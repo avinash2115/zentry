@@ -1,0 +1,56 @@
+<div *ngIf="!isLoading" class="storage--list">
+  <div
+    *ngFor="let option of storagesOptions"
+    [class.storage--list--option--default]="isDefault(option)"
+    [class.storage--list--option--default__alerted]="isDefault(option) && !storage(option).available"
+    class="storage--list--option"
+  >
+    <div class="storage--list--option--heading">
+      <div [ngClass]="logo(option)" [class.not-allowed]="!isConfigured(option)" class="storage--list--option--heading__logo storage">
+      </div>
+      <ng-container *ngIf="isConfigured(option)">
+        <div *ngIf="isDefault(option)" class="storage--list--option--heading__active">
+          Default Storage
+        </div>
+        <button (click)="activate(option)" *ngIf="!isDefault(option)" class="btn btn--radius__sm btn--color__green">
+          Make Default
+        </button>
+      </ng-container>
+      <ng-container *ngIf="!isConfigured(option)">
+        <button (click)="configure(option)" class="btn btn--radius__sm btn-outline-success">
+          Configure
+        </button>
+      </ng-container>
+    </div>
+    <div [class.not-allowed]="!isConfigured(option)" class="storage--list--option__title">
+      {{option.title}}
+    </div>
+    <ng-container *ngIf="isConfigured(option)">
+      <div *ngIf="storage(option).isUsageThresholdReached" class="storage--list--option__threshold">
+        {{storage(option).available ? 'Storage is almost full! Synchronization is going to be stopped soon.' : 'Storage is full! Synchronization has been stopped.'}}
+      </div>
+      <div class="storage--list--option--capacity">
+        <div class="storage--list--option--capacity--annotation">
+          <span>{{used(option)}}</span>
+          <span>{{storage(option).isCapacityUnlimited ? 'Unlimited' : capacity(option)}}</span>
+        </div>
+        <div class="progress">
+          <div
+            [class.infinite]="storage(option).isCapacityUnlimited"
+            [class.alerted]="storage(option).isUsageThresholdReached"
+            [style.width.%]="storage(option).usage"
+            class="progress-bar"
+          ></div>
+        </div>
+      </div>
+    </ng-container>
+    <div *ngIf="!isConfigured(option)" class="storage--list--option__configuration not-allowed">
+      This storage is not configured. Configure to upload sessions and clips.
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>
+

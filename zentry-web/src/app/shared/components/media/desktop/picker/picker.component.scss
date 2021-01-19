@@ -1,0 +1,59 @@
+.media {
+  &--desktop {
+    &--picker {
+      &__title {
+        margin-bottom: 35px;
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      &--option {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+
+        &:not(:first-child) {
+          margin-top: 25px;
+        }
+
+        &__title {
+          font-size: 16px;
+          color: #6B6C7E;
+          font-weight: bold;
+        }
+
+        &__snap {
+          margin-top: 10px;
+          border: 2px solid transparent;
+
+          &:hover {
+            border-color: #0DC4E8;
+          }
+
+          img {
+            width: 220px;
+            height: auto;
+          }
+        }
+      }
+
+      &__cancel {
+        margin-top: 35px;
+        color: #4983FF;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+
+      &--options {
+        margin-top: 10px;
+        padding: 0 10px;
+
+        button {
+          padding: 10px !important;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

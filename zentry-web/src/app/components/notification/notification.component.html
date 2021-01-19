@@ -1,0 +1,12 @@
+<div class="notifications">
+	<div *ngFor="let notification of notifications"
+		 class="notification"
+		 [ngClass]="className(notification)"
+		 (click)="close(notification)"
+		 @notificationTransition>
+		 <div class="icon">
+			<fa-icon [icon]="icon(notification)"></fa-icon>
+		</div>
+		<div class="message">{{notification.message}}</div>
+	</div>
+</div>

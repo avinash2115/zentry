@@ -1,0 +1,21 @@
+<div class="presentation">
+  <button
+    (click)="goBack()"
+    *ngIf="isBackButtonVisible"
+    class="btn btn-outline-secondary"
+  >
+    <fa-icon icon="arrow-left"></fa-icon>
+  </button>
+  <div class="presentation__place cut-long-text">{{place}}</div>
+  <ng-container *ngIf="isAuthorized">
+    <div class="presentation--ad-hoc">
+      <button
+        (click)="quickStart()"
+        class="btn btn--radius__md btn--color__contextual"
+      >
+        <i class="ad-hoc"></i> Quick Start
+      </button>
+    </div>
+  </ng-container>
+</div>
+

@@ -1,0 +1,71 @@
+<div
+  *ngIf="!isLoading"
+  class="calendar"
+>
+  <div class="calendar__title">
+    {{data.length ? 'Appointments' : 'You don\'t have any appointments'}}
+  </div>
+  <div
+    *ngIf="!data.length"
+    class="calendar--event--empty"
+  ></div>
+  <div
+    *ngIf="data.length && current"
+    class="calendar--event"
+  >
+    <div class="calendar--event--header">
+      <div class="calendar--event--header__title cut-long-text">
+        {{current.scheduledOnDate | date: 'd MMMM'}}
+      </div>
+      <ng-container *ngIf="current.hasSources">
+        <div
+          ngbTooltip="Imported from TeleTeachers"
+          container="body"
+          class="source--exists ml-auto"
+        >
+          TT
+        </div>
+      </ng-container>
+    </div>
+    <div class="calendar--event--body">
+      <div class="calendar--event--body__title cut-long-text">
+        {{current.name}}
+      </div>
+      <div class="calendar--event--body__schedule">
+        <fa-icon icon="clock"></fa-icon>
+        {{current.scheduledOnDate | date: 'h:mm aa'}} - {{current.scheduledToDate | date: 'h:mm aa'}}
+      </div>
+      <div class="calendar--event--body--participants">
+        <app-session-recorded-shared-participant
+          [recorded]="current"
+          [readonly]="true"
+          [inject]="true"
+        ></app-session-recorded-shared-participant>
+      </div>
+      <div class="calendar--event--body--actions">
+        <button
+          (click)="launch()"
+          class="btn btn__standard btn__wide btn--radius__md btn--color__primary"
+        >
+          Launch
+        </button>
+      </div>
+
+      <div
+        (click)="navigate(true)"
+        [class.more]="navigatable"
+        class="calendar--event--body--backward"
+      >
+        <fa-icon icon="chevron-left"></fa-icon>
+      </div>
+
+      <div
+        (click)="navigate()"
+        [class.more]="navigatable"
+        class="calendar--event--body--forward"
+      >
+        <fa-icon icon="chevron-right"></fa-icon>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+App\Components\Users\User\CRM\CRMEntity:
+  type: entity
+  table: users_crms
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    config:
+      type: crm_config
+    driver:
+      type: string
+    active:
+      type: boolean
+    notified:
+      type: boolean
+    createdAt:
+      type: datetime
+      column: created_at
+    updatedAt:
+      type: datetime
+      column: updated_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+  oneToMany:
+    sources:
+      targetEntity: App\Components\CRM\Source\SourceEntity
+      mappedBy: crm
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true

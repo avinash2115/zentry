@@ -1,0 +1,68 @@
+.swal {
+  &--icons {
+    &__hide {
+      display: none !important;
+    }
+  }
+}
+
+.swal2-container {
+  .swal2-popup {
+    padding: 45px 30px;
+    border-radius: 9px;
+    box-shadow: 0 0 16px 0 rgba(0,0,0,0.11);
+
+    .swal2-header {
+      .swal2-title {
+        margin-top: 40px;
+        font-size: 20px;
+        font-weight: 800;
+      }
+    }
+
+    .swal2-content {
+      margin-top: 15px;
+
+      #swal2-content {
+        font-size: 16px;
+        font-weight: 600;
+        color: #6B6C7E;
+      }
+    }
+
+    .swal2-actions {
+      margin-top: 40px;
+
+      button:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    @media (max-width: 415px) {
+      padding: 45px 10px;
+    }
+
+    &.swal2-toast {
+      min-width: 315px;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 11px 0 rgba(0,0,0,0.25);
+
+      .swal2-header {
+        .swal2-title {
+          margin-top: 0;
+          color: #6B6C7E;
+          font-size: 14px;
+          font-weight: bold;
+        }
+
+        .swal2-image {
+          width: 25px;
+          height: 25px;
+          margin: 0;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}

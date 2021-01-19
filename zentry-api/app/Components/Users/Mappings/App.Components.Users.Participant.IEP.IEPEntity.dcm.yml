@@ -1,0 +1,41 @@
+App\Components\Users\Participant\IEP\IEPEntity:
+  type: entity
+  table: users_participants_ieps
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    dateActual:
+      type: datetime
+      nullable: false
+      column: date_actual
+    dateReeval:
+      type: datetime
+      nullable: false
+      column: date_reeval
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id
+  oneToMany:
+    sources:
+      targetEntity: App\Components\CRM\Source\ParticipantIEPSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

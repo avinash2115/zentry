@@ -1,0 +1,24 @@
+<ng-select
+  #ngSelectComponent
+  (blur)="detectChanges()"
+  (ngModelChange)="sort($event, ngSelectComponent)"
+  (search)="detectChanges()"
+  [items]="sortables"
+  [ngModel]="sortBy"
+  [clearable]="false"
+  [searchable]="false"
+  [class.not-allowed]="disabled"
+>
+  <ng-template
+    let-item="item"
+    ng-label-tmp
+  >
+    {{title(item)}}
+  </ng-template>
+  <ng-template
+    let-item="item"
+    ng-option-tmp
+  >
+    <div (mouseover)="mouseover()">{{title(item)}}</div>
+  </ng-template>
+</ng-select>

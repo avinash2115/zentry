@@ -1,0 +1,97 @@
+App\Components\Users\Participant\ParticipantEntity:
+  type: entity
+  table: users_participants
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    email:
+      type: string
+      nullable: true
+    firstName:
+      type: string
+      column: first_name
+      nullable: true
+    lastName:
+      type: string
+      column: last_name
+      nullable: true
+    phoneCode:
+      type: string
+      column: phone_code
+      nullable: true
+    phoneNumber:
+      type: string
+      column: phone_number
+      nullable: true
+    avatar:
+      type: string
+      nullable: true
+    gender:
+      type: string
+      nullable: true
+    dob:
+      type: datetime
+      nullable: true
+      column: dob
+    parentEmail:
+      type: string
+      nullable: true
+      column: parent_email
+    parentPhoneNumber:
+      type: string
+      nullable: true
+      column: parent_phone_number
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  oneToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+    therapy:
+      targetEntity: App\Components\Users\Participant\Therapy\TherapyEntity
+      mappedBy: participant
+      cascade: ["persist", "merge", "remove"]
+  oneToMany:
+    goals:
+      targetEntity: App\Components\Users\Participant\Goal\GoalEntity
+      mappedBy: participant
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    ieps:
+      targetEntity: App\Components\Users\Participant\IEP\IEPEntity
+      mappedBy: participant
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    sources:
+      targetEntity: App\Components\CRM\Source\ParticipantSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id
+  manyToOne:
+    team:
+      targetEntity: App\Components\Users\Team\TeamEntity
+      joinColumn:
+        name: team_id
+        referencedColumnName: id
+    school:
+      targetEntity: App\Components\Users\Team\School\SchoolEntity
+      joinColumn:
+        name: school_id
+        referencedColumnName: id

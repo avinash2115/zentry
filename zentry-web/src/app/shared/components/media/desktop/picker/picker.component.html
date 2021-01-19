@@ -1,0 +1,49 @@
+<div *ngIf="hasSources" class="media--desktop--picker">
+  <div class="media--desktop--picker__title">
+    Please select the screen
+  </div>
+  <div
+    *ngFor="let option of sources" (click)="select(option)"
+    class="media--desktop--picker--option"
+  >
+    <div class="media--desktop--picker--option__title">
+      {{option.name}}
+    </div>
+    <div class="media--desktop--picker--option__snap">
+      <img [src]="option.thumbnail.toDataURL()" [alt]="option.name">
+    </div>
+  </div>
+  <div
+    class="media--desktop--picker--options btn-group"
+  >
+    <button
+      (click)="optionSwitch(optionsAvailable.all)"
+      [class.btn-outline-primary]="!optionIsActive(optionsAvailable.all)"
+      [class.btn--color__primary]="optionIsActive(optionsAvailable.all)"
+      type="button"
+      class="btn btn__standard btn--radius__md"
+    >
+      Capture All
+    </button>
+    <button
+      (click)="optionSwitch(optionsAvailable.audio)"
+      [class.btn-outline-primary]="!optionIsActive(optionsAvailable.audio)"
+      [class.btn--color__primary]="optionIsActive(optionsAvailable.audio)"
+      type="button"
+      class="btn btn__standard btn--radius__md"
+    >
+      Capture Audio
+    </button>
+    <button
+      (click)="optionSwitch(optionsAvailable.none)"
+      [class.btn-outline-primary]="!optionIsActive(optionsAvailable.none)"
+      [class.btn--color__primary]="optionIsActive(optionsAvailable.none)"
+      type="button"
+      class="btn btn__standard btn--radius__md"
+    >
+      No capture
+    </button>
+  </div>
+
+  <a (click)="cancel()" class="media--desktop--picker__cancel">Cancel</a>
+</div>

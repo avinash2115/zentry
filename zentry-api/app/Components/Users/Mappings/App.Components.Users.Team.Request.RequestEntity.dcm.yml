@@ -1,0 +1,24 @@
+App\Components\Users\Team\Request\RequestEntity:
+  type: entity
+  table: users_teams_requests
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+  manyToOne:
+    team:
+      targetEntity: App\Components\Users\Team\TeamEntity
+      joinColumn:
+        name: team_id
+        referencedColumnName: id
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

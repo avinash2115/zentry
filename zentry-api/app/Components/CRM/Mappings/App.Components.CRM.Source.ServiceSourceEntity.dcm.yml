@@ -1,0 +1,8 @@
+App\Components\CRM\Source\ServiceSourceEntity:
+  type: entity
+  manyToOne:
+    entity:
+      targetEntity: App\Components\Services\Service\ServiceEntity
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

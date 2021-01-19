@@ -1,0 +1,8 @@
+{
+  "name": "echo",
+  "script": "laravel-echo-server",
+  "args": "start",
+  "cwd": "",
+  "out_file": "/dev/null",
+  "error_file": "/dev/null"
+}

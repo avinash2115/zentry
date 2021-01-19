@@ -1,0 +1,9 @@
+<button
+  (click)="toggle()"
+  [disabled]="!(filterService.filtersAvailable | async).length"
+  ngbTooltip="Filter"
+  container="body"
+  class="btn btn-h-36px btn-md btn-secondary"
+>
+  <i class="fa fa-filter"></i>
+</button>

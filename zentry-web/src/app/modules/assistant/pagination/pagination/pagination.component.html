@@ -1,0 +1,41 @@
+<div class="pagination">
+  <div
+    *ngIf="upDirectionReached"
+    class="reached-text reached-text--top"
+  >
+    <i class="fa fa-check text-success"></i> You are up to date
+  </div>
+
+  <app-loader
+    *ngIf="isLoadingTop"
+    class="spinner-top"
+  ></app-loader>
+
+  <perfect-scrollbar
+    #ps
+    (psScrollDown)="onScrollDown()"
+    (psScrollUp)="onScrollUp()"
+    [config]="scrollConfig"
+    [style.max-height.px]="scrollHeight"
+  >
+    <div
+      #bodyElem
+      class="pagination-body"
+    >
+      <ng-content></ng-content>
+    </div>
+  </perfect-scrollbar>
+
+  <app-loader
+    *ngIf="isLoadingBottom"
+    class="spinner-bottom"
+  ></app-loader>
+
+  <div
+    *ngIf="downDirectionReached"
+    class="reached-text reached-text--bottom"
+  >
+    <i class="fa fa-check text-success"></i> You are up to date
+  </div>
+</div>
+

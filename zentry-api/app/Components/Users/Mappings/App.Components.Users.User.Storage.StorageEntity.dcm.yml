@@ -1,0 +1,33 @@
+App\Components\Users\User\Storage\StorageEntity:
+  type: entity
+  table: users_storages
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    config:
+      type: config
+    driver:
+      type: string
+    name:
+      type: string
+    enabled:
+      type: boolean
+    used:
+      type: integer
+    capacity:
+      type: integer
+    createdAt:
+      type: datetime
+      column: created_at
+    updatedAt:
+      type: datetime
+      column: updated_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

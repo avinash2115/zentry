@@ -1,0 +1,48 @@
+App\Components\Services\Service\ServiceEntity:
+  type: entity
+  table: services
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    name:
+      type: string
+      nullable: false
+    code:
+      type: string
+      nullable: false
+    category:
+      type: string
+      nullable: false
+    status:
+      type: string
+      nullable: false
+    actions:
+      type: string
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+  oneToMany:
+    sources:
+      targetEntity: App\Components\CRM\Source\ServiceSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

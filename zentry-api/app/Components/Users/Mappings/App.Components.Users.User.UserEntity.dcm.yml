@@ -1,0 +1,59 @@
+App\Components\Users\User\UserEntity:
+  type: entity
+  table: users
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    email:
+      type: string
+      nullable: false
+    password:
+      type: string
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    archivedAt:
+      type: datetime
+      nullable: true
+      column: archived_at
+  oneToOne:
+    profile:
+      targetEntity: App\Components\Users\User\Profile\ProfileEntity
+      mappedBy: user
+      cascade: ["persist", "merge", "remove"]
+    poi:
+      targetEntity: App\Components\Users\User\Poi\PoiEntity
+      mappedBy: user
+      cascade: ["persist", "merge", "remove"]
+    backtrack:
+      targetEntity: App\Components\Users\User\Backtrack\BacktrackEntity
+      mappedBy: user
+      cascade: ["persist", "merge", "remove"]
+  oneToMany:
+    storages:
+      targetEntity: App\Components\Users\User\Storage\StorageEntity
+      mappedBy: user
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    dataProviders:
+      targetEntity: App\Components\Users\User\DataProvider\DataProviderEntity
+      mappedBy: user
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    crms:
+      targetEntity: App\Components\Users\User\CRM\CRMEntity
+      mappedBy: user
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true

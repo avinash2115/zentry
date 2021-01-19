@@ -1,0 +1,176 @@
+<ng-container *ngIf="!isLoading">
+  <div class="profile">
+    <div class="profile--card">
+      <div class="avatar-wrapper">
+        <img *ngIf="false; else simpleAvatar" [src]="" [alt]="entity.initials" class="avatar avatar__md">
+        <ng-template #simpleAvatar>
+          <span class="avatar avatar__md">{{entity.initials}}</span>
+        </ng-template>
+      </div>
+      <div class="profile--card__fullname cut-long-text">
+        {{entity.profile.fullname}}
+      </div>
+      <div class="profile--card--details">
+        <div class="profile--card--details__item">
+          <fa-icon icon="envelope"></fa-icon>
+          {{entity.email}}
+        </div>
+        <div *ngIf="entity.profile.phoneNumber" class="profile--card--details__item">
+          <fa-icon icon="phone"></fa-icon>
+          {{entity.profile.phone}}
+        </div>
+      </div>
+    </div>
+    <div class="profile--form">
+      <div class="profile--form__title">Contact Details</div>
+      <form
+        (submit)="detectChanges()"
+        [formGroup]="form"
+        appFormSubmit
+        class="w-100"
+      >
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input
+            appControlError
+            class="form-control"
+            formControlName="first_name"
+            id="first_name"
+            name="first_name"
+            type="text"
+          >
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input
+            appControlError
+            class="form-control"
+            formControlName="last_name"
+            id="last_name"
+            name="last_name"
+            type="text"
+          >
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            appControlError
+            class="form-control with-icon"
+            formControlName="email"
+            id="email"
+            name="email"
+            type="email"
+          >
+        </div>
+        <label for="phone_code">Phone Number</label>
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <input
+              appControlError
+              class="form-control text-center"
+              formControlName="phone_code"
+              id="phone_code"
+              name="phone_code"
+              type="text"
+            >
+          </div>
+          <div class="form-group col-md-9">
+            <input
+              appControlError
+              class="form-control"
+              formControlName="phone_number"
+              id="phone_number"
+              name="phone_number"
+              type="text"
+            >
+          </div>
+        </div>
+        <div *ngIf="form.disabled" class="form-group">
+          <button
+            (click)="edit()"
+            [disabled]="isPasswordStepVisible"
+            class="btn btn--radius__md btn--color__blue btn__standard"
+          >Edit Details</button>
+        </div>
+        <div *ngIf="form.enabled" class="form-row">
+          <div class="form-group col-md-4 col-sm-12">
+            <button
+              (click)="save()"
+              class="btn btn--radius__md btn--color__green btn__standard btn__wide"
+            >Update Details</button>
+          </div>
+          <div class="form-group col-md-2 col-sm-12">
+            <button
+              (click)="cancel()"
+              class="btn btn--radius__md btn-outline-dark btn__standard btn__wide"
+            >Cancel</button>
+          </div>
+        </div>
+      </form>
+      <div class="divide"></div>
+      <div class="profile--form__title">
+        Change Password
+        <label class="switch">
+          <input (change)="togglePasswordStep($event)" [checked]="isPasswordStepVisible" type="checkbox">
+          <span class="switch--slider switch--slider__round"></span>
+        </label>
+      </div>
+      <ng-container *ngIf="isPasswordStepVisible">
+        <form
+          (submit)="detectChanges()"
+          [formGroup]="formPassword"
+          appFormSubmit
+        >
+          <div class="form-group">
+            <label for="password">New Password</label>
+            <div class="input-group-password">
+              <input
+                appControlError
+                class="form-control with-icon"
+                formControlName="password"
+                id="password"
+                name="password"
+                [type]="isPasswordVisible ? 'text' : 'password'"
+              >
+              <fa-icon *ngIf="!isPasswordVisible" (click)="togglePasswordVisibility()" icon="eye" [classes]="['show-password']"></fa-icon>
+              <fa-icon *ngIf="isPasswordVisible" (click)="togglePasswordVisibility()" icon="eye-slash" [classes]="['show-password', 'show-password--active']"></fa-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="passwordRepeat">Repeat New Password</label>
+            <div class="input-group-password">
+              <input
+                appControlError
+                class="form-control with-icon"
+                formControlName="passwordRepeat"
+                id="passwordRepeat"
+                name="passwordRepeat"
+                [type]="isPasswordRepeatVisible ? 'text' : 'password'"
+              >
+              <fa-icon *ngIf="!isPasswordRepeatVisible" (click)="togglePasswordRepeatVisibility()" icon="eye" [classes]="['show-password']"></fa-icon>
+              <fa-icon *ngIf="isPasswordRepeatVisible" (click)="togglePasswordRepeatVisibility()" icon="eye-slash" [classes]="['show-password', 'show-password--active']"></fa-icon>
+            </div>
+          </div>
+          <div
+            *ngIf="showMismatchError"
+            class="error"
+          >
+            Your password and repeated password are not match
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4 col-sm-12">
+              <button (click)="savePassword()" [disabled]="!formPassword.valid" class="btn btn--radius__md btn--color__green btn__standard btn__wide">Update Password</button>
+            </div>
+            <div class="form-group col-md-2 col-sm-12">
+              <button (click)="togglePasswordStep({currentTarget: {checked: false}})" class="btn btn--radius__md btn-outline-dark btn__standard btn__wide">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

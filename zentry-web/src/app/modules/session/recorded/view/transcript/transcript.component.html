@@ -1,0 +1,31 @@
+<div
+  *ngIf="data.length && !isLoading"
+  class="transcript"
+>
+  <div class="transcript--title">
+    <fa-icon icon="comment-alt"></fa-icon>
+    <span>Transcripts</span>
+  </div>
+  <div class="transcript--list">
+    <div
+      *ngFor="let transcript of data"
+      class="transcript--list--item"
+    >
+      <div class="transcript--list--item--heading">
+        <div class="transcript--list--item--heading__info">
+          <fa-icon [icon]="['far', 'clock']"></fa-icon>
+          <span>{{transcript.poi.startedAtHuman(recordedEntity)}} - {{transcript.poi.endedAtHuman(recordedEntity)}}</span>
+        </div>
+        <a class="transcript--list--item--heading__edit force">
+          <fa-icon icon="pencil-alt"></fa-icon>
+          <span>Click to edit text</span>
+        </a>
+      </div>
+      <div class="transcript--list--item--content">
+        {{transcript.transcript.transcript}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-loader *ngIf="isLoading"></app-loader>

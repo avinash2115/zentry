@@ -1,0 +1,14 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    inferPrivatePropertyTypeFromConstructor: true
+    checkMissingIterableValueType: false
+    excludes_analyse:
+        - %currentWorkingDirectory%/app/Http/Middleware/Authenticate.php
+        - %currentWorkingDirectory%/app/Components/*/Migrations/*
+        - %currentWorkingDirectory%/app/Components/*/Tests/*
+        - %currentWorkingDirectory%/app/Assistants/*/Tests/*
+    ignoreErrors:
+        - '#Cannot call method withoutMiddleware\(\) on array\|Illuminate\\Routing\\Route\.#'
+

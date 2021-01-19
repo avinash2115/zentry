@@ -1,0 +1,12 @@
+.link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 30px;
+
+  &__title, &__loader {
+    margin-top: 30px;
+  }
+}

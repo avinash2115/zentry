@@ -1,0 +1,92 @@
+.upload-queue {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  transform: translateY(100%);
+  left: 0;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.1);
+  z-index: 2;
+
+  &--list {
+    width: 100%;
+    height: 43px;
+    overflow: hidden;
+    transition: height 1s ease;
+
+    &--item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0 10px;
+      padding-bottom: 15px;
+
+      &:first-child {
+        padding-top: 15px;
+      }
+
+      &__name {
+        width: 80%;
+        color: #707293;
+        font-size: 12px;
+      }
+
+      &--progress, &__action, &__button {
+        margin-left: auto;
+      }
+
+      &--progress {
+        width: 20%;
+        min-width: 20%;
+        margin-right: 5px;
+
+        .progress {
+          height: 8px;
+          border-radius: 5.5px;
+
+          .progress-bar {
+            border-radius: 5.5px;
+          }
+        }
+      }
+
+      &__action {
+        margin-right: 5px;
+        font-size: 11px;
+      }
+
+      &__button {
+        color: #707293;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.expand & {
+    &--list {
+      height: 100px;
+      overflow: auto;
+    }
+  }
+
+  &--arrow {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    background: #FFFFFF;
+    padding: 0 10px;
+    box-shadow: 0 5px 4px 0 rgba(0,0,0,0.1);
+    border-radius: 0 0 5px 5px;
+    cursor: pointer;
+
+    &:hover {
+      fa-icon {
+        color: #4983FF;
+      }
+    }
+  }
+}

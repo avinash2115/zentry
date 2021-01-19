@@ -1,0 +1,22 @@
+<div class="form-group">
+  <label>{{filterName}}:</label>
+  <ng-select
+    (close)="onCloseEvent()"
+    (open)="onOpenEvent()"
+    [clearable]="clearable"
+    [formControl]="control"
+    [items]="filterValues"
+    [multiple]="multiple"
+    [searchable]="searchable"
+    appendTo="#filter"
+    bindLabel="label"
+    bindValue="value"
+  >
+    <ng-template
+      let-item="item"
+      ng-option-tmp
+    >
+      <div class="white-space-normal word-break-word">{{item.label}}</div>
+    </ng-template>
+  </ng-select>
+</div>

@@ -1,0 +1,41 @@
+App\Components\Users\Participant\Therapy\TherapyEntity:
+  type: entity
+  table: users_participants_therapies
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    diagnosis:
+      type: string
+    frequency:
+      type: string
+    eligibility:
+      type: string
+    sessionsAmountPlanned:
+      type: integer
+      column: sessions_amount_planned
+    treatmentAmountPlanned:
+      type: integer
+      column: treatment_amount_planned
+    notes:
+      type: string
+    privateNotes:
+      type: string
+      column: private_notes
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  oneToOne:
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      inversedBy: therapy
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id

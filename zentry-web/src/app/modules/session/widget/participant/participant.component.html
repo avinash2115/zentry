@@ -1,0 +1,125 @@
+<div class="participants--wrapper">
+  <div
+    (click)="isForm = true; detectChanges();"
+    *ngIf="!isForm"
+    ngbTooltip="Add {{terms('participant')}}"
+    placement="right"
+    class="participants--wrapper--add"
+  >
+    <fa-icon
+      icon="user-plus"
+    ></fa-icon>
+  </div>
+  <ng-container *ngIf="isForm">
+    <div class="participants--wrapper--create">
+    <span>
+      Type the full name or email and click enter to add new or select existing
+    </span>
+      <ng-select
+        #ngSelectComponent
+        (change)="selectControlPick($event, ngSelectComponent)"
+        (focus)="detectChanges()"
+        (blur)="detectChanges()"
+        (clear)="detectChanges()"
+        (search)="detectChanges()"
+        [searchFn]="selectControlSearch"
+        [addTag]="selectControlCreate"
+        [items]="available"
+        [clearable]="false"
+        [searchable]="true"
+        placeholder="Start typing or select ..."
+        addTagText="Add new by providing email or full name"
+      >
+        <ng-template
+          let-item="item"
+          ng-label-tmp
+        >
+          {{item.fullname || item.email}}
+        </ng-template>
+        <ng-template
+          let-item="item"
+          ng-option-tmp
+        >
+          <div
+            (mouseover)="ngSelectMouseover()"
+            class="participants--wrapper--create--select--item"
+          >
+            <div class="avatar-wrapper">
+              <img *ngIf="false; else simpleAvatar" [src]="" [alt]="item.initials" class="avatar__sm">
+              <ng-template #simpleAvatar>
+                <span class="avatar avatar__sm">{{item.initials}}</span>
+              </ng-template>
+            </div>
+            <div class="participants--wrapper--create--select--item--info">
+              <span *ngIf="!!item.fullname">{{item.fullname}}</span>
+              <span *ngIf="!!item.email">{{item.email}}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ng-select>
+      <button (click)="isForm = false; detectChanges();" class="btn btn--radius__md btn-outline-dark btn__wide">
+        Cancel
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!isForm">
+    <div *ngIf="selected.length" class="participants--wrapper--list">
+      <div
+        (click)="scrollLeft()"
+        [class.more]="isScrollLeftAvailable()"
+        class="participants--wrapper--list--backward"
+      >
+        <fa-icon icon="chevron-left"></fa-icon>
+      </div>
+      <div
+        (psXReachStart)="detectChanges()"
+        (psXReachEnd)="detectChanges()"
+        (psScrollX)="detectChanges()"
+        [perfectScrollbar]="scrollbarConfig"
+        #selectedList="ngxPerfectScrollbar"
+        class="participants--wrapper--list--items"
+      >
+        <div
+          *ngFor="let participant of selected"
+          [class.not-allowed]="isAttached(participant)"
+          class="participants--wrapper--list--items--item">
+          <ng-template #tipContent>
+            <strong>{{participant.fullname}}</strong>
+            <br>
+            Click to select for clip
+          </ng-template>
+          <div
+            (click)="attach(participant)"
+            [ngbTooltip]="sessionService.isStarted ? tipContent : null"
+            placement="bottom"
+            container="body"
+            class="avatar-wrapper"
+          >
+            <img *ngIf="false; else simpleAvatar" [src]="" [alt]="participant.initials" class="avatar avatar__xs">
+            <ng-template #simpleAvatar>
+              <span class="avatar avatar__xs">{{participant.initials}}</span>
+            </ng-template>
+          </div>
+          <div
+            (click)="$event.stopPropagation(); remove(participant)"
+            class="participants--wrapper--list--items--item--remove"
+          >
+            <fa-icon icon="times"></fa-icon>
+          </div>
+        </div>
+      </div>
+      <div
+        [class.more]="isScrollRightAvailable()"
+        (click)="scrollRight()"
+        class="participants--wrapper--list--forward"
+      >
+        <fa-icon icon="chevron-right"></fa-icon>
+      </div>
+    </div>
+    <div *ngIf="!selected.length" class="participants--wrapper--list__empty">
+      Who {{sessionService.isStarted ? 'is participating' : 'will participate'}} in the session?
+      <br>
+      Select by clicking on the icon on the left
+    </div>
+  </ng-container>
+</div>

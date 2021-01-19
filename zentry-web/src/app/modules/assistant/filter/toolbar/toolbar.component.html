@@ -1,0 +1,57 @@
+<div
+  *ngIf="filters.length"
+  class="selected-filters"
+>
+  <div class="selected-filters__box">
+    <div class="selected-filters__title">Active filters:</div>
+    <div
+      *ngFor="let filter of filters"
+      class="selected-filter"
+    >
+      <div class="selected-filter__label">{{filter.label + ':'}}</div>
+      <div
+        [ngSwitch]="filter.type"
+        class="selected-filter__values"
+      >
+        <ng-container *ngSwitchCase="filtersType.datepicker">
+          <div class="selected-filter__value">
+            <!--TODO added on 28.07.2020 by slebediev for VPTEC-4183: get rid of this hardcoded code-->
+            <ng-container *ngIf="filter.values.length > 1; else textLabelTemplate">
+              <span>{{filter.values[0].label + ' - ' + filter.values[1].label}}</span>
+            </ng-container>
+            <ng-template #textLabelTemplate>
+              <span>{{filter.values[0].label}}</span>
+            </ng-template>
+            <button
+              (click)="clear(filter.attribute, filter.type)"
+              class="btn btn-outline no-border no-padding bg-transparent lh-0"
+            >
+              <i class="fa fa-times-circle"></i>
+            </button>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="filtersType.select">
+          <ng-container *ngFor="let value of filter.values">
+            <div class="selected-filter__value">
+              <span class="word-break-word">{{value.label}}</span>
+              <button
+                (click)="clear(filter.attribute, filter.type, value.value)"
+                class="btn btn-outline no-border no-padding bg-transparent"
+              >
+                <i class="fa fa-times-circle"></i>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="selected-filters__manage">
+    <button
+      (click)="reset()"
+      class="btn bnt-outline no-border no-padding bg-transparent fs-13 fw-400"
+    >
+      RESET FILTERS
+    </button>
+  </div>
+</div>

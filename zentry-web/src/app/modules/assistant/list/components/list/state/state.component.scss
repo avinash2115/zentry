@@ -1,0 +1,43 @@
+:host {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.list-states {
+  display: flex;
+  flex: 1 1 auto;
+  padding: 75px 0;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+
+  &__icon {
+    margin-bottom: 20px;
+
+    i {
+      color: #dddee1;
+      font-size: 55px;
+    }
+  }
+
+  &__text {
+    color: #4D5259;
+    font-size: 17px;
+    line-height: 26px;
+    text-align: center;
+
+    button {
+      display: inline;
+      padding: 0;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      background: none;
+      color: #48B0F7;
+
+      &:hover {
+        color: #465161;
+      }
+    }
+  }
+}

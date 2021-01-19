@@ -1,0 +1,56 @@
+<ng-container *ngIf="!isLoading">
+  <div *ngIf="!data.length; else listTemplate" class="scratch">
+    <div *ngIf="!isConnectingDevice" class="scratch-body">
+      <div class="title">Scan QR code to add device</div>
+      <div class="subtitle">Scan this code in {{applicationName}} Mobile to quickly add device to your account</div>
+      <div class="qr-code">
+        <img [src]='qrCode' [alt]="'Scan this code in ' + applicationName + ' Mobile to quickly add device to your account'">
+      </div>
+    </div>
+    <div *ngIf="isConnectingDevice" class="scratch-body">
+      <div class="title">Please wait while your {{connectingDevice.model}} device is being added</div>
+      <div class="subtitle">It may take a few minutes</div>
+      <app-loader></app-loader>
+    </div>
+  </div>
+  <ng-template #listTemplate>
+    <div class="qr-code">
+      <ng-container *ngIf="isConnectingDevice">
+        <app-loader></app-loader>
+        <div class="explanation">
+          <div class="title">Please wait while your {{connectingDevice.model}} device is being added</div>
+          <div class="subtitle">It may take a few minutes</div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isConnectingDevice">
+        <img [src]='qrCode' [alt]="'Scan this code in ' + applicationName + ' Mobile to quickly add device to your account'">
+        <div class="explanation">
+          <div class="title">Quickly add your device!</div>
+          <div class="subtitle">You may add your device by scanning this QR code in {{applicationName}} Mobile</div>
+        </div>
+      </ng-container>
+    </div>
+    <div @List class="list">
+      <div @EnterLeave *ngFor="let device of data" class="list--device">
+        <div
+          (click)="remove(device)"
+          ngbTooltip="Remove device"
+          placement="auto"
+          class="remove"
+        >
+          <fa-icon icon="trash" [classes]="['fa--default']"></fa-icon>
+        </div>
+        <div class="list--device__face">
+          <img [src]="devicePicture(device.model)" [alt]="device.model">
+        </div>
+        <div class="list--device__model">{{device.model}}</div>
+        <div class="list--device__date">Added on: {{device.createdAt | date: 'medium'}}</div>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>
+

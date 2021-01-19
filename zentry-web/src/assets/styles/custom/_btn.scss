@@ -1,0 +1,262 @@
+button {
+  font-family: Muli;
+}
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  &--disabled {
+    pointer-events: none;
+  }
+
+  i {
+    display: block;
+    margin-right: 15px;
+  }
+
+  &__standard {
+    padding: 10px 30px;
+    font-size: 14px;
+    &--condensed{
+      padding: 10px 17px;
+    }
+    &--sm {
+      padding: 6.5px 19.5px;
+    }
+  }
+
+  &__floor {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    color: #FFFFFF;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    fa-icon {
+      font-size: 25px;
+      margin-right: 15px;
+    }
+
+    span {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      i {
+        font-style: normal;
+        margin-right: 0;
+
+        &:first-child {
+          font-size: 12px;
+        }
+
+        &:last-child {
+          font-size: 16px;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+
+  &__wide {
+    width: 100%;
+  }
+
+  &--radius {
+    &__sm {
+      border-radius: 16px;
+    }
+
+    &__md {
+      border-radius: 27.5px;
+    }
+  }
+
+  &--square {
+    border-radius: 0 !important;
+  }
+
+  &--color {
+    &__gradient {
+      border: none;
+      color: #FFFFFF;
+      background: linear-gradient(225deg, #06D2DE 0%, #9B70FE 100%);
+
+      &:hover {
+        color: #FFFFFF;
+        background: linear-gradient(225deg, #B290FF, #5BF6FF);
+      }
+    }
+
+    &__red {
+      color: #FFFFFF !important;
+      background-color: #F45F68;
+
+      &:hover {
+        color: #FFFFFF !important;
+        background-color: #C44A52;
+      }
+    }
+
+    &__orange {
+      color: #FFFFFF !important;
+      background-color: #FFB274;
+
+      &:hover {
+        color: #FFFFFF !important;
+        background-color: #F78E3A;
+      }
+    }
+
+    &__green {
+      color: #FFFFFF !important;
+      background-color: #29D2A0;
+
+      &:hover {
+        color: #FFFFFF !important;
+        background-color: #21AE83;
+      }
+    }
+
+    &__blue, &__blue-forced {
+      color: #FFFFFF !important;
+      background-color: #4983FF;
+
+      &:hover {
+        color: #FFFFFF !important;
+        background-color: #3664C6;
+      }
+    }
+
+    &__white {
+      background-color: #FFFFFF;
+
+      &:hover {
+        background-color: #F8FBFF;
+        box-shadow: 0 1px 5px 0 rgba(0,0,0,0.25)
+      }
+    }
+  }
+
+  &--actions {
+    &__logout {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      width: 32px;
+      font-size: 14px;
+      padding: 0;
+      color: #6B6C7E;
+
+      i {
+        width: 16px;
+        height: 12px;
+        margin-right: 0;
+        mask: url('assets/img/icons/logout.svg');
+        background-color: #6B6C7E;
+      }
+
+      &:hover {
+        color: #FFFFFF !important;
+        background-color: #6B6C7E;
+
+        i {
+          background-color: #FFFFFF;
+        }
+      }
+    }
+  }
+
+  // overrides
+
+  &.btn-outline-success {
+    border: 1px solid #29D2A0;
+    color: #29D2A0;
+    background-color: transparent;
+
+    &:hover {
+      color: #FFFFFF;
+      border: 1px solid #21AE83;
+      background-color: #21AE83;
+    }
+  }
+
+  &.btn-outline-danger {
+    border: 1px solid #F45F68;
+    color: #F45F68;
+    background-color: transparent;
+
+    &:hover {
+      color: #FFFFFF;
+      border: 1px solid #C44A52;
+      background-color: #C44A52;
+
+      fa-icon {
+        svg {
+          path {
+            fill:  #FFFFFF;
+          }
+        }
+      }
+    }
+
+    fa-icon {
+      margin-right: 10px;
+      svg {
+        path {
+          fill:  #F45F68;
+        }
+      }
+    }
+  }
+
+  &.btn-outline-dark {
+    border: 1px solid #494953;
+    color: #494953;
+    background-color: transparent;
+
+    &:hover {
+      color: #FFFFFF;
+      background-color: #494953;
+    }
+  }
+
+  &.btn-outline-primary {
+    border: 1px solid #4983FF;
+    color: #4983FF;
+    background-color: transparent;
+
+    &:hover, &[aria-expanded="true"] {
+      color: #FFFFFF;
+      border: 1px solid #007bff;
+      background-color: #007bff;
+
+      svg {
+        path {
+          fill: #FFFFFF;
+        }
+      }
+    }
+  }
+
+  &.btn-outline-white {
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    background-color: transparent;
+
+    &:hover {
+      color: #F45F68;
+      background-color: #FFFFFF;
+    }
+  }
+
+  &.btn-dashed {
+    border-style: dashed !important;
+  }
+}

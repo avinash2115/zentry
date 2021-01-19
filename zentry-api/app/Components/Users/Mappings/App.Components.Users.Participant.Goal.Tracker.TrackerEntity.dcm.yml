@@ -1,0 +1,39 @@
+App\Components\Users\Participant\Goal\Tracker\TrackerEntity:
+  type: entity
+  table: users_participants_goals_trackers
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    name:
+      type: string
+    type:
+      type: string
+    icon:
+      type: string
+    color:
+      type: string
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+  manyToOne:
+    goal:
+      targetEntity: App\Components\Users\Participant\Goal\GoalEntity
+      joinColumn:
+        name: goal_id
+        referencedColumnName: id
+  manyToMany:
+    sessions:
+      indexBy: identity
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinTable:
+        name: sessions_progress
+        joinColumns:
+          tracker_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          session_id:
+            referencedColumnName: id

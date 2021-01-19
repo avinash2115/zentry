@@ -1,0 +1,141 @@
+App\Components\Sessions\Session\SessionEntity:
+  type: entity
+  table: sessions
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    name:
+      type: string
+      nullable: false
+    type:
+      type: string
+      nullable: false
+    status:
+      type: integer
+      options:
+        default: 0
+    description:
+      type: string
+      nullable: false
+    reference:
+      type: string
+      nullable: nullable
+    geo:
+      type: geo
+      nullable: true
+    tags:
+      column: tags
+      type: tags
+    thumbnail:
+      type: string
+      nullable: true
+    startedAt:
+      type: datetime
+      nullable: true
+      column: started_at
+    endedAt:
+      type: datetime
+      nullable: true
+      column: ended_at
+    scheduledOn:
+      type: datetime
+      nullable: true
+      column: scheduled_on
+    scheduledTo:
+      type: datetime
+      nullable: true
+      column: scheduled_to
+    sign:
+      type: string
+      nullable: true
+    excludedGoals:
+      type: json
+      nullable: false
+      column: excluded_goals
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+    service:
+      targetEntity: App\Components\Services\Service\ServiceEntity
+      joinColumn:
+        name: service_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+    school:
+      targetEntity: App\Components\Users\Team\School\SchoolEntity
+      joinColumn:
+        name: school_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+  oneToMany:
+    pois:
+      targetEntity: App\Components\Sessions\Session\Poi\PoiEntity
+      mappedBy: session
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    streams:
+      targetEntity: App\Components\Sessions\Session\Stream\StreamEntity
+      mappedBy: session
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    notes:
+      targetEntity: App\Components\Sessions\Session\Note\NoteEntity
+      mappedBy: session
+      indexBy: identity
+      cascade: [ "persist", "merge", "remove" ]
+      orphanRemoval: true
+    soaps:
+      targetEntity: App\Components\Sessions\Session\SOAP\SOAPEntity
+      mappedBy: session
+      indexBy: identity
+      cascade: [ "persist", "merge", "remove" ]
+      orphanRemoval: true
+    progress:
+      targetEntity: App\Components\Sessions\Session\Progress\ProgressEntity
+      mappedBy: session
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    goals:
+      targetEntity: App\Components\Sessions\Session\Goal\GoalEntity
+      mappedBy: session
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    sources:
+      targetEntity: App\Components\CRM\Source\SessionSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id
+  manyToMany:
+    participants:
+      indexBy: identity
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinTable:
+        name: sessions_participants
+        joinColumns:
+          session_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          participant_id:
+            referencedColumnName: id

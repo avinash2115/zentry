@@ -1,0 +1,9 @@
+<div class="signature-pad">
+  <div *ngIf="!pad.isEmpty()" (click)="clear()" class="signature-pad--clear">
+    Clear
+  </div>
+  <div class="signature-pad--placeholder" *ngIf="pad.isEmpty()">
+    {{placeholder}}
+  </div>
+  <canvas #canvas class="signature-pad--canvas"></canvas>
+</div>

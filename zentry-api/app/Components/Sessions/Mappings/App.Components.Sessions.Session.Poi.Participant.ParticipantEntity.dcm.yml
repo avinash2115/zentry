@@ -1,0 +1,28 @@
+App\Components\Sessions\Session\Poi\Participant\ParticipantEntity:
+  type: entity
+  table: sessions_pois_participants
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    startedAt:
+      type: datetime
+      nullable: false
+      column: started_at
+    endedAt:
+      type: datetime
+      nullable: false
+      column: ended_at
+  manyToOne:
+    poi:
+      targetEntity: App\Components\Sessions\Session\Poi\PoiEntity
+      joinColumn:
+        name: poi_id
+        referencedColumnName: id
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id

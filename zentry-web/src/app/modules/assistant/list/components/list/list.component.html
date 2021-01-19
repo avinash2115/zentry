@@ -1,0 +1,59 @@
+<div
+  *ngIf="toolbar"
+  class="list--toolbar"
+>
+  <!--  <app-assistant-filter-controls-button></app-assistant-filter-controls-button>-->
+  <div class="list--toolbar--sorting">
+    <div class="list--toolbar--sorting__title">
+      Sort by:
+    </div>
+    <div class="list--toolbar--sorting__select">
+      <app-assistant-sorting-select
+        [sortable]="sortable"
+        [default]="sortableDefaultData"
+        [disabled]="isLoading"
+      ></app-assistant-sorting-select>
+    </div>
+  </div>
+  <div class="list--toolbar--search">
+    <app-assistant-search-local *ngIf="search"></app-assistant-search-local>
+  </div>
+</div>
+
+<!--<app-assistant-filter-toolbar></app-assistant-filter-toolbar>-->
+<!--<app-assistant-filter></app-assistant-filter>-->
+
+<div
+  *ngIf="!isLoading"
+  [class.list__pagination]="pagination"
+  class="list"
+>
+  <ng-container [ngSwitch]="stateActive">
+    <ng-container *ngSwitchCase="statesAvailable.hasItems">
+      <ng-container *ngIf="pagination; else defaultListBodyTemplate">
+        <app-assistant-pagination
+          [buttonShift]="paginationButtonShift"
+          [extendArea]="paginationExtendArea"
+          [selector]="paginationSelector"
+        >
+          <ng-template [ngTemplateOutlet]="bodyTemplate"></ng-template>
+        </app-assistant-pagination>
+      </ng-container>
+      <ng-template #defaultListBodyTemplate>
+        <ng-template [ngTemplateOutlet]="bodyTemplate"></ng-template>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <ng-container *ngIf="bodyStatesTemplate; else defaultBodyStatesTemplate">
+        <ng-template [ngTemplateOutlet]="bodyStatesTemplate"></ng-template>
+      </ng-container>
+      <ng-template #defaultBodyStatesTemplate>
+        <app-assistant-list-states></app-assistant-list-states>
+      </ng-template>
+    </ng-container>
+  </ng-container>
+</div>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

@@ -1,0 +1,51 @@
+.notifications {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    
+    .notification {
+      cursor: pointer;
+      margin: 5px;
+      overflow: hidden;
+      min-width: 280px;
+      border-radius: 6px;
+      background: #FFFFFF;
+      box-shadow: 0 0 11px 0 rgba(0,0,0,0.25);
+      min-height: 60px;
+      padding: 20px;
+      display: flex;
+      .icon {
+        margin-right: 12px;
+      }
+
+      .message {
+        color: #6B6C7E;
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 18px;
+      }
+  
+      // &.info {}
+      // &.warning {}
+  
+      &.success {
+        fa-icon {
+          color: #29D2A0;
+        }
+      }
+  
+  
+      &.error {
+        .message {
+          color: #F45F68;
+        }
+        fa-icon {
+          color: #F45F68;
+        }
+      }
+    }
+  }
+  

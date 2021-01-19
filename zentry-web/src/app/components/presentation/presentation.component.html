@@ -1,0 +1,14 @@
+<div class="presentation">
+  <div class="presentation__place cut-long-text">{{place}}</div>
+  <ng-container *ngIf="isAuthorized">
+    <div class="presentation--ad-hoc">
+      <button
+        (click)="quickStart()"
+        class="btn btn--radius__md btn--color__gradient"
+      >
+        <i class="ad-hoc"></i> Quick Start
+      </button>
+    </div>
+  </ng-container>
+</div>
+

@@ -1,0 +1,38 @@
+.list {
+  &--toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    box-shadow: 0 -2px 15px 0 rgba(0,0,0,0.06);
+    padding: 10px 15px;
+    margin-bottom: 30px;
+
+    &--sorting {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &__title {
+        font-size: 16px;
+        font-weight: 800;
+        margin-right: 10px;
+      }
+
+      &__select {
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+
+    &--search {
+      margin-left: auto;
+    }
+  }
+
+  &__pagination {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

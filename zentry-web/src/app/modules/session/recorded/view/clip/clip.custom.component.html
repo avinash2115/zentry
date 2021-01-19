@@ -1,0 +1,192 @@
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="data.length; else emptyListTemplate">
+    <div class="clips--list">
+      <div
+        *ngFor="let poi of data; let first = first; let last = last"
+        [class.clips--list--item--removing]="removalMode && removalMode.id === poi.id"
+        class="clips--list--item"
+      >
+        <div class="clips--list--item--body">
+          <div
+            (click)="seek(poi)"
+            class="clips--list--item--body__snap"
+          >
+            <img
+              [src]="poi.thumbnailUrl || '/assets/img/icons/session/recorded/clip-placeholder.svg'"
+              [alt]="poi.startedAtHuman(recordedEntity)"
+            >
+          </div>
+          <div class="clips--list--item--body--meta">
+            <div class="clips--list--item--body--meta--frame">
+              <div class="clips--list--item--body--meta--frame--type">
+                <fa-icon
+                  *ngIf="isType(poi, recordedService.poiService.types.backtrack)"
+                  icon="backward"
+                ></fa-icon>
+                <fa-icon
+                  *ngIf="isType(poi, recordedService.poiService.types.stopwatch)"
+                  icon="microphone-alt"
+                ></fa-icon>
+                <i
+                  [class.clips--list--item--body--meta--frame--type__poi]="isType(poi, recordedService.poiService.types.poi)"
+                ></i>
+              </div>
+              <a
+                (click)="seek(poi)"
+                [ngbTooltip]="'Playback the clip'"
+                [placement]="last ? 'top' : 'bottom'"
+                container="body"
+                class="clips--list--item--body--meta--frame__time force"
+              >
+                {{poi.startedAtHuman(recordedEntity)}} - {{poi.endedAtHuman(recordedEntity)}}
+              </a>
+            </div>
+            <div *ngIf="!recordedEntity.readonly" class="clips--list--item--body--meta--actions">
+              <div
+                (click)="share(poi)"
+                [class.outline__green]="poi.isShared"
+                [ngbTooltip]="poi.isShared ? 'Edit Access' : 'Share Clip'"
+                container="body"
+                placement="auto"
+                class="clips--list--item--body--meta--actions__share"
+              >
+                <fa-icon icon="share-square"></fa-icon>
+              </div>
+              <div
+                (click)="startRemoval(poi)"
+                ngbTooltip="Remove Clip"
+                container="body"
+                placement="auto"
+                class="clips--list--item--body--meta--actions__remove"
+              >
+                <fa-icon icon="trash" [classes]="['fa--default']"></fa-icon>
+              </div>
+            </div>
+            <div class="clips--list--item--body--meta--duration">
+              <div class="clips--list--item--body--meta--duration__time">
+                {{poi.durationHuman}}
+              </div>
+              <div
+                *ngIf="!recordedEntity.readonly"
+                class="clips--list--item--body--meta--duration--tags"
+              >
+                <fa-icon icon="tag" [classes]="['fa--default']"></fa-icon>
+                <a
+                  (click)="onEditMode('tags', poi)"
+                  *ngIf="!isEditMode('tags', poi)"
+                  class="clips--list--item--body--meta--duration--tags__action force"
+                >
+                  {{poi.tags.length ? 'Edit tags' : 'Define tags'}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clips--list--item--footer">
+          <div
+            *ngIf="poi.tags.length || isEditMode('tags', poi)"
+            class="clips--list--item--footer--tags--list"
+          >
+            <div class="input-group confirmation">
+              <tag-input
+                (onAdd)="detectChanges()"
+                (onRemove)="detectChanges()"
+                (onFocus)="detectChanges()"
+                (onValidationError)="detectChanges()"
+                (onSelect)="detectChanges()"
+                (onPaste)="detectChanges()"
+                (onBlur)="save(poi, 'tags')"
+                (ngModelChange)="detectChanges()"
+                [addOnBlur]="true"
+                [(ngModel)]="poi.tags"
+                [class.readonly]="!isEditMode('tags', poi)"
+                [removable]="isEditMode('tags', poi)"
+                [identifyBy]="'tag'"
+                [displayBy]="'tag'"
+                [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                theme='bootstrap'
+              >
+              </tag-input>
+              <div
+                *ngIf="isEditMode('tags', poi)"
+                class="input-group-append"
+              >
+                <button
+                  (click)="save(poi,'tags')"
+                  class="btn"
+                >
+                  <fa-icon icon="check"></fa-icon>
+                </button>
+                <button
+                  (click)="cancel(poi, 'tags')"
+                  class="btn"
+                >
+                  <fa-icon icon="times"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clips--list--item--participants">
+          <app-session-recorded-shared-participant-custom
+            [recorded]="recordedEntity"
+            [recordedPoi]="poi"
+            [readonly]="recordedEntity.readonly"
+          ></app-session-recorded-shared-participant-custom>
+        </div>
+        <div
+          *ngIf="recordedService.poiService.transcriptService.transcript(poi)?.transcript"
+          class="clips--list--item--transcript"
+        >
+          <a
+            (click)="transcriptToggle(poi)"
+            class="clips--list--item--transcript__action force"
+          >
+            <fa-icon icon="align-left"></fa-icon>
+            <span>{{transcriptIsVisible(poi) ? 'Hide Transcript' : 'Show Transcript'}}</span>
+          </a>
+          <div
+            *ngIf="transcriptIsVisible(poi)"
+            class="clips--list--item--transcript--body"
+          >
+            <div class="clips--list--item--transcript--body--heading">
+              <a class="clips--list--item--transcript--body--heading__edit force">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span>Click to edit text</span>
+              </a>
+            </div>
+            <div class="clips--list--item--transcript--body--content">
+              {{recordedService.poiService.transcriptService.transcript(poi)?.transcript}}
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="removalMode && removalMode.id === poi.id"
+          class="clips--list--item--removing--overlay"
+        >
+          <div class="clips--list--item--removing--overlay__title">
+            Are you sure you want do remove this clip?
+          </div>
+          <div class="clips--list--item--removing--overlay--actions">
+            <button (click)="confirmRemoval()" class="btn btn--radius__md btn-outline-white">Remove</button>
+            <button (click)="cancelRemoval()" class="btn btn--radius__md btn-outline-white">No, Keep</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<app-loader *ngIf="isLoading"></app-loader>
+
+<ng-template #emptyListTemplate>
+  <div class="clips--empty">
+    <div class="clips--empty__icon"></div>
+    <div class="clips--empty__title heading">
+      You don't have any clips
+    </div>
+    <div class="clips--empty__subtitle sub-heading sub-heading--muted">
+      Track your clips in the Widget or in the {{applicationName}} Mobile next time.
+    </div>
+  </div>
+</ng-template>

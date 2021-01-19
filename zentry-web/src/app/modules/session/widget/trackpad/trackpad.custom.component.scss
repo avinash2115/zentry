@@ -1,0 +1,191 @@
+.trackpad {
+  &--controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 0 10px;
+
+    &--buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 25px;
+
+      &__backtrack, &__poi, &--stopwatch--wrapper__button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 100%;
+        transition: all .2s, opacity 0.7s linear;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
+      }
+
+      &--stopwatch {
+        &--wrapper {
+          position: relative;
+          height: 87px;
+          width: 87px;
+          margin-top: 8px;
+          padding-bottom: 7px;
+
+          &__button {
+            position: relative;
+            height: 87px;
+            width: 87px;
+            background: linear-gradient(45deg, #01AAF4 0%, #4BFFC9 100%);
+
+            &:hover {
+              background: linear-gradient(45deg, #0293D3 0%, #3CDAAB 100%);
+            }
+
+            span {
+              position: absolute;
+              bottom: 9px;
+              font-size: 12px;
+              color: #FFFFFF;
+            }
+
+            i {
+              width: 20px;
+              height: 32px;
+              background-image: url("/assets/img/icons/themes/zentry/session/widget/buttons/stopwatch.svg");
+              background-repeat: no-repeat;
+              background-size: contain;
+            }
+          }
+
+          &__effect {
+            position: absolute;
+            top: -47%;
+            left: -57%;
+            transform-origin: 50% 50%;
+            display: none;
+            width: 185px;
+            min-width: 185px;
+            height: 170px;
+            min-height: 170px;
+            background-image: url("/assets/img/icons/themes/zentry/session/widget/buttons/effect.svg");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+          }
+
+          &.active & {
+            &__button {
+              z-index: 1;
+              background: linear-gradient(180deg, #FF6D6D 0%, #FF4E81 100%);
+
+              &:hover {
+                background: linear-gradient(180deg, #F46161 0%, #DE3B6A 100%);
+              }
+            }
+
+            &__effect {
+              display: block;
+              animation: spin 4s linear infinite;
+            }
+          }
+
+          &--progress {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 116px;
+            min-width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            min-height: 116px;
+            background-image: url("/assets/img/icons/themes/zentry/session/widget/buttons/background.svg");
+            background-position: center center;
+            background-repeat: no-repeat;
+          }
+
+          circle-progress {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+
+      &__backtrack, &__poi {
+        height: 45px;
+        width: 45px;
+        background: linear-gradient(180deg, #0DBAF0 0%, #2BCFFF 100%);
+
+        &:hover {
+          background: linear-gradient(180deg, #089FCF 0%, #27C3EF 100%);
+        }
+
+        &.visited {
+          background: linear-gradient(0deg, #FF6D6D 0%, #FF4E81 100%);
+        }
+
+        i {
+          background-repeat: no-repeat;
+          color: #FFFFFF;
+        }
+      }
+
+      &__backtrack {
+        i {
+          width: 17px;
+          height: 14px;
+          background-size: contain;
+          background-image: url("/assets/img/icons/themes/zentry/session/widget/buttons/backtrack.svg");
+        }
+      }
+
+      &__poi {
+        i {
+          width: 20px;
+          height: 20px;
+          background-size: contain;
+          background-image: url("/assets/img/icons/themes/zentry/session/widget/buttons/poi.svg");
+        }
+      }
+
+      &--inline {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 20px;
+
+        &--item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 25px;
+
+          span {
+            margin-top: 14px;
+            color: #888997;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    &__duration {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  }
+
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

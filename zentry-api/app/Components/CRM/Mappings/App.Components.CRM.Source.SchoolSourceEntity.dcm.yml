@@ -1,0 +1,8 @@
+App\Components\CRM\Source\SchoolSourceEntity:
+  type: entity
+  manyToOne:
+    entity:
+      targetEntity: App\Components\Users\Team\School\SchoolEntity
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

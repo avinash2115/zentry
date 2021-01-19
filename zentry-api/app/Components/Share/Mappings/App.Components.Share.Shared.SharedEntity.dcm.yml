@@ -1,0 +1,21 @@
+App\Components\Share\Shared\SharedEntity:
+  type: entity
+  table: shared
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    type:
+      type: string
+    payload:
+      type: shared_payload
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

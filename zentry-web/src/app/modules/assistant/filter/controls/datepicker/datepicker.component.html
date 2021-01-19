@@ -1,0 +1,29 @@
+<div
+  [formGroup]="form"
+  class="form-group"
+>
+  <label>{{filterName}}:</label>
+  <ng-select
+    (close)="onCloseEvent()"
+    (open)="onOpenEvent()"
+    [clearable]="true"
+    [searchable]="true"
+    appendTo="#filter"
+    formControlName="preset"
+  >
+    <ng-container *ngFor="let key of objectKeys(datesPreset)">
+      <ng-option [value]="key">{{datePresetLabels[key]}}</ng-option>
+    </ng-container>
+  </ng-select>
+<!--  <input-->
+<!--    #dp="bsDaterangepicker"-->
+<!--    [bsConfig]="bsConfig"-->
+<!--    bsDaterangepicker-->
+<!--    class="form-control mt-15"-->
+<!--    container="#filter"-->
+<!--    formControlName="date"-->
+<!--    placement="{{innerWidth > 1024 ? 'right' : 'bottom'}}"-->
+<!--    readonly-->
+<!--    type="text"-->
+<!--  >-->
+</div>

@@ -1,0 +1,22 @@
+.token {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 30px;
+
+  &--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 220px;
+    width: 220px;
+    border-radius: 100%;
+    background-color: #F7FAFC;
+  }
+
+  &__title, &__loader {
+    margin-top: 30px;
+  }
+}

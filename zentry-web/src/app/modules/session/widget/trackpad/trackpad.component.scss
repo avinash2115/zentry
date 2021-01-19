@@ -1,0 +1,144 @@
+.trackpad {
+  &--controls {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &--buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+
+      &__guide {
+        position: absolute;
+        bottom: 0;
+        transform: translateY(150%);
+        text-transform: uppercase;
+        font-size: 10px;
+        font-weight: 700;
+        color: #888997;
+      }
+
+      &__backtrack, &__poi, &__stopwatch {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+        border-radius: 100%;
+        box-shadow: 0 5px 16px 0 rgba(0,0,0,0.2);
+        transition: all .2s, opacity 0.7s linear;
+      }
+
+      &__backtrack, &__poi {
+        width: 57px;
+        height: 57px;
+        background-color: #9093C5;
+
+        &:hover {
+          background-color: #4983FF;
+        }
+
+        &.visited {
+          animation: ripple-small 1s linear;
+        }
+      }
+
+      &__backtrack {
+        i {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 31px;
+          height: 32px;
+          background-image: url("/assets/img/icons/session/widget/buttons/backtrack.svg");
+          background-repeat: no-repeat;
+          color: #FFFFFF;
+          font-size: 12px;
+          font-weight: 800;
+          line-height: 1.1;
+        }
+      }
+
+      &__stopwatch {
+        position: relative;
+        margin: 0 13px;
+        height: 122px;
+        width: 122px;
+        background: linear-gradient(225deg, #06D2DE 0%, #9B70FE 100%);
+
+        &:hover {
+          background: linear-gradient(225deg, #5BF6FF 0%, #B290FF 100%);
+        }
+
+        &.active {
+          background: linear-gradient(224.72deg, #F45F68 0%, #9B70FE 100%);
+
+          i {
+            width: 30px;
+            height: 30px;
+            background-image: url("/assets/img/icons/session/widget/buttons/stop.svg");
+            background-repeat: no-repeat;
+          }
+
+          animation: ripple 1s linear infinite;
+        }
+
+        i {
+          width: 46px;
+          height: 46px;
+          background-image: url("/assets/img/icons/session/widget/buttons/stopwatch.svg");
+          background-repeat: no-repeat;
+        }
+
+        span {
+          position: absolute;
+          bottom: 15px;
+          color: #FFFFFF;
+        }
+      }
+
+      &__poi {
+        i {
+          width: 20px;
+          height: 28px;
+          background-image: url("/assets/img/icons/session/widget/buttons/poi.svg");
+          background-repeat: no-repeat;
+        }
+      }
+    }
+
+    &__duration {
+      margin-top: 25px;
+      font-size: 16px;
+    }
+  }
+
+  &--participant {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+  }
+
+  @keyframes ripple {
+    0% {
+      box-shadow: 0 0 0 0 rgba(209, 102, 163, 0.15), 0 0 0 10px rgba(209, 102, 163, 0.15), 0 0 0 20px rgba(209, 102, 163, 0.15), 0 0 0 40px rgba(209, 102, 163, 0.15);
+    }
+    100% {
+      box-shadow: 0 0 0 10px rgba(209, 102, 163, 0.15), 0 0 0 20px rgba(209, 102, 163, 0.15), 0 0 0 40px rgba(209, 102, 163, 0.15), 0 0 0 60px rgba(0, 231, 255, 0);
+    }
+  }
+
+  @keyframes ripple-small {
+    0% {
+      box-shadow: 0 0 0 0 rgba(209, 102, 163, 0.15), 0 0 0 10px rgba(209, 102, 163, 0.15), 0 0 0 20px rgba(209, 102, 163, 0.15);
+    }
+    100% {
+      box-shadow: 0 0 0 10px rgba(209, 102, 163, 0.15), 0 0 0 20px rgba(0, 231, 255, 0);
+    }
+  }
+}

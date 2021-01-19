@@ -1,0 +1,68 @@
+App\Components\Users\Team\TeamEntity:
+  type: entity
+  table: users_teams
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    name:
+      type: string
+    description:
+      type: string
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    owner:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+  oneToMany:
+    requests:
+      targetEntity: App\Components\Users\Team\Request\RequestEntity
+      mappedBy: team
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    sources:
+      targetEntity: App\Components\CRM\Source\TeamSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id
+    participants:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      mappedBy: team
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    schools:
+      targetEntity: App\Components\Users\Team\School\SchoolEntity
+      mappedBy: team
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+  manyToMany:
+    members:
+      indexBy: identity
+      targetEntity: App\Components\Users\User\UserEntity
+      joinTable:
+        name: users_teams_members
+        joinColumns:
+          team_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          user_id:
+            referencedColumnName: id

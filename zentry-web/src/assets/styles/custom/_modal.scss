@@ -1,0 +1,155 @@
+.modal-dialog {
+  position: relative;
+  border-radius: 9px;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 16px 0 rgba(0,0,0,0.11);
+
+  .modal-content {
+    border-radius: 9px;
+    border: none;
+    padding: 30px 60px;
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+      cursor: pointer;
+      background: rgba(186,187,203,0.25);
+      font-size: 15px;
+      color: #494953;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgba(186,187,203,0.75);
+      }
+    }
+
+    .modal-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      fa-icon {
+        font-size: 67px;
+      }
+
+      margin-bottom: 10px;
+    }
+
+    .modal-header {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 0;
+
+      .modal-title {
+        font-size: 20px;
+        font-weight: 800;
+        text-align: center;
+      }
+
+      .modal-subtitle {
+        margin-top: 10px;
+        color: #6B6C7E;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+
+    .modal-body {
+      :not(&--no-indentation) {
+        margin-top: 30px;
+      }
+      border: 0;
+
+      .form-group {
+        label {
+          color: #888997;
+          font-size: 14px;
+          font-weight: bold;
+
+          fa-icon {
+            margin-right: 10px;
+          }
+        }
+
+        input {
+          min-height: 47px;
+        }
+      }
+
+      agm-map {
+        height: 300px;
+      }
+    }
+
+    .modal-footer {
+      border: 0;
+      justify-content: space-around;
+
+      button {
+        display: flex;
+        flex: 0 0 40%;
+      }
+
+      .modal-buttons {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 auto;
+
+        button {
+          display: flex;
+          flex: 0 0 auto;
+
+          &:not(:first-child) {
+            margin-left: 10px;
+          }
+
+          &:last-child {
+            margin-left: auto;
+          }
+        }
+
+        &--center {
+          justify-content: center;
+          button {
+            &:last-child {
+              margin-left: initial;
+            }
+          }
+        }
+
+        @media (max-width: 1279px) {
+          flex-wrap: wrap;
+
+          button {
+            &:not(:first-child) {
+              flex: 1;
+            }
+
+            &:last-child {
+              flex: 1 1 100%;
+              margin-left: 0;
+              margin-top: 10px;
+            }
+          }
+        }
+
+        @media (max-width: 415px) {
+          button {
+            flex: 1 1 100%;
+            margin-top: 10px;
+            margin-left: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+.color {
+  &__primary {
+    color: #4983FF;
+  }
+
+  &--action {
+    color: #2C9BD6 !important;
+
+    &:hover {
+      color: #2179A8 !important;
+    }
+
+    &__green {
+      color: #36DAA9 !important;
+
+      &:hover {
+        color: #13785A !important;
+      }
+    }
+
+    &__red {
+      color: #F45F68 !important;
+
+      &:hover {
+        color: #BC454C !important;
+      }
+    }
+
+    &__black {
+      color: #293F70 !important;
+
+      &:hover {
+        color: #213257 !important;
+      }
+    }
+
+    &__orange {
+      color: #FFB601 !important;
+
+      &:hover {
+        color: #FFB601 !important;
+      }
+    }
+
+    &__muted {
+      color: #95A4C6 !important;
+
+      &:hover {
+        color: #494953 !important;
+      }
+    }
+
+    &.inverse {
+      &:not(:hover) {
+        color: #95A4C6 !important;
+      }
+    }
+
+    &__green, &__red, &__orange {
+      &.inverse {
+        &:not(:hover) {
+          color: #95A4C6 !important;
+        }
+      }
+    }
+  }
+}
+
+.outline {
+  &__green {
+    color: #29D2A0 !important;
+    border: 1px solid #29D2A0;
+    background-color: #FFFFFF;
+
+    &:hover {
+      color: #21AE83 !important;
+      border: 1px solid #21AE83;
+    }
+  }
+}

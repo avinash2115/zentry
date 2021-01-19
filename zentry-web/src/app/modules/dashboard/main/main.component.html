@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="main.component.scss">
+<div *ngIf="!isLoading" class="dashboard">
+  <div class="dashboard--heading">
+    <div class="dashboard--heading--greetings">
+      <div class="dashboard--heading--greetings__avatar">
+        <div *ngIf="authUser" class="avatar-wrapper">
+          <img *ngIf="false; else simpleAvatar" [src]="" [alt]="authUser.initials" class="avatar avatar__lg">
+          <ng-template #simpleAvatar>
+            <span class="avatar avatar__lg">{{authUser.initials}}</span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="dashboard--heading--greetings--info">
+        <div class="dashboard--heading--greetings--info__hello cut-long-text">
+          Hi, {{authUser.profile.fullname}}
+        </div>
+        <div class="dashboard--heading--greetings--info__time">
+          {{today | date:'h:mm a EEEE, MMM d'}}
+        </div>
+      </div>
+    </div>
+    <div class="dashboard--heading--ad-hoc">
+      <button
+        (click)="quickStart()"
+        class="btn btn--radius__md btn--color__gradient"
+      >
+        <i class="ad-hoc"></i> Quick Start
+      </button>
+    </div>
+  </div>
+  <div class="dashboard--recording">
+    <div class="dashboard--recording__content">
+      <app-session-calendar
+        [embedded]="true"
+      ></app-session-calendar>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>
+

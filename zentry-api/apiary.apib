@@ -1,0 +1,4095 @@
+FORMAT: 1A
+
+# ECHO API
+
+API documentation
+
+# Events
+
+## Users
+
+### Devices
+
+#### Channel:
+
+`
+users-{userIdentity}.devices
+`
+
+#### Events:
+
+`
+created
+`
+
+`
+exists
+`
+
+`
+removed
+`
+
+```json
+
+    {
+        "data": {
+            "type": "users_devices",
+            "id": "cf59309e-133f-48d4-932f-2817d97ac985",
+            "attributes": {
+                "type": "mobile",
+                "model": "phone",
+                "reference": "11111111",
+                "created_at": "2020-04-15T10:44:48+00:00",
+                "updated_at": "2020-04-15T10:44:48+00:00"
+            },
+            "relationships": {
+                "user": {
+                    "data": {
+                        "type": "users",
+                        "id": "f9c1f29f-7094-4053-9784-df2faf000ff4",
+                        "attributes": {
+                            "email": "example@echo.com",
+                            "created_at": "2020-04-15T10:39:58+00:00",
+                            "updated_at": "2020-04-15T10:39:58+00:00",
+                            "archived_at": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+```
+
+`
+connecting_started
+`
+
+`
+connecting_refresh
+`
+
+`
+connecting_failed
+`
+
+```json
+    {
+        "data": {
+            "type": "users_devices_connecting_payload",
+            "id": "cf59309e-133f-48d4-932f-2817d97ac985",
+            "attributes": {
+                "type": "mobile",
+                "model": "phone",
+                "reference": "11111111",
+            }
+        }
+    }
+```
+
+### Sessions
+
+#### Channel:
+
+`
+users-{userIdentity}.sessions
+`
+
+#### Events:
+
+`
+started
+`
+
+```json
+{
+    "data": {
+        "type": "sessions",
+        "id": "fb158e13-e812-45b3-8dd2-bf59c6a717e6",
+        "attributes": {
+            "name": "session",
+            "started_at": "2020-04-21T12:12:53+00:00",
+            "ended_at": "",
+            "created_at": "2020-04-21T12:12:53+00:00"
+        }
+    }
+}
+```
+
+
+#### Channel:
+
+`
+users-{userIdentity}.sessions-{sessionIdentity}
+`
+
+#### Events:
+
+`
+changed
+`
+
+`
+ended
+`
+
+`
+wrapped
+`
+
+```json
+{
+    "data": {
+        "type": "sessions",
+        "id": "fb158e13-e812-45b3-8dd2-bf59c6a717e6",
+        "attributes": {
+            "name": "session",
+            "started_at": "2020-04-21T12:12:53+00:00",
+            "ended_at": "",
+            "created_at": "2020-04-21T12:12:53+00:00"
+        }
+    }
+}
+```
+
+`
+poi_created
+`
+
+`
+poi_changed
+`
+
+`
+poi_removed
+`
+
+```json
+{
+    "data": {
+        "type": "sessions_pois",
+        "id": "2593b703-c81c-44b5-9ed5-cec9841325be",
+        "attributes": {
+            "type": "poi",
+            "duration": 20,
+            "started_at": "2016-01-01T12:00:00+00:00",
+            "ended_at": "2016-01-01T12:00:20+00:00",
+            "created_at": "2020-04-24T08:57:01+00:00"
+        },
+        "links": {
+            "self": "https://{ECHO_HOST}/sessions/3094a037-8801-4a88-8485-eb05c5e4188b/relationships/pois/2593b703-c81c-44b5-9ed5-cec9841325be"
+        }
+    }
+}
+```
+
+`
+stream_created
+`
+
+`
+stream_convert_progress
+`
+
+```json
+{
+    "data": {
+        "type": "sessions_streams",
+        "id": "2593b703-c81c-44b5-9ed5-cec9841325be",
+        "attributes": {
+            "type": "audio",
+            "convert_progress": 20,
+            "created_at": "2020-04-24T08:57:01+00:00"
+        },
+        "links": {
+            "self": "https://{ECHO_HOST}/sessions/3094a037-8801-4a88-8485-eb05c5e4188b/relationships/streams/2593b703-c81c-44b5-9ed5-cec9841325be"
+        }
+    }
+}
+```
+
+`
+participant_added
+`
+
+`
+participant_removed
+`
+
+```json
+    {
+        "data": {
+            "type": "users_participants",
+            "id": "t318a31a-0bcf-48d1-9350-a6ae499007c0",
+            "attributes": {
+                "email": "example@domain.com",
+                "first_name": "John",
+                "last_name": "Doe",
+                "phone_code": "1",
+                "phone_number": "38944133",
+                "avatar": "path/avatar.png",
+                "dob": "1990-04-24T00:00:00+00:00",
+                "created_at": "2020-04-24T08:57:01+00:00",
+                "updated_at": "2020-04-24T08:57:01+00:00"
+            }
+        }
+    }
+```
+
+***
+
+# Group HTTP Headers
+
+Every request should has default Headers:
+
+```
+
+    Accept: application/vnd.api+json
+    Content-Type: application/vnd.api+json
+
+```
+
+Every authorized device should contains device identity header:
+
+```
+
+    X-DEVICE-REFERENCE: t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+```
+
+Authorization token should be set via Authorization Header:
+
+```
+
+    Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+```
+
+API doesn't accept DELETE method, instead of this please set X-HTTP-METHOD-OVERRIDE Header:
+
+```
+
+    X-HTTP-METHOD-OVERRIDE: DELETE
+
+```
+
+# Data Structures
+
+## Identity Scheme (object)
++ id: `t318a31a-0bcf-48d1-9350-a6ae499007c0` (string, required)
+
+## Acknowledge Response
++ acknowledge: true (boolean)
+
+## Exception Body (object)
++ Include Identity Scheme
+
+## Exception Info (object)
++ detail: `Issue has been reported, id#t318a31a-0bcf-48d1-9350-a6ae499007c0`
++ meta (object)
+    + trace (array)
+    + source (object)
+        + parameters (object)
+        + body (object)
+
+## Validation Response
++ data (object)
+    + Include Exception Body
+    + status: 422 (number, optional)
+    + title: `Sample validation error text` (string)
+    + Include Exception Info
+
+## Unathorized Response
++ data (object)
+    + Include Exception Body
+    + status: 401 (number, optional)
+    + title: `Not authorized` (string)
+    + Include Exception Info
+
+## Not Found Response
++ data (object)
+    + Include Exception Body
+    + status: 404 (number, optional)
+    + title: `Not found` (string)
+    + Include Exception Info
+
+## Server Error Response
++ data (object)
+    + Include Exception Body
+    + status: 500 (number, optional)
+    + title: `Sample server error text` (string)
+    + Include Exception Info
+
+## Dead Session Response
++ data (object)
+    + Include Exception Body
+    + status: 409 (number, optional)
+    + title: `Sample server error text` (string)
+    + Include Exception Info
+
+## In Progress Session Response
++ data (object)
+    + Include Exception Body
+    + status: 423 (number, optional)
+    + title: `Sample server error text` (string)
+    + Include Exception Info
+
+## Active Session Response
++ data (object)
+    + Include Exception Body
+    + status: 424 (number, optional)
+    + title: `Sample server error text` (string)
+    + Include Exception Info
+
+## Authorization Type (object)
++ type: `session` (string, required)
+
+## Authorization (Authorization Type)
++ attributes (object, required)
+    + email: `example@domain.com` (string, required)
+    + password: `SuperSecureP@ssword` (string, required)
+    + remember: `true` (boolean, optional)
++ relationships
+    + device (object, optional)
+        + data (Device Create)
+
+## Authorization Token (Authorization Type)
++ attributes (object)
+    + token: `t318a31a-0bcf-48d1-9350-a6ae499007c0` (string)
+
+## Authorization Login Token Type (object)
++ type: `login_tokens` (string, required)
+
+## Authorization Login Token Scheme (Authorization Login Token Type)
++ attributes (object)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+
+## Authorization Login Token Signin (Authorization Login Token Type)
++ attributes (object)
+    + referer: `sample referer string` (string)
+
+## Authorization Login Token Create (Authorization Login Token Type)
++ attributes (object)
+    + referer: `sample referer string` (string)
+    + email: `example@domain.com` (string, required)
+    + password: `SuperSecureP@ssword` (string, required)
+
+## SSO Auth Type (object)
++ type: `sso` (string, required)
+
+## SSO Auth Scheme (SSO Auth Type)
++ Include Identity Scheme
++ attributes (object)
+    + config (object, required)
+        + type: `google` (string)
+        + auth_token: `a0AfH6SMC7QFC0n02LSONT` (string)
+
+## SSO Available Drivers Type (object)
++ type: `sso_drivers` (string, required)
+
+## SSO Available Drivers Scheme (SSO Available Drivers Type)
++ Include Identity Scheme
++ attributes (object)
+    + type (enum, required)
+        + google
+    + title: `Google` (string, required)
+    + config (array, required)
+
+## User Type (object)
++ type: `users` (string, required)
+
+## User Create (User Type)
++ attributes (object)
+    + email: `example@domain.com` (string, required)
+    + password: `SuperSecureP@ssword` (string, required)
+    + password_repeat: `SuperSecureP@ssword` (string, required)
++ relationships
+    + profile (object, required)
+        + data (User Profile Create)
+
+## User Scheme (User Type)
++ Include Identity Scheme
++ attributes (object)
+    + email: `example@domain.com` (string, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## User Full (User Scheme)
++ relationships
+    + poi (object)
+        + data (POI Scheme)
+    + backtrack (object)
+        + data (Backtrack Scheme)
+    + profile (object)
+        + data (User Profile Scheme)
+
+## User Profile Type (object)
++ type: `users_profile` (string, required)
+
+## User Profile Scheme (User Profile Type)
++ Include Identity Scheme
++ attributes (object)
+    + first_name: `John` (string, required)
+    + last_name: `Doe` (string, required)
+    + phone_code: `1` (string, optional)
+    + phone: `38944133` (string, required)
+
+## User Profile Create (User Profile Type)
++ Include Identity Scheme
++ attributes (object)
+    + first_name: `John` (string, required)
+    + last_name: `Doe` (string, required)
+    + phone: `38944133` (string, optional)
+
+## User Storage Type (object)
++ type: `users_storages` (string, required)
+
+## User Storage Scheme (User Storage Type)
++ Include Identity Scheme
++ attributes (object)
+    + driver (enum, required)
+        + default
+        + kloudless_s3
+        + kloudless_google_drive
+        + kloudless_dropbox
+        + kloudless_box
+    + name: `AWS` (string, required)
+    + enabled: `true` (boolean, optional)
+    + available: `true` (boolean, optional)
+    + used: `38944133` (number, required)
+    + capacity: `389441335` (number, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## User Storage Create (User Storage Type)
++ Include Identity Scheme
++ attributes (object)
+    + driver (enum, required)
+        + default
+        + kloudless_s3
+        + kloudless_google_drive
+        + kloudless_dropbox
+        + kloudless_box
+    + config (array, required)
+
+## User Storage Driver Type (object)
++ type: `users_storages_drivers` (string, required)
+
+## User Storage Driver Scheme (User Storage Driver Type)
++ Include Identity Scheme
++ attributes (object)
+    + type (enum, required)
+        + default
+        + kloudless_s3
+        + kloudless_google_drive
+        + kloudless_dropbox
+        + kloudless_box
+    + title: `AWS` (string, required)
+    + config (array, required)
+
+## User Data Provider Type (object)
++ type: `users_data_providers` (string, required)
+
+## User Data Provider Scheme (User Data Provider Type)
++ Include Identity Scheme
++ attributes (object)
+    + driver (enum, required)
+        + google_calendar
+    + name: `Google Calendar` (string, required)
+    + status: `10` (number, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## User Data Provider Create (User Data Provider Type)
++ Include Identity Scheme
++ attributes (object)
+    + driver (enum, required)
+        + google_calendar
+    + status: `10` (number, required)
+    + config (array, required)
+
+## User Data Provider Driver Type (object)
++ type: `users_data_providers_drivers` (string, required)
+
+## User Data Provider Driver Scheme (User Data Provider Driver Type)
++ Include Identity Scheme
++ attributes (object)
+    + type (enum, required)
+        + google_calendar
+    + title: `Google Calendar` (string, required)
+    + config (array, required)
+
+## POI Type (object)
++ type: `users_poi` (string, required)
+
+## POI Scheme (POI Type)
++ Include Identity Scheme
++ attributes
+    + backward: `5` (number, required)
+    + forward: `5` (number, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## Backtrack Type (object)
++ type: `users_backtrack` (string, required)
+
+## Backtrack Scheme (Backtrack Type)
++ Include Identity Scheme
++ attributes
+    + backward: `15` (number, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## Password Reset Type (object)
++ type: `password_resets` (string, required)
+
+## Password Reset Create (Password Reset Type)
++ Include Identity Scheme
++ attributes
+    + email: `example@domain.com` (string, required)
+
+## Password Reset Update (Password Reset Type)
++ Include Identity Scheme
++ attributes
+    + password: `SuperSecureP@ssword` (string, required)
+    + password_repeat: `SuperSecureP@ssword` (string, required)
+
+## Device Type (object)
++ type: `users_devices` (string, required)
+
+## Device Create (Device Type)
++ attributes (object)
+    + type: `Mobile phone` (string, required)
+    + model: `Phone model` (string, required)
+    + reference: `t318a31a-0bcf-48d1-9350-a6ae499007c0` (string, required)
+
+## Device Scheme (Device Type)
++ Include Identity Scheme
++ attributes (object)
+    + type: `Mobile phone` (string, required)
+    + model: `Phone model` (string, required)
+    + reference: `t318a31a-0bcf-48d1-9350-a6ae499007c0` (string, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## Device Full (Device Scheme)
++ relationships
+    + user (object)
+        + data (User Scheme)
+
+## Participant Type (object)
++ type: `users_participants` (string, required)
+
+## Participant Create (Participant Type)
++ attributes (object)
+    + email: `example@domain.com` (string, optional)
+    + first_name: `John` (string, optional)
+    + last_name: `Doe` (string, optional)
+    + phone_code: `1` (string, optional)
+    + phone_number: `38944133` (string, optional)
+    + avatar: `path/avatar.png` (string, optional)
+    + gender (enum, optional)
+        + male
+        + female
+    + dob: `1990-04-24T00:00:00+00:00` (string, optional)
+
+## Participant Scheme (Participant Type)
++ Include Identity Scheme
++ attributes (object)
+    + email: `example@domain.com` (string, optional)
+    + first_name: `John` (string, optional)
+    + last_name: `Doe` (string, optional)
+    + phone_code: `1` (string, optional)
+    + phone_number: `38944133` (string, optional)
+    + avatar: `path/avatar.png` (string, optional)
+    + gender (enum, optional)
+        + male
+        + female
+    + dob: `1990-04-24T00:00:00+00:00` (string, optional)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## Participant Full (Participant Scheme)
++ relationships
+    + user (object)
+        + data (User Scheme)
+    + goals (object)
+        + data (array[Participant Goal Scheme])
+
+## Participant Goal Type (object)
++ type: `users_participants_goals` (string, required)
+
+## Participant Goal Create (Participant Goal Type)
++ attributes (object)
+    + name: `Goal name` (string, required)
+    + description: `Description` (string, optional)
++ relationships (object)
+    + trackers (object)
+        + data (array[Participant Goal Tracker Scheme])
+
+## Participant Goal Scheme (Participant Goal Type)
++ Include Identity Scheme
++ attributes (object)
+    + name: `Goal name` (string, required)
+    + description: `Description` (string, optional)
+    + reached: `true` (boolean, required)
+    + imported: `true` (boolean, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string)
+
+## Participant Goal Full (Participant Goal Scheme)
++ relationships (object)
+    + trackers (object)
+        + data (array[Participant Goal Tracker Scheme])
+
+## Participant Goal Tracker Type (object)
++ type: `users_participants_goals_trackers` (string, required)
+
+## Participant Goal Tracker Scheme (Participant Goal Type)
++ Include Identity Scheme
++ attributes (object)
+    + name: `Tracker name` (string, required)
+    + icon: `/path/to/icon.png` (string, optional)
+    + created_at: `2020-04-24T08:57:01+00:00` (string)
++ relationships (object)
+    + recorded (object)
+        + data (Session Recorded Scheme)
+
+## Team Type (object)
++ type: `users_teams` (string, required)
+
+## Team Scheme (Team Type)
++ Include Identity Scheme
++ attributes (object)
+    + name: `My team` (string, required)
+    + description: `Some description` (string, optional)
+
+## Team Full (Team Scheme)
++ relationships (object)
+    + members (object)
+        + data (array[User Scheme])
+    + requests (object)
+        + data (array[Team Request Scheme])
+
+## Team Request Type (object)
++ type: `users_teams_requests` (string, required)
+
+## Team Request Scheme (Team Request Type)
++ Include Identity Scheme
++ attributes (object)
+    + created_at: `2020-04-24T08:57:01+00:00` (string, required)
+
+## Team Request Full (Team Request Type)
++ relationships (object)
+    + user (object)
+        + data (User Scheme)
+
+## Team Request Create (Team Request Type)
++ attributes (object)
+    + link: `http://echo.domain/teams/{id}` (string, required)
++ relationships (object)
+    + user (object)
+        + data (User Scheme)
+
+## Geo Scheme (object, optional)
++ lng: `45.707198` (number, required)
++ lat: `45.707198` (number, required)
++ place: `Some place` (string, required)
+
+## Session Type (object)
++ type: `sessions` (string, required)
+
+## Session Scheme (Session Type)
++ Include Identity Scheme
++ attributes
+    + name: `Simple name` (string, required)
+    + type: `Default` (string, required)
+    + status (enum)
+        + 0
+        + 10
+        + 20
+        + 30
+    + description: `Description` (string, optional)
+    + thumbnail_url: `https://{ECHO_HOST}/sessions/image.jpg` (string, required)
+    + geo
+        + Include Geo Scheme
+    + tags (array)
+        + (object)
+            + tag: `Lecture` (string, required)
+    + is_shared: `false` (boolean, required)
+    + started_at: `2020-04-24T08:57:01+00:00` (string, optional)
+    + ended_at: `2020-04-24T08:57:01+00:00` (string, optional)
+    + scheduled_on: `2020-04-24T08:57:01+00:00` (string, optional)
+    + scheduled_to: `2020-04-24T09:57:01+00:00` (string, optional)
+    + created_at: `2020-04-24T08:57:01+00:00` (string, required)
+
+## Session Create (Session Type)
++ attributes
+    + name: `Simple name` (string, required)
+
+## Session Full (Session Scheme)
++ relationships
+    + user (object)
+        + data (User Scheme)
+    + pois (object)
+        + data (array[Session POI Scheme])
+    + streams (object)
+        + data (array[Session Stream Scheme])
+    + participants (object)
+        + data (array[Participant Scheme])
+    + progress (object)
+        + data (array[Session Progress Scheme])
+    + goals (object)
+        + data (array[Session Participant Goal Scheme])
+
+## Session POI Type (object)
++ type: `sessions_pois` (string, required)
+
+## Session POI Scheme (Session POI Type)
++ Include Identity Scheme
++ attributes
+    + type (enum)
+        + poi
+        + stopwatch
+        + backtrack
+    + name: `Simple clip name` (string, optional)
+    + tags (array)
+        + (object)
+            + tag: `introduction` (string, required)
+    + thumbnail_url: `https://{ECHO_HOST}/sessions/image.jpg` (string, required)
+    + duration: `10` (number, required)
+    + is_shared: `false` (boolean, required)
+    + started_at: `2020-04-24T08:57:01+00:00` (string, required)
+    + ended_at: `2020-04-24T08:57:01+00:00` (string, required)
+    + created_at: `2020-04-24T08:57:01+00:00` (string, required)
+
+## Session POI Full (Session POI Scheme)
++ relationships
+    + participants (object)
+        + data (array[Session POI Participant Scheme])
+
+## Session POI Transcript (Session POI Scheme)
++ relationships
+    + transcript (object)
+        + data (Transcript Scheme)
+
+## Session POI Participant Scheme (POI Participant Scheme)
++ type: `sessions_pois_participants` (string, required)
+
+## Session POI Create (Session POI Type)
++ attributes
+    + type (enum)
+        + poi
+        + stopwatch
+        + backtrack
+    + name: `Simple clip name` (string, optional)
+    + started_at: `2020-04-24T08:57:01+00:00` (string, required)
+    + ended_at: `2020-04-24T18:57:01+00:00` (string, required)
++ relationships
+    + participants (object)
+        + data (array[Session POI Participant Scheme])
+
+## Session Stream Type (object)
++ type: `sessions_streams` (string, required)
+
+## Session Stream Scheme (Session Stream Type)
++ Include Identity Scheme
++ attributes (object)
+    + type (enum)
+        + audio
+        + desktop
+        + combined
+    + name: `stream.wav` (string, required)
+
+## Session Stream Create (Session Stream Type)
++ attributes (object)
+    + type (enum)
+        + audio
+        + desktop
+        + combined
+
+## Session Stream Progress Type (object)
++ type: `sessions_streams_upload_progress` (string, required)
+
+## Session Stream Progress Scheme (Session Stream Progress Type)
++ Include Identity Scheme
++ attributes (object)
+    + progress: `55` (number, required)
+
+## Session Stream Token Type (object)
++ type: `sessions_streams_token` (string, required)
+
+## Session Stream Token Scheme (Session Stream Token Type)
++ Include Identity Scheme
++ attributes (object)
+    + token: `cf59309e-133f-48d4-932f-2817d97ac985` (string, required)
+
+## Session Progress Type (object)
++ type: `sessions_progress` (string, required)
+
+## Session Progress Scheme (Session Progress Type)
++ Include Identity Scheme
++ attributes (object)
+    + datetime: `2020-04-24T08:57:01+00:00` (string, required)
++ relationships (object)
+    + participant (object)
+        + data (Participant Scheme)
+    + goal (object)
+        + data (Participant Goal Scheme)
+    + tracker (object)
+        + data (Participant Goal Tracker Scheme)
+    + poi (object)
+        + data (Session POI Scheme)
+
+## Session Participant Goal Type (object)
++ type: `session_participants_goals` (string, required)
+
+## Session Participant Goal Scheme
++ Include Identity Scheme
++ attributes (object)
+    + created_at: `2020-04-24T08:57:01+00:00` (string, required)
++ relationships (object)
+    + participant (object)
+        + data (Participant Scheme)
+    + goal (object)
+        + data (Participant Goal Scheme)
+
+## Session Note Type (object)
++ type: `sessions_notes` (string, required)
+
+## Session Note Create (Session Note Type)
++ attributes (object)
+    + text: `text` (string, optional)
+
+## Session Note Scheme (Session Note Type)
++ Include Identity Scheme
++ attributes (object)
+    + text: `text` (string, optional)
+    + url: `https://{ECHO_HOST}/sessions/notes/2593b703-c81c-44b5-9ed5-cec9841325be.png` (string, optional)
+    + created_at: `2020-04-24T08:57:01+00:00` (string, required)
+    + updated_at: `2020-04-24T08:57:01+00:00` (string, required)
+
+## Session Note Full (Session Note Scheme)
++ relationships (object)
+    + participant (object)
+        + data (Participant Scheme)
+    + poi (object)
+        + data (Session POI Scheme)
+    + poi_participant (object)
+        + data (Session POI Participant Scheme)
+
+## Session Note Progress Type (object)
++ type: `sessions_notes_upload_progress` (string, required)
+
+## Session Note Progress Scheme (Session Note Progress Type)
++ Include Identity Scheme
++ attributes (object)
+    + progress: `55` (number, required)
+
+## POI Participant Scheme
++ Include Identity Scheme
++ attributes (object)
+    + first_name: `John` (string, required)
+    + last_name: `Doe` (string, required)
+    + phone_code: `1` (string, optional)
+    + phone_number: `38944133` (string, required)
+    + started_at: `2020-04-24T08:57:01+00:00` (string, required)
+    + ended_at: `2020-04-24T18:57:01+00:00` (string, required)
++ relationships (object)
+    + raw (object)
+        + data (Participant Scheme)
+
+## File Temporary Url Type (object)
++ type: `files_temporary_urls` (string, required)
+
+## File Temporary Url Scheme (File Temporary Url Type)
++ Include Identity Scheme
++ attributes (object)
+    + name: `file.ext` (string, required)
+    + url: `https://storage/file.ext` (string, required)
+
+## Share Scheme Type (object)
++ type: `shared` (string, required)
+
+## Share Scheme (Share Scheme Type)
++ Include Identity Scheme
++ attributes (object)
+    + type: `sessions` (string, required)
+    + payload (object)
+        + pattern: `/sessions/cf59309e-133f-48d4-932f-2817d97ac985` (string, required)
+        + parameters (object)
+            + sessionId: `cf59309e-133f-48d4-932f-2817d97ac985` (string, required)
+        + methods: `GET` (array[string], required)
+
+## Transcript Scheme Type (object)
++ type: `transcripts` (string, required)
+
+## Transcript Scheme (Transcript Scheme Type)
++ Include Identity Scheme
++ attributes (object)
+    + transcript: `Hello my darling \n\n Hi!` (string, required)
+
+## Transcript Word Scheme Type (object)
++ type: `transcripts_words` (string, required)
+
+## Transcript Word Scheme (Transcript Word Scheme Type)
++ Include Identity Scheme
++ attributes (object)
+    + word: `Hello` (string, required)
+
+## Transcript Phrase Scheme Type (object)
++ type: `transcripts_phrases` (string, required)
+
+## Transcript Phrase Scheme (Transcript Phrase Scheme Type)
++ Include Identity Scheme
++ attributes (object)
+    + phrase: `Hello my witness` (string, required)
+
+# Group Authorization
+
+## Login [/auth/login]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Token)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Login Token | Create [/auth/login/token]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Login Token Create, required)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Login Token Scheme, required)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Login Token | Login [/auth/login/token/{tokenId}]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Login Token Signin, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Token)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Logout [/auth/logout]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## SSO Login or Signup [/auth/sso]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (SSO Auth Scheme, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Token)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## SSO Available Drivers [/auth/sso/drivers]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (SSO Available Drivers Scheme, required)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sign Up [/auth/signup]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes
+        + data (User Create, required)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes
+        + data (User Full, required)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Refresh Token [/auth/token/refresh]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (object, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Password Reset
+
+## Password Reset | Activate [/password_reset/activate]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Password Reset Update, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Password Reset | Create [/password_reset]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Password Reset Create, required)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Password Reset | Set New Password [/password_reset/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Password Reset Update, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Authorization Token)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Users
+
+## Users | Show Current [/users/current]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (User Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Users | Show / Update [/users/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (User Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Parameters
+    + id: `a318a31a-0bcf-48d1-9350-a6ae499007c0` (string) - ID in UUIDv4 format
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes
+        + data (User Full, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes
+        + data (User Full, required)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Profile | Show / Update [/users/{id}/relationships/profile]
+
+### GET [GET]
+
++ Parameters
+    + id: `a318a31a-0bcf-48d1-9350-a6ae499007c0` (string) - ID in UUIDv4 format
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (User Profile Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Parameters
+    + id: `a318a31a-0bcf-48d1-9350-a6ae499007c0` (string) - ID in UUIDv4 format
+
++ Request (application/vnd.api+json)
+
+    + Attributes
+        + data (User Profile Scheme, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes
+        + data (User Profile Scheme, required)
+
++ Response 422 (application/vnd.api+json)
+
+    + Attributes (Validation Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Storages
+
+## Storages | Drivers  [/users/{id}/relationships/storages/drivers]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[User Storage Driver Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Storages | List / Create  [/users/{id}/relationships/storages]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[User Storage Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (User Storage Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (User Storage Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Storages | Enable [/users/{id}/relationships/storages/{storageId}/enable]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Storages | Remove [/users/{id}/relationships/storages/{storageId}]
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Data Providers
+
+## Data Providers | Drivers  [/users/{id}/relationships/data_providers/drivers]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[User Data Provider Driver Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Data Providers | List / Create  [/users/{id}/relationships/data_providers]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[User Data Provider Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (User Data Provider Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (User Data Provider Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Data Providers | Change | Remove [/users/{id}/relationships/data_providers/{dataProviderId}]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (User Data Provider Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes  (object)
+        + data (User Data Provider Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Data Providers | Sync [/users/{id}/relationships/data_providers/{dataProviderId}/sync]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Devices
+
+## Devices | List | Remove current [/devices]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Device Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Devices | Connect By Token [/devices/connect/{token}]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Device Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Device Full)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Devices | Show | Remove [/devices/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Device Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Devices | QR code [/devices/qr]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (image/svg+xml)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Participants
+
+## Participants | List | Create [/participants]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Participant Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Full)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Participants | Show | Update | Remove [/participants/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Participant Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+            + data (Participant Full)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Participants | Goals | List | Create [/participants/{id}/relationships/goals]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Participant Goal Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Participants | Goals | Show | Update | Remove [/participants/{id}/relationships/goals/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Participant Goal Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+            + data (Participant Goal Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Participants | Goals | Trackers | List | Create [/participants/{id}/relationships/goals/{id}/relationships/trackers]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Participant Goal Tracker Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Tracker Scheme)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Tracker Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Participants | Goals | Show | Update | Remove [/participants/{id}/relationships/goals/{id}/relationships/trackers/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Tracker Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Tracker Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Participant Goal Tracker Scheme)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Teams
+
+## Teams | List | Create [/teams]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Team Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (Team Scheme)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Team Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Teams | Show | Update | Remove [/teams/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Team Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (Team Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Team Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Teams | Leave [/teams/{id}/leave]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Teams | Requests | List | Create [/teams/{id}/relationships/requests]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Team Request Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
+>> The Requests scheme should contains link attr with {id} placeholder it will be changed to the current value after creation.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (Team Request Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Team Request Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Teams | Requests | Delete [/teams/{id}/relationships/requests/{id}]
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Teams | Requests | Apply [/teams/{id}/relationships/requests/{id}/apply]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (User Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Teams | Requests | Reject [/teams/{id}/relationships/requests/{id}/reject]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (User Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Sessions
+
+## Sessions | List [/sessions]
+
+Support fields:
+-------------
+By the default request will return all described fields of the object.
+
+> Fields
+> > fields[user]=email,created_at,updated_at - get specific fields for users relationship
+> > fields[pois]=name,created_at - get specific fields for pois relationship
+
+Support include:
+> Include
+> > include=* - load all relationships
+> > include=user - get session with user relationship
+> > include=pois - get session with pois relationship
+> > include=pois,user - load specific relationships for session
+
+Supported filters:
+-------------
+> Filter Users
+> > - filter[users][has]=true
+> > - filter[users][collection][]=24859499-b2f2-45f0-b006-14c76e7cdb44
+
+> Filter Statuses
+Available statuses = 0, 10, 20, 30
+
+> > - filter[statuses][has]=true
+> > - filter[statuses][collection][]=0
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Show Active [/sessions/active]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Show Dead [/sessions/dead]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Scheduled | List [/sessions/scheduled]
+
+### GET [GET]
+
+Supported filters:
+-------------
+> Filter by scheduled on
+> > - filter[scheduled_on][range][gte]=2020-04-15T10:44:48
+> > - filter[scheduled_on][range][lte]=2020-04-19T10:44:48
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Scheduled | Create [/sessions/schedule]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Session Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 409 (application/vnd.api+json)
+
+    + Attributes (Dead Session Response)
+
++ Response 423 (application/vnd.api+json)
+
+    + Attributes (In Progress Session Response)
+
++ Response 424 (application/vnd.api+json)
+
+    + Attributes (Active Session Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Scheduled | Start [/sessions/{id}/start]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Show | Update | Remove [/sessions/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Session Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Start [/sessions/start]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Session Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 409 (application/vnd.api+json)
+
+    + Attributes (Dead Session Response)
+
++ Response 423 (application/vnd.api+json)
+
+    + Attributes (In Progress Session Response)
+
++ Response 424 (application/vnd.api+json)
+
+    + Attributes (Active Session Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | End [/sessions/{id}/end]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Wrap [/sessions/{id}/wrap]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+
+## Sessions | Share [/sessions/{id}/share]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Share Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Unshare [/sessions/{id}/unshare]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | QR [/sessions/{id}/qr]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (image/svg+xml)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Device | Connect [/sessions/{id}/device/connect]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Device Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Device Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Device | Disconnect [/sessions/{id}/device/disconnect]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            X-DEVICE-REFERENCE: {DEVICE_REFERENCE}
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+        + data (Device Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Device Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Device | Save [/sessions/{id}/device/save]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            X-DEVICE-REFERENCE: {DEVICE_REFERENCE}
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Streams | Upload [/sessions/{id}/relationships/streams/upload/{streamType}]
+
++ Parameters
+    + id - session id
+    + streamType - is an available type of the stream (audio, desktop, combined)
+
+### PUT [PUT]
+
++ Request (multipart/form-data; boundary=---BOUNDARY)
+        -----BOUNDARY
+        Content-Disposition: form-data; name="file"; filename="image.jpg"
+        Content-Type: image/jpeg
+
+        /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a
+        HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy
+        MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIA
+        AhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEB
+        AAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AL+AD//Z
+        -----BOUNDARY
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+            X-HTTP-METHOD-OVERRIDE: PUT
+
+    + Attributes (object, required)
+        + data (Session Stream Create, required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Stream Progress Scheme])
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Streams | List [/sessions/{id}/relationships/streams]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Stream Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Streams | Temporary Url [/sessions/{id}/relationships/streams/{id}/temporary_url]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (File Temporary Url Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Streams | Token [/sessions/{id}/relationships/streams/{id}/token]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Stream Token Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Streams | Play [/sessions/{id}/relationships/streams/{id}/token/{token}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+
++ Response 200 (application/octet-stream)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Participants | Add | Remove [/sessions/{id}/relationships/participants]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (array[Participant Scheme])
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+        + data (array[Participant Scheme])
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | List | Create [/sessions/{id}/relationships/pois]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session POI Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (Session POI Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session POI Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Show | Change | Remove [/sessions/{id}/relationships/pois/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session POI Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Session POI Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session POI Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Transcript [/sessions/{id}/relationships/pois/transcript]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session POI Transcript])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Participants | Remove [/sessions/{id}/relationships/pois/{id}/relationships/participants]
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+        + data (array[Participant Scheme])
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Temporary Url [/sessions/{id}/relationships/pois/{id}/temporary_url]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (File Temporary Url Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Token [/sessions/{id}/relationships/pois/{id}/token]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer t318a31a-0bcf-48d1-9350-a6ae499007c0
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Stream Token Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Play [/sessions/{id}/relationships/pois/{id}/token/{token}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+
++ Response 200 (application/octet-stream)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Share [/sessions/{id}/relationships/pois/{id}/share]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Share Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | POIs | Unshare [/sessions/{id}/relationships/pois/{id}/unshare]
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Progress | List | Create [/sessions/{id}/relationships/progress]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Progress Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (Session Progress Scheme)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Progress Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Prgress | Show | Remove [/sessions/{id}/relationships/progress/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Progress Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+
+## Sessions | Notes | List | Create | Upload [/sessions/{id}/relationships/notes]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Note Scheme])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+        + data (Session Note Create)
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### PUT [PUT]
+
+Support chunk upload:
+
+> Required parameters:
+
+> > resumableChunkNumber=1
+
+> > resumableChunkSize=1048576
+
+> > resumableCurrentChunkSize=880453
+
+> > resumableTotalSize=880453
+
+> > resumableType=image/png
+
+> > resumableIdentifier=880453-combinedwebm
+
+> > resumableFilename=photo.png
+
+> > resumableRelativePath=photo.png
+
+> > resumableTotalChunks=1
+
+Available query parameters for creation:
+> > participant_id=2318a31a-0bcf-48d1-9350-a6ae499007c0 - attach note to participant
+> > poi_id=2318a31a-0bcf-48d1-9350-a6ae499007c0 - attach note to poi (clip)
+> > poi_participant_id=2318a31a-0bcf-48d1-9350-a6ae499007c0 - attach note to poi participant (clip)
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: PUT
+
+    + Attributes (object)
+        + file: `binary` (required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Note Progress Scheme])
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Note Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+## Sessions | Notes | Show | Change | Upload | Remove [/sessions/{id}/relationships/notes/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Note Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### POST [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token}
+
+    + Attributes (object)
+        + data (Session Note Create)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Session Note Full)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### PUT [PUT]
+
+Support chunk upload:
+
+> Required parameters:
+
+> > resumableChunkNumber=1
+
+> > resumableChunkSize=1048576
+
+> > resumableCurrentChunkSize=880453
+
+> > resumableTotalSize=880453
+
+> > resumableType=image/png
+
+> > resumableIdentifier=880453-combinedwebm
+
+> > resumableFilename=photo.png
+
+> > resumableRelativePath=photo.png
+
+> > resumableTotalChunks=1
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: PUT
+
+    + Attributes (object)
+        + file : `binary` (required)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Note Progress Scheme])
+
++ Response 201 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (array[Session Note Full])
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+### DELETE [DELETE]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer {token} - Mandatory when no X-DEVICE-REFERENCE is set
+            X-DEVICE-REFERENCE: {reference} - Mandatory when no Authorization is set
+            X-HTTP-METHOD-OVERRIDE: DELETE
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (Acknowledge Response)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)
+
+# Group Shared
+
+## Shared | Show [/share/{id}]
+
+### GET [GET]
+
++ Request (application/vnd.api+json)
+
+    + Attributes (object)
+
++ Response 200 (application/vnd.api+json)
+
+    + Attributes (object)
+        + data (Share Scheme)
+
++ Response 401 (application/vnd.api+json)
+
+    + Attributes (Unathorized Response)
+
++ Response 404 (application/vnd.api+json)
+
+    + Attributes (Not Found Response)
+
++ Response 500 (application/vnd.api+json)
+
+    + Attributes (Server Error Response)

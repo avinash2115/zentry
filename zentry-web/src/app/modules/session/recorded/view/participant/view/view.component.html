@@ -1,0 +1,89 @@
+<div *ngIf="entity" class="participant-view">
+  <div class="participant-view--header">
+    <div
+      [ngbTooltip]="entity.fullname || entity.email"
+      placement="bottom"
+      container="body"
+      class="avatar-wrapper"
+    >
+      <img
+        *ngIf="false; else simpleAvatar"
+        [src]=""
+        [alt]="entity.initials"
+        class="avatar avatar__xs"
+      >
+      <ng-template #simpleAvatar>
+        <span class="avatar avatar__xs">{{entity.initials}}</span>
+      </ng-template>
+    </div>
+    <div class="participant-view--header__fullname cut-long-text">
+      {{entity.fullname}} session information
+    </div>
+  </div>
+  <div class="participant-view--buttons">
+    <button
+      (click)="activate(views.soap)"
+      [class.btn-outline-primary]="!isActive(views.soap)"
+      [class.btn--color__primary]="isActive(views.soap)"
+      type="button"
+      class="btn btn__standard btn__standard--condensed btn--radius__md"
+    >
+      <fa-icon icon="clipboard"></fa-icon>
+      SOAP Note
+    </button>
+    <button
+      (click)="activate(views.goals)"
+      [class.btn-outline-primary]="!isActive(views.goals)"
+      [class.btn--color__primary]="isActive(views.goals)"
+      type="button"
+      class="btn btn__standard btn__standard--condensed btn--radius__md"
+    >
+      <fa-icon icon="tasks"></fa-icon>
+      Quantitative Progress - {{recordedEntity.participantsProgress(entity).length}}
+    </button>
+    <button
+      (click)="activate(views.clips)"
+      [class.btn-outline-primary]="!isActive(views.clips)"
+      [class.btn--color__primary]="isActive(views.clips)"
+      type="button"
+      class="btn btn__standard btn__standard--condensed btn--radius__md"
+    >
+      <fa-icon icon="video"></fa-icon>
+      Clips - {{recordedEntity.participantsClips(entity).length}}
+    </button>
+    <button
+      (click)="activate(views.notes)"
+      [class.btn-outline-primary]="!isActive(views.notes)"
+      [class.btn--color__primary]="isActive(views.notes)"
+      type="button"
+      class="btn btn__standard btn__standard--condensed btn--radius__md"
+    >
+      <fa-icon icon="sticky-note"></fa-icon>
+      Additional Information - {{recordedEntity.participantsNotes(entity).length}}
+    </button>
+  </div>
+  <div class="participant-view--body">
+    <ng-container [ngSwitch]="viewActive">
+      <ng-container *ngSwitchCase="views.soap">
+        <app-session-recorded-participant-view-soap></app-session-recorded-participant-view-soap>
+      </ng-container>
+      <ng-container *ngSwitchCase="views.goals">
+        <app-session-recorded-participant-view-goal></app-session-recorded-participant-view-goal>
+      </ng-container>
+      <ng-container *ngSwitchCase="views.clips">
+        <app-session-recorded-view-clip-custom
+          (sourceSeeked)="onClipSeeked($event)"
+          (sourceReplaced)="onClipReplaced($event)"
+          (shared)="onClipShared($event)"
+          [participant]="entity"
+        ></app-session-recorded-view-clip-custom>
+      </ng-container>
+      <ng-container *ngSwitchCase="views.notes">
+        <app-session-recorded-view-note
+          [recordedEntity]="recordedEntity"
+          [participant]="entity"
+        ></app-session-recorded-view-note>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

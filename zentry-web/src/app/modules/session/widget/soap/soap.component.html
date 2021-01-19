@@ -1,0 +1,189 @@
+<div
+  *ngIf="!isLoading"
+  class="soap"
+>
+  <div class="soap--header">
+    <div class="soap--header__title">SOAP Notes</div>
+  </div>
+  <div class="soap--body">
+    <div class="soap--body--student">
+      <div class="avatar-wrapper">
+        <img
+          *ngIf="false; else simpleAvatar"
+          [src]=""
+          [alt]="participantCurrent.initials"
+          class="avatar avatar__sm"
+        >
+        <ng-template #simpleAvatar>
+          <span class="avatar avatar__sm">{{participantCurrent.initials}}</span>
+        </ng-template>
+      </div>
+      <div class="soap--body--student__fullname">
+        {{participantCurrent.fullname}}
+      </div>
+    </div>
+    <div class="soap--body--form">
+      <form [formGroup]="form">
+        <ng-container formArrayName="participants">
+          <ng-container [formGroup]="form.get('participants.' + participantCurrentIndex)">
+            <div class="soap--body--form--presence">
+              <div class="soap--body--form--presence__text">
+                Was the student present for this session?
+              </div>
+              <div class="soap--body--form--presence--buttons">
+                <button
+                  (click)="present()"
+                  [class.btn--color__green]="form.get('participants.' + participantCurrentIndex + '.present').value"
+                  [class.btn-outline-secondary]="!form.get('participants.' + participantCurrentIndex + '.present').value"
+                  type="button"
+                  class="btn btn--radius__md"
+                >
+                  Yes
+                </button>
+                <button
+                  (click)="absent()"
+                  [class.btn--color__red]="!form.get('participants.' + participantCurrentIndex + '.present').value"
+                  [class.btn-outline-secondary]="form.get('participants.' + participantCurrentIndex + '.present').value"
+                  type="button"
+                  class="btn btn--radius__md"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+            <ng-container
+              *ngIf="form.get('participants.' + participantCurrentIndex + '.present').value"
+            >
+              <div class="soap--body--form--goals">
+                <div class="soap--body--form--goals--content">
+                  <div class="soap--body--form--goals--content--goals">
+                    <ng-container *ngFor="let goal of participantCurrent.goalsSortedActual;index as goalIndex;">
+                      <div class="soap--body--form--goals--content--goals--navigation">
+                        <div class="soap--body--form--goals--content--goals--navigation--current">
+                          <div class="clamp">
+                            {{goal ? goal.name : 'There are no goals for ' + participantCurrent.fullname}}
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="goal && goal.trackers.length"
+                        class="soap--body--form--goals--content--goals--controls"
+                      >
+                        <div
+                          *ngFor="let tracker of goal.trackers"
+                          class="soap--body--form--goals--content--goals--controls--tracker"
+                        >
+                          <button
+                            [style.color]="tracker.color"
+                            class="btn btn--color__white"
+                          >
+                            <fa-icon
+                              [icon]="tracker.icon"
+                            ></fa-icon>
+                          </button>
+                          <div
+                            [style.color]="amount(goal, tracker) > 0 ? tracker.color : ''"
+                            class="soap--body--form--goals--content--goals--controls--tracker__amount"
+                          >
+                            {{amount(goal, tracker)}}
+                          </div>
+                          <div class="soap--body--form--goals--content--goals--controls--tracker__name">
+                            {{tracker.name}}
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container
+                        *ngIf="goal"
+                        formArrayName="goals"
+                      >
+                        <div
+                          [formGroup]="form.get('participants.' + participantCurrentIndex + '.goals.' + goalIndex)"
+                          class="soap--body--form--controls"
+                        >
+                          <div class="form-group">
+                            <label for="rate" class="required">Rate Progress</label>
+                            <ng-select
+                              #ngSelectComponentRate
+                              (change)="ngSelectComponentRate.close(); detectChanges()"
+                              (focus)="detectChanges()"
+                              (blur)="detectChanges()"
+                              (clear)="detectChanges()"
+                              (search)="detectChanges()"
+                              [items]="rates"
+                              [clearable]="true"
+                              [searchable]="true"
+                              bindLabel="label"
+                              bindValue="value"
+                              appControlError
+                              formControlName="rate"
+                              placeholder="Start typing or select ..."
+                              id="rate"
+                              class="rounder"
+                            ></ng-select>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="soap--body--form--fields">
+                <div class="form-group">
+                  <label for="activity" class="required">Activity</label>
+                  <textarea formControlName="activity" id="activity" class="form-control rounder"></textarea>
+                  <a
+                    *ngIf="form.get('participants.' + participantCurrentIndex + '.activity').value.length"
+                    (click)="copyActivityToGroup()"
+                    class="soap--body--form-controls--link--copy force"
+                  >
+                    Copy Activity to group
+                  </a>
+                </div>
+                <div class="form-group">
+                  <label for="note" class="required">Note</label>
+                  <textarea formControlName="note" id="note" class="form-control rounder"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="plan" class="required">Plan</label>
+                  <textarea formControlName="plan" id="plan" class="form-control rounder"></textarea>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!form.get('participants.' + participantCurrentIndex + '.present').value || !participantCurrent.goals.length">
+              <div class="soap--body--form--controls">
+                <div class="form-group">
+                  <label for="absent_note" class="required">Note</label>
+                  <textarea formControlName="note" id="absent_note" class="form-control rounder"></textarea>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </form>
+    </div>
+  </div>
+  <div class="soap--footer">
+    <div class="soap--footer--btn-group">
+      <button
+        (click)="participantActivate(participants[participantCurrentIndex - 1])"
+        *ngIf="participantCurrentIndex > 0"
+        class="btn btn-outline-secondary"
+      >
+        <fa-icon icon="arrow-left"></fa-icon>
+      </button>
+      <button
+        (click)="participantCurrentIndex + 1 === participants.length ? complete() : participantActivate(participants[participantCurrentIndex + 1])"
+        class="btn btn--radius__md btn--color__contextual"
+      >
+        {{participantCurrentIndex + 1 === participants.length ? 'Complete Notes' : 'Go to next Student'}}
+        ({{participantCurrentIndex + 1}} of {{participants.length}})
+      </button>
+    </div>
+    <a
+      (click)="skip()"
+      class="soap--footer__later force"
+    >
+      Add notes later from the website
+    </a>
+  </div>
+</div>

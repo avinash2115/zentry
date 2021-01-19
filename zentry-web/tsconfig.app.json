@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./out-tsc/app",
+        "typeRoots": ["./node_modules/@types"]
+    },
+    "files": [
+        "src/main.ts",
+        "src/polyfills.ts"
+    ],
+    "include": [
+        "src/**/*.d.ts",
+        "src/index.js"
+    ],
+    "type": [
+        "googlemaps"
+    ]
+}

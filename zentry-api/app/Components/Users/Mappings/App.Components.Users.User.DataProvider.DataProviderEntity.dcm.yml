@@ -1,0 +1,27 @@
+App\Components\Users\User\DataProvider\DataProviderEntity:
+  type: entity
+  table: users_data_providers
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    driver:
+      type: string
+    config:
+      type: config
+    status:
+      type: integer
+    createdAt:
+      type: datetime
+      column: created_at
+    updatedAt:
+      type: datetime
+      column: updated_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

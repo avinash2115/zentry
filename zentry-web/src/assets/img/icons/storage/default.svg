@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="70px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>zentry-storage</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Storage-UI-elements" transform="translate(-751.000000, -68.000000)">
+            <g id="Group-3" transform="translate(754.000000, 83.000000)">
+                <circle id="Oval-Copy-9" fill="#A1D4F5" cx="38.7234043" cy="20.7446809" r="16.5957447"></circle>
+                <circle id="Oval-Copy-10" fill="#88E4EF" cx="55.3191489" cy="20.7446809" r="9.68085106"></circle>
+                <path d="M52.4958875,11.4821913 C54.278575,14.1276751 55.3191489,17.3146584 55.3191489,20.7446809 C55.3191489,24.1746237 54.2786232,27.3615387 52.4960116,30.0069863 C48.5263967,28.7989363 45.6382979,25.1090844 45.6382979,20.7446809 C45.6382979,16.4121022 48.4844306,12.7442735 52.4090239,11.508867 Z" id="Combined-Shape" fill="#59CFEA"></path>
+                <circle id="Oval-Copy-11" fill="#C9B9FE" cx="20.0531915" cy="20.0531915" r="20.0531915"></circle>
+                <path d="M33.3466754,5 C37.4929086,8.67381007 40.106383,14.0387454 40.106383,20.0140903 C40.106383,26.522768 37.005554,32.3072083 32.2005884,35.9707187 C26.277473,33.4358403 22.1276596,27.5553304 22.1276596,20.7055797 C22.1276596,13.4583795 26.7730215,7.29616172 33.2485615,5.03411015 Z" id="Combined-Shape" fill="#9AA4F9"></path>
+            </g>
+        </g>
+    </g>
+</svg>

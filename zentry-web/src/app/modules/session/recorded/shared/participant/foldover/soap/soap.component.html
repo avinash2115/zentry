@@ -1,0 +1,127 @@
+<div class="soap">
+    <div class="soap--header">
+      SOAP Note
+    </div>
+    <div class="soap--body">
+      <div class="soap--body--presence" *ngIf="!!soapCurrent">
+        <div class="soap--body--presence__text">
+          Was the student present for this session?
+        </div>
+        <div class="soap--body--presence--buttons">
+          <button
+            *ngIf="soapCurrent.present"
+            [class.btn--color__green]="soapCurrent.present"
+            type="button"
+            class="btn btn__standard btn__standard--sm btn--radius__md"
+          >
+            Yes
+          </button>
+          <button
+            *ngIf="!soapCurrent.present"
+            [class.btn--color__red]="!soapCurrent.present"
+            type="button"
+            class="btn btn__standard btn__standard--sm btn--radius__md"
+          >
+            No
+          </button>
+        </div>
+      </div>
+      <div
+        class="soap--body--list"
+      >
+        <div class="soap--body--list--navigation">
+          <div
+            (click)="goalNavigate(true)"
+            *ngIf="goalCurrent"
+            [class.more]="goalsNavigatable"
+            class="soap--body--list--navigation--backward"
+          >
+            <fa-icon icon="chevron-left"></fa-icon>
+            Previous Goal
+          </div>
+          <div class="soap--body--list--navigation--count">
+            Goal {{goalCurrentIndexHuman}} of {{goals.length}}
+          </div>
+          <div
+            (click)="goalNavigate()"
+            *ngIf="goalCurrent"
+            [class.more]="goalsNavigatable"
+            class="soap--body--list--navigation--forward"
+          >
+            <fa-icon icon="chevron-right"></fa-icon>
+            Next Goal
+          </div>
+        </div>
+        <div class="soap--body--list--current">
+          <div class="clamp">
+            {{goalCurrent ? goalCurrent.name : 'There are no goals for this participant'}}
+          </div>
+        </div>
+        <div
+          *ngIf="goalCurrent && goalCurrent.trackers.length"
+          class="soap--body--list--controls"
+        >
+          <div
+            *ngFor="let tracker of goalCurrent.trackers"
+            class="soap--body--list--controls--tracker"
+          >
+            <button
+              [style.color]="tracker.color"
+              class="btn btn--color__white"
+            >
+              <fa-icon
+                [icon]="tracker.icon"
+              ></fa-icon>
+            </button>
+            <div
+              [style.color]="amount(goalCurrent, tracker) > 0 ? tracker.color : ''"
+              class="soap--body--list--controls--tracker__amount"
+            >
+              {{amount(goalCurrent, tracker)}}
+            </div>
+            <div class="soap--body--list--controls--tracker__name">
+              {{tracker.name}}
+            </div>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="!!soapCurrent && goals.length"
+        >
+          <div class="soap--body--info-item">
+            <div class="soap--body--info-item--label">
+              Rate Progress
+            </div>
+            <div class="soap--body--info-item--value">
+              {{currentSoapRate}}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="!!soapCurrent && goals.length">
+        <div class="soap--body--info-item">
+          <div class="soap--body--info-item--label">
+            Activity
+          </div>
+          <div class="soap--body--info-item--value">
+            {{soapCurrent.activity || '-'}}
+          </div>
+        </div>
+        <div class="soap--body--info-item">
+          <div class="soap--body--info-item--label">
+            Note
+          </div>
+          <div class="soap--body--info-item--value">
+            {{soapCurrent.note || '-'}}
+          </div>
+        </div>
+        <div class="soap--body--info-item">
+          <div class="soap--body--info-item--label">
+            Plan
+          </div>
+          <div class="soap--body--info-item--value">
+            {{soapCurrent.plan || '-'}}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+</div>

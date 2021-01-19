@@ -1,0 +1,231 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.school {
+  &--profile {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+
+    &--content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 20px 25px;
+      border-radius: 7px;
+      background-color: #FFFFFF;
+      box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.06);
+      min-width: 0;
+    }
+
+    &--content {
+      position: relative;
+
+      &:not(:last-child) {
+        margin-right: 30px;
+      }
+
+      &:first-child {
+        max-width: 30%;
+      }
+
+      &--main {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &--info {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          margin-right: 20px;
+
+          &__title {
+            font-size: 20px;
+            font-weight: 800;
+          }
+
+          &__subtitle {
+            margin-top: 5px;
+            color: #888997;
+            font-size: 16px;
+            font-weight: 600;
+          }
+        }
+
+        &__edit {
+          margin-left: auto;
+
+          fa-icon {
+            margin-right: 10px;
+          }
+        }
+      }
+
+      &--body {
+        display: flex;
+        flex-direction: row;
+        margin-top: 35px;
+
+        &:not(:last-child) {
+          margin-bottom: 25px;
+        }
+
+        &.columned {
+          flex-direction: column;
+        }
+
+        &--left, &--right {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding: 0 30px;
+
+          &:first-child {
+            padding-left: 0;
+          }
+
+          &:last-child {
+            padding-right: 0;
+          }
+
+          &:not(:last-child) {
+            border-right: 1px solid #D8D8D8;
+          }
+        }
+
+        &--item {
+          margin-bottom: 25px;
+          color: #293F70;
+
+          &__title {
+            font-size: 16px;
+            font-weight: bold;
+          }
+
+          &__content {
+            margin-top: 10px;
+            font-size: 16px;
+          }
+
+          &.carded {
+            border-radius: 7px;
+            background-color: #F6F7F7;
+            box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+          }
+
+          &.carded & {
+            &--header, &--body {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              padding: 15px 20px;
+            }
+
+            &--header {
+              background-color: #FFFFFF;
+              border-radius: 7px 7px 0 0;
+
+              &__title {
+                font-size: 14px;
+                font-weight: bold;
+              }
+
+              &--actions {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-left: auto;
+                width: 50px;
+                min-width: 50px;
+
+                a {
+                  color: #95A4C6;
+                  font-size: 16px;
+
+                  &:not(:last-child) {
+                    margin-right: 20px;
+                  }
+                }
+              }
+            }
+
+            &--body {
+              flex-wrap: wrap;
+
+              &--item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                border-radius: 4px;
+                background-color: #FFFFFF;
+                margin-bottom: 10px;
+                padding: 10px;
+                color: #888997;
+                font-size: 14px;
+                font-weight: 600;
+
+                &:not(:last-child) {
+                  margin-right: 10px;
+                }
+
+                fa-icon {
+                  font-size: 22px;
+                  margin-right: 10px;
+                }
+              }
+            }
+          }
+        }
+
+        form {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+
+          .form-group {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      &--actions {
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin: -20px -25px;
+        margin-top: 25px;
+        border-radius: 0 0 8px 8px;
+        background-color: #FFFFFF;
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+
+        button {
+          &:not(:last-child) {
+            margin-right: 15px;
+          }
+
+          &.left {
+            fa-icon {
+              margin-right: 10px;
+            }
+          }
+
+          &.right {
+            fa-icon {
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

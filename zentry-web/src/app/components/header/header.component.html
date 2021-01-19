@@ -1,0 +1,75 @@
+<nav class="navbar">
+  <a class="navbar-brand logo" routerLink="/"></a>
+  <ng-container *ngIf="isAuthorized">
+    <div class="navbar-nav flex-row justify-content-between">
+      <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a class="nav-item nav-link" routerLink="/session/recorded" routerLinkActive="active">Sessions</a>
+      <a ngbDropdown display="dynamic" class="nav-item force" routerLinkActive="active">
+        <a ngbDropdownToggle class="nav-link">
+          My Assets
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu">
+          <a ngbDropdownItem class="dropdown-item" routerLink="/user/devices" routerLinkActive="active">My Devices</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/user/storage" routerLinkActive="active">My Storage</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/user/participants" routerLinkActive="active">{{terms('participants')}}</a>
+        </div>
+      </a>
+      <a class="nav-item nav-link" routerLink="/assets/widgets" routerLinkActive="active">Download Widget</a>
+
+      <a ngbDropdown display="dynamic" class="nav-item adaptive-menu">
+        <a ngbDropdownToggle class="btn btn--radius__sm btn-outline-primary adaptive-menu__toggle force">
+          <svg width="26px" height="10px" viewBox="0 0 26 10">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Storage-UI-elements" transform="translate(-492.000000, -1145.000000)" fill="#4983FF">
+                <g id="menu" transform="translate(492.000000, 1145.000000)">
+                  <path
+                    d="M17,8 C17.5522847,8 18,8.44771525 18,9 C18,9.55228475 17.5522847,10 17,10 L1,10 C0.44771525,10 6.76353751e-17,9.55228475 0,9 C-6.76353751e-17,8.44771525 0.44771525,8 1,8 L17,8 Z M25,0 C25.5522847,-1.01453063e-16 26,0.44771525 26,1 C26,1.55228475 25.5522847,2 25,2 L1,2 C0.44771525,2 6.76353751e-17,1.55228475 0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 L25,0 Z"></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+          Menu
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu">
+          <a ngbDropdownItem class="dropdown-item" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/session/recorded"
+             routerLinkActive="active">Sessions</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/user/devices" routerLinkActive="active">My Devices</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/user/storage" routerLinkActive="active">My Storage</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/user/participants" routerLinkActive="active">{{terms('participants')}}</a>
+        </div>
+      </a>
+    </div>
+    <form
+      (ngSubmit)="submit()"
+      *ngIf="searchAvailable()"
+      class="form-inline"
+    >
+      <input
+        (ngModelChange)="termChange($event)"
+        (search)="termChange($event)"
+        [ngModel]="term"
+        name="term"
+        type="text"
+        placeholder="Search"
+        aria-label="Search"
+        class="form-control with-icon"
+      >
+    </form>
+    <div *ngIf="!!authUser" class="navbar-right">
+      <a routerLink="/user/profile" routerLinkActive="profile__active" class="profile">
+        <span class="cut-long-text">{{authUser.profile.fullname}}</span>
+        <div class="avatar-wrapper">
+          <img *ngIf="false; else simpleAvatar" [src]="" [alt]="authUser.initials" class="avatar avatar__sm">
+          <ng-template #simpleAvatar>
+            <span class="avatar avatar__sm">{{authUser.initials}}</span>
+          </ng-template>
+        </div>
+      </a>
+
+      <a (click)="logout()" class="btn btn-outline-secondary btn--radius__sm btn--actions__logout">
+        <i></i>
+      </a>
+    </div>
+  </ng-container>
+</nav>

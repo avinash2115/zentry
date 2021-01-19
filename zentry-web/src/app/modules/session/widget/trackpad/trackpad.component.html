@@ -1,0 +1,41 @@
+<div
+  *ngIf="!isLoading"
+  class="trackpad--controls"
+>
+  <div class="trackpad--controls--buttons">
+    <div
+      (click)="backtrack()"
+      [class.not-allowed]="!isBacktrackAvailable"
+      [class.visited]="isVisited(sessionService.poiService.types.backtrack)"
+      class="trackpad--controls--buttons__backtrack"
+    >
+      <i>{{authUser.backtrack.backward}}</i>
+      <div class="trackpad--controls--buttons__guide">Trackback</div>
+    </div>
+    <div
+      (click)="isRecording ? capture() : stopwatch()"
+      [class.active]="isRecording"
+      class="trackpad--controls--buttons__stopwatch"
+    >
+      <i></i>
+      <div class="trackpad--controls--buttons__guide">Record</div>
+      <span *ngIf="isRecording">
+        <app-date-timer [from]="startedAt.valueOf()"></app-date-timer>
+      </span>
+      <div class="trackpad--participant">
+        <app-session-widget-participant-attached></app-session-widget-participant-attached>
+      </div>
+    </div>
+    <div
+      (click)="poi()"
+      [class.visited]="isVisited(sessionService.poiService.types.poi)"
+      class="trackpad--controls--buttons__poi"
+    >
+      <i></i>
+      <div class="trackpad--controls--buttons__guide">POI</div>
+    </div>
+  </div>
+  <div class="trackpad--controls__duration">
+    <app-date-timer [hours]="true"></app-date-timer>
+  </div>
+</div>

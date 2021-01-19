@@ -1,0 +1,79 @@
+.ad-hoc {
+  width: 14px;
+  min-width: 14px;
+  height: 20px;
+  min-height: 20px;
+  background-image: url("assets/img/icons/ad-hoc.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.zoom {
+  width: 45px;
+  min-width: 45px;
+  height: 45px;
+  min-height: 45px;
+  background-image: url("assets/img/icons/zoom.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.clip {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  background-image: url("assets/img/icons/clip.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.note {
+  width: 26px;
+  min-width: 28px;
+  height: 30px;
+  min-height: 28px;
+  background-image: url("assets/img/icons/note.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.download {
+  width: 24px;
+  min-width: 24px;
+  height: 30px;
+  min-height: 30px;
+  background-image: url("assets/img/icons/download.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+
+.storage {
+  width: 70px;
+  min-width: 70px;
+  height: 70px;
+  min-height: 70px;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  &__default {
+    background-image: url("assets/img/icons/storage/default.svg");
+  }
+
+  &__aws {
+    background-image: url("assets/img/icons/storage/aws.svg");
+  }
+
+  &__box {
+    background-image: url("assets/img/icons/storage/box.svg");
+  }
+
+  &__dropbox {
+    background-image: url("assets/img/icons/storage/dropbox.svg");
+  }
+
+  &__googledrive {
+    background-image: url("assets/img/icons/storage/googledrive.svg");
+  }
+}

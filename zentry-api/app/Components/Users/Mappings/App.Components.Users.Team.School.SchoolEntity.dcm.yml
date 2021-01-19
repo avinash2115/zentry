@@ -1,0 +1,57 @@
+App\Components\Users\Team\School\SchoolEntity:
+  type: entity
+  table: users_teams_schools
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    name:
+      type: string
+    available:
+      type: boolean
+    streetAddress:
+      type: string
+      nullable: true
+      column: street_address
+    city:
+      type: string
+      nullable: true
+    state:
+      type: string
+      nullable: true
+    zip:
+      type: string
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    team:
+      targetEntity: App\Components\Users\Team\TeamEntity
+      joinColumn:
+        name: team_id
+        referencedColumnName: id
+      cascade: ["persist"]
+  oneToMany:
+    participants:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      mappedBy: school
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+    sources:
+      targetEntity: App\Components\CRM\Source\SchoolSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

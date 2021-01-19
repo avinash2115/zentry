@@ -1,0 +1,883 @@
+<ng-container *ngIf="!isLoading">
+  <div class="participant--profile">
+    <div class="participant--profile--card">
+      <div class="participant--profile--card--main">
+        <div class="avatar-wrapper">
+          <img *ngIf="false; else simpleAvatar" [src]="" [alt]="entity.initials" class="avatar avatar__sl">
+          <ng-template #simpleAvatar>
+            <span class="avatar avatar__sl">{{entity.initials}}</span>
+          </ng-template>
+        </div>
+        <div class="participant--profile--card--main--info">
+          <div class="participant--profile--card--main--info__fullname cut-long-text">
+            {{entity.fullname}}
+          </div>
+          <div class="participant--profile--card--main--info__email cut-long-text">
+            {{entity.email}}
+          </div>
+        </div>
+      </div>
+      <div class="participant--profile--card--summary">
+        <div class="participant--profile--card--summary--item">
+          <div class="participant--profile--card--summary--item__title">
+            Session
+          </div>
+          <div class="participant--profile--card--summary--item__body">
+            {{sessions.length}}
+          </div>
+        </div>
+        <div class="participant--profile--card--summary--item">
+          <div class="participant--profile--card--summary--item__title">
+            Goals
+          </div>
+          <div class="participant--profile--card--summary--item__body">
+            {{entity.goals.length}}
+          </div>
+        </div>
+      </div>
+      <div class="participant--profile--card--menu">
+        <div
+          (click)="stepActivate(steps.general)"
+          [class.active]="stepIsActive(steps.general)"
+          class="participant--profile--card--menu--item"
+        >
+          <fa-icon icon="id-card"></fa-icon>
+          General Information
+        </div>
+        <div
+          (click)="stepActivate(steps.ieps)"
+          [class.active]="stepIsActive(steps.ieps)"
+          class="participant--profile--card--menu--item"
+        >
+          <fa-icon icon="calendar"></fa-icon>
+          IEP Dates
+        </div>
+        <div
+          (click)="stepActivate(steps.goals)"
+          [class.active]="stepIsActive(steps.goals)"
+          class="participant--profile--card--menu--item"
+        >
+          <fa-icon icon="tasks"></fa-icon>
+          Goals
+        </div>
+        <div
+          (click)="stepActivate(steps.recordings)"
+          [class.active]="stepIsActive(steps.recordings)"
+          class="participant--profile--card--menu--item"
+        >
+          <fa-icon icon="video"></fa-icon>
+          Documentation
+        </div>
+      </div>
+    </div>
+    <div class="participant--profile--content">
+      <ng-container *ngIf="stepIsActive(steps.general)">
+        <div class="participant--profile--content--main">
+          <div class="avatar-wrapper">
+            <img *ngIf="false; else simpleAvatar" [src]="" [alt]="entity.initials" class="avatar avatar__lg">
+            <ng-template #simpleAvatar>
+              <span class="avatar avatar__lg">{{entity.initials}}</span>
+            </ng-template>
+          </div>
+          <div class="participant--profile--content--main--info">
+            <div class="participant--profile--content--main--info__title cut-long-text">
+              {{entity.fullname}}
+            </div>
+          </div>
+          <ng-container *ngIf="entity.hasSources">
+            <div class="source ml-auto">
+              <span>Imported from TeleTeachers</span>
+              <div class="source--exists">
+                TT
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!entity.hasSources">
+            <button
+              (click)="build()"
+              [disabled]="!!form"
+              type="button"
+              class="btn btn__standard btn--radius__md btn--color__primary participant--profile--content--main__edit"
+            >
+              <fa-icon icon="pen"></fa-icon>
+              Edit Profile
+            </button>
+          </ng-container>
+        </div>
+        <div class="participant--profile--content--body">
+          <ng-container *ngIf="!form">
+            <div class="participant--profile--content--body--left">
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Email:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.email}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Phone Number:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.phone}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Parent Email:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.parentEmail}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Parent Phone Number:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.parentPhoneNumber}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Gender:</div>
+                <div class="participant--profile--content--body--item__content capitalize">{{entity.gender}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">D.O.B:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.dob | date: 'MMM d, yyyy'}}</div>
+              </div>
+              <div
+                *ngIf="entity.team"
+                class="participant--profile--content--body--item"
+              >
+                <div class="participant--profile--content--body--item__title">District:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.team.name}}</div>
+              </div>
+              <div
+                *ngIf="entity.school"
+                class="participant--profile--content--body--item"
+              >
+                <div class="participant--profile--content--body--item__title">School:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.school.name}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Diagnosis:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.therapy.diagnosis}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Frequency:</div>
+                <div
+                  class="participant--profile--content--body--item__content capitalize">{{entity.therapy.frequency}}</div>
+              </div>
+            </div>
+            <div class="participant--profile--content--body--right">
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Planned number of sessions:</div>
+                <div class="participant--profile--content--body--item__content">
+                  {{entity.therapy.sessionsAmountPlanned}}
+                  <ng-container [ngPlural]="entity.therapy.sessionsAmountPlanned">
+                    <ng-template ngPluralCase="=1">session</ng-template>
+                    <ng-template ngPluralCase="other">sessions</ng-template>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Total minutes:</div>
+                <div class="participant--profile--content--body--item__content">
+                  {{entity.therapy.treatmentAmountPlanned}}
+                  <ng-container [ngPlural]="entity.therapy.treatmentAmountPlanned">
+                    <ng-template ngPluralCase="=1">minute</ng-template>
+                    <ng-template ngPluralCase="other">minutes</ng-template>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Notes:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.therapy.notes}}</div>
+              </div>
+              <div class="participant--profile--content--body--item">
+                <div class="participant--profile--content--body--item__title">Private Notes:</div>
+                <div class="participant--profile--content--body--item__content">{{entity.therapy.privateNotes}}</div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="form">
+            <form
+              (submit)="detectChanges()"
+              [formGroup]="form"
+            >
+              <div class="participant--profile--content--body--left">
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="first_name" class="required">First Name</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="first_name"
+                      placeholder="Enter First Name"
+                      id="first_name"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="last_name" class="required">Last Name</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="last_name"
+                      placeholder="Enter Last Name"
+                      id="last_name"
+                      name="last_name"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="email"
+                      placeholder="example@domain.com"
+                      id="email"
+                      type="email"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="dob" class="required">Date of Birth</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="dob"
+                      placeholder="example@domain.com"
+                      id="dob"
+                      type="date"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="gender" class="required">Gender</label>
+                    <ng-select
+                      #ngSelectComponentGender
+                      (change)="ngSelectComponentGender.close(); detectChanges()"
+                      (focus)="detectChanges()"
+                      (blur)="detectChanges()"
+                      (clear)="detectChanges()"
+                      (search)="detectChanges()"
+                      [items]="genders"
+                      [clearable]="false"
+                      [searchable]="true"
+                      bindLabel="label"
+                      bindValue="value"
+                      appControlError
+                      formControlName="gender"
+                      placeholder="Start typing or select ..."
+                      id="gender"
+                      class="rounder"
+                    ></ng-select>
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="phone_number"
+                      id="phone_number"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="parent_email">Parent Email Address</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="parent_email"
+                      placeholder="example@domain.com"
+                      id="parent_email"
+                      type="email"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="parent_phone_number">Parent Phone Number</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="parent_phone_number"
+                      id="parent_phone_number"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="team_id">District</label>
+                    <ng-select
+                      #ngSelectComponentDistrict
+                      (change)="ngSelectComponentDistrict.close(); detectChanges()"
+                      (focus)="detectChanges()"
+                      (blur)="detectChanges()"
+                      (clear)="detectChanges()"
+                      (search)="detectChanges()"
+                      [items]="teams"
+                      [clearable]="true"
+                      [searchable]="true"
+                      bindLabel="name"
+                      bindValue="id"
+                      formControlName="team_id"
+                      placeholder="Start typing or select ..."
+                      id="team_id"
+                      class="rounder"
+                    ></ng-select>
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="school_id">School</label>
+                    <ng-select
+                      #ngSelectComponentSchool
+                      (change)="ngSelectComponentSchool.close(); detectChanges()"
+                      (focus)="detectChanges()"
+                      (blur)="detectChanges()"
+                      (clear)="detectChanges()"
+                      (search)="detectChanges()"
+                      [items]="schools"
+                      [clearable]="true"
+                      [searchable]="true"
+                      bindLabel="name"
+                      bindValue="id"
+                      formControlName="school_id"
+                      placeholder="Start typing or select ..."
+                      id="school_id"
+                      class="rounder"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="participant--profile--content--body--right">
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="diagnosis" class="required">Diagnosis</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="diagnosis"
+                      placeholder="Enter diagnosis here"
+                      id="diagnosis"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="frequency" class="required">Frequency</label>
+                    <ng-select
+                      #ngSelectComponentFrequency
+                      (change)="ngSelectComponentFrequency.close(); detectChanges()"
+                      (focus)="detectChanges()"
+                      (blur)="detectChanges()"
+                      (clear)="detectChanges()"
+                      (search)="detectChanges()"
+                      [items]="frequencies"
+                      [clearable]="false"
+                      [searchable]="true"
+                      bindLabel="label"
+                      bindValue="value"
+                      appControlError
+                      formControlName="frequency"
+                      placeholder="Start typing or select ..."
+                      id="frequency"
+                      class="rounder"
+                    ></ng-select>
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="sessions_amount_planned">Planned number of sessions</label>
+                      <input
+                        appControlError
+                        class="form-control"
+                        formControlName="sessions_amount_planned"
+                        placeholder="0"
+                        id="sessions_amount_planned"
+                        type="number"
+                      >
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="treatment_amount_planned">Planned total treatment time</label>
+                      <input
+                        appControlError
+                        class="form-control"
+                        formControlName="treatment_amount_planned"
+                        placeholder="0 minutes"
+                        id="treatment_amount_planned"
+                        type="number"
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea
+                      appControlError
+                      class="form-control"
+                      formControlName="notes"
+                      id="notes"
+                      type="text"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="participant--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="private_notes">Private Notes</label>
+                    <textarea
+                      appControlError
+                      class="form-control"
+                      formControlName="private_notes"
+                      id="private_notes"
+                      type="text"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </div>
+        <div
+          *ngIf="!!form"
+          class="participant--profile--content--actions"
+        >
+          <button
+            (click)="cancel()"
+            class="btn btn__standard btn--radius__md btn-outline-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="submit()"
+            class="btn btn__standard btn--radius__md btn--color__contextual left"
+          >
+            <fa-icon icon="check"></fa-icon>
+            Update Student Profile
+          </button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="stepIsActive(steps.goals)">
+        <div class="participant--profile--content--main">
+          <div class="participant--profile--content--main--info">
+            <div class="participant--profile--content--main--info__title">
+              Goals
+            </div>
+            <div class="participant--profile--content--main--info__subtitle">
+              Personal goals for {{entity.fullname}}
+            </div>
+          </div>
+          <button
+            (click)="buildGoal()"
+            [disabled]="!!formGoal"
+            type="button"
+            class="btn btn__standard btn--radius__md btn--color__primary participant--profile--content--main__edit"
+          >
+            <fa-icon icon="plus"></fa-icon>
+            Add Goal
+          </button>
+        </div>
+        <div class="participant--profile--content--body columned">
+          <div
+            *ngFor="let goal of entity.goalsSorted"
+            class="participant--profile--content--body--item carded"
+          >
+            <div class="participant--profile--content--body--item--header">
+              <div class="participant--profile--content--body--item--header__title">
+                {{goal.name}}
+              </div>
+              <div class="participant--profile--content--body--item--header--actions">
+                <a
+                  (click)="buildGoal(goal)"
+                  ngbTooltip="Edit"
+                  placement="bottom"
+                  container="body"
+                >
+                  <fa-icon icon="pen"></fa-icon>
+                </a>
+                <ng-container *ngIf="goal.hasSources">
+                  <div
+                    ngbTooltip="Imported from TeleTeachers"
+                    container="body"
+                    class="source--exists"
+                  >
+                    TT
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!goal.hasSources">
+                  <a
+                    (click)="removeGoal(goal)"
+                    ngbTooltip="Remove"
+                    placement="bottom"
+                    container="body"
+                  >
+                    <fa-icon icon="trash"></fa-icon>
+                  </a>
+                </ng-container>
+              </div>
+            </div>
+            <div class="participant--profile--content--body--item--body">
+              <div
+                *ngFor="let tracker of goal.trackers"
+                class="participant--profile--content--body--item--body--item"
+              >
+                <fa-icon
+                  [icon]="tracker.icon"
+                  [style.color]="tracker.color"
+                ></fa-icon>
+                {{tracker.name}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="!!formGoal"
+          class="participant--profile--content--foldover"
+        >
+          <div class="participant--profile--content--foldover--header">
+            <div class="participant--profile--content--foldover--header__title">
+              {{formGoal.get('resource').value.is_new ? 'Create Goal' : 'Edit Goal'}}
+            </div>
+            <div class="participant--profile--content--foldover--header--actions">
+              <button
+                (click)="submitGoal()"
+                type="button"
+                class="btn btn__standard btn--radius__sm btn--color__primary"
+              >
+                Submit Goal
+              </button>
+              <button
+                (click)="cancel()"
+                type="button"
+                class="btn btn__standard btn--radius__sm btn-outline-secondary"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+          <div class="participant--profile--content--foldover--body">
+            <form
+              [formGroup]="formGoal"
+            >
+              <div class="form-group">
+                <label for="name" class="required">Goal</label>
+                <textarea
+                  appControlError
+                  class="form-control"
+                  formControlName="name"
+                  placeholder="Type goal here ..."
+                  id="name"
+                  type="text"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="iep" class="required">IEP Date</label>
+                <ng-select
+                  appControlError
+                  (change)="detectChanges()"
+                  (focus)="detectChanges()"
+                  (blur)="detectChanges()"
+                  (clear)="detectChanges()"
+                  (search)="detectChanges()"
+                  [items]="ieps"
+                  [clearable]="false"
+                  [searchable]="false"
+                  bindLabel="dateActualHuman"
+                  bindValue="id"
+                  formControlName="iep"
+                  class="rounder-simple"
+                >
+                </ng-select>
+              </div>
+              <div
+                formArrayName="trackers"
+                class="form-group"
+              >
+                <label class="required">Tracking buttons</label>
+                <div
+                  *ngFor="let tracker of trackers; let index = index"
+                  [formGroupName]="index"
+                  class="form-row"
+                >
+                  <div class="form-group col-md-2">
+                    <label class="required">Icon</label>
+                    <ng-select
+                      (change)="detectChanges()"
+                      (focus)="detectChanges()"
+                      (blur)="detectChanges()"
+                      (clear)="detectChanges()"
+                      (search)="detectChanges()"
+                      [items]="trackersIcons"
+                      [clearable]="false"
+                      [searchable]="false"
+                      bindLabel="label"
+                      bindValue="value"
+                      formControlName="icon"
+                      appControlError
+                      class="rounder-simple"
+                    >
+                      <ng-template
+                        let-item="item"
+                        ng-label-tmp
+                      >
+                        <div class="option">
+                          <fa-icon
+                            [icon]="item.value"
+                            [style.color]="item.label"
+                          ></fa-icon>
+                        </div>
+                      </ng-template>
+                      <ng-template
+                        let-item="item"
+                        ng-option-tmp
+                      >
+                        <div class="option">
+                          <fa-icon
+                            [icon]="item.value"
+                            [style.color]="item.label"
+                          ></fa-icon>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div class="form-group col-md-3" *ngIf="typeSelectNeeded(formGoal.get('trackers.' + index + '.icon').value)">
+                    <label class="required">Type</label>
+                    <ng-select
+                      (change)="detectChanges();"
+                      (focus)="detectChanges()"
+                      (blur)="detectChanges()"
+                      (clear)="detectChanges()"
+                      (search)="detectChanges()"
+                      [items]="goalTypes"
+                      [clearable]="false"
+                      [searchable]="false"
+                      bindLabel="label"
+                      bindValue="value"
+                      formControlName="tracker_type"
+                      appControlError
+                      class="rounder-simple"
+                    >
+                      <ng-template
+                        let-item="item"
+                        ng-option-tmp
+                      >
+                        <div class="white-space-normal word-break-word">{{item.label}}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div class="form-group"
+                    [class.col-md-7]="typeSelectNeeded(formGoal.get('trackers.' + index + '.icon').value)"
+                    [class.col-md-10]="!typeSelectNeeded(formGoal.get('trackers.' + index + '.icon').value)">
+                    <div class="removal">
+                      <label class="required">Name</label>
+                      <div
+                        *ngIf="trackers.length > 1"
+                        (click)="removeTracker(index)"
+                        class="removal--action"
+                      >
+                        <fa-icon icon="trash"></fa-icon>
+                      </div>
+                    </div>
+                    <input
+                      formControlName="name"
+                      appControlError
+                      class="form-control form-control--sm free"
+                      placeholder="Type tracker name here ..."
+                      type="text"
+                    >
+                  </div>
+                </div>
+              </div>
+              <button
+                [disabled]="trackers.length >= 5"
+                (click)="appendTracker()"
+                type="button"
+                class="btn btn-outline-primary btn-dashed participant--profile--content--foldover--body--append"
+              >
+                <fa-icon icon="plus-circle"></fa-icon>
+                Add Tracker
+              </button>
+            </form>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="stepIsActive(steps.ieps)">
+        <div class="participant--profile--content--main">
+          <div class="participant--profile--content--main--info">
+            <div class="participant--profile--content--main--info__title">
+              IEP Dates
+            </div>
+          </div>
+          <button
+            (click)="buildIep()"
+            [disabled]="!!formIep"
+            type="button"
+            class="btn btn__standard btn--radius__md btn--color__primary participant--profile--content--main__edit"
+          >
+            <fa-icon icon="plus"></fa-icon>
+            Add IEP Date
+          </button>
+        </div>
+        <div class="participant--profile--content--body columned">
+          <div
+            *ngIf="!!formIep && !activeIepResourceId"
+            class="participant--profile--content--body--item carded carded--white"
+          >
+            <div class="participant--profile--content--body--item--body participant--profile--content--body--item--body--iep">
+              <form [formGroup]="formIep" class="participant--profile--content--body--item--body--iep--form">
+                <div class="form-group">
+                  <label for="dateActual">IEP Date</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="date_actual"
+                    placeholder="IEP Date"
+                    type="date"
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="dateReeval">Student's Re-Eval Date</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="date_reeval"
+                    placeholder="Student's Re-Eval Date"
+                    type="date"
+                  >
+                </div>
+              </form>
+              <div class="participant--profile--content--body--item--body--iep--actions">
+                <a
+                  (click)="submitIep()"
+                  class="color--action__green participant--profile--content--body--item--body--iep--actions--item"
+                >
+                  <fa-icon icon="check"></fa-icon>
+                  Save
+                </a>
+                <a
+                  (click)="cancel()"
+                  class="color--action__muted participant--profile--content--body--item--body--iep--actions--item"
+                >
+                  <fa-icon icon="times"></fa-icon>
+                  Cancel
+                </a>
+              </div>
+            </div>
+          </div>
+          <div
+            class="participant--profile--content--body--item carded carded--white"
+            *ngFor="let iep of ieps"
+          >
+            <div class="participant--profile--content--body--item--body participant--profile--content--body--item--body--iep">
+              <div *ngIf="activeIepResourceId !== iep.id" class="participant--profile--content--body--item--body--iep--form">
+                <div class="form-group">
+                  <label for="dateActual">IEP Date</label>
+                  <input
+                    class="form-control"
+                    placeholder="IEP Date"
+                    [value]="iep.dateActual"
+                    type="date"
+                    disabled
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="dateReeval">Student's Re-Eval Date</label>
+                  <input
+                    class="form-control"
+                    placeholder="Student's Re-Eval Date"
+                    [value]="iep.dateReeval"
+                    type="date"
+                    disabled
+                  >
+                </div>
+              </div>
+              <form *ngIf="activeIepResourceId === iep.id" [formGroup]="formIep" class="participant--profile--content--body--item--body--iep--form">
+                <div class="form-group">
+                  <label for="dateActual">IEP Date</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="date_actual"
+                    placeholder="IEP Date"
+                    type="date"
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="dateReeval">Student's Re-Eval Date</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="date_reeval"
+                    placeholder="Students Re-Eval Date"
+                    type="date"
+                  >
+                </div>
+              </form>
+              <div *ngIf="!iep.hasSources" class="participant--profile--content--body--item--body--iep--actions">
+                <ng-container *ngIf="activeIepResourceId === iep.id">
+                  <a
+                    (click)="submitIep()"
+                    class="color--action__green participant--profile--content--body--item--body--iep--actions--item"
+                  >
+                    <fa-icon icon="check"></fa-icon>
+                    Update
+                  </a>
+                  <a
+                    (click)="cancel()"
+                    class="color--action__muted participant--profile--content--body--item--body--iep--actions--item"
+                  >
+                    <fa-icon icon="times"></fa-icon>
+                    Cancel
+                  </a>
+                </ng-container>
+                <a *ngIf="activeIepResourceId !== iep.id"
+                  (click)="buildIep(iep)"
+                  ngbTooltip="Edit"
+                  placement="bottom"
+                  container="body"
+                  class="participant--profile--content--body--item--body--iep--actions--item"
+                >
+                  <fa-icon class="color--action__black" icon="pencil-alt"></fa-icon>
+                </a>
+                <a
+                  (click)="removeIep(iep)"
+                  ngbTooltip="Remove"
+                  placement="bottom"
+                  container="body"
+                  class="participant--profile--content--body--item--body--iep--actions--item"
+                >
+                  <fa-icon class="color--action__red" icon="trash-alt"></fa-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="stepIsActive(steps.recordings)">
+        <div class="participant--profile--content--main">
+          <div class="participant--profile--content--main--info">
+            <div class="participant--profile--content--main--info__title">
+              Documentation
+            </div>
+            <div class="participant--profile--content--main--info__subtitle">
+              List of documentation for {{entity.fullname}}
+            </div>
+          </div>
+        </div>
+        <div class="participant--profile--content--body columned">
+          <app-session-recorded-list-custom
+            [filter]="recordingsFilter"
+            [embedded]="true"
+          ></app-session-recorded-list-custom>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

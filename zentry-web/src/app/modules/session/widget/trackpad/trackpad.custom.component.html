@@ -1,0 +1,66 @@
+<div
+  *ngIf="!isLoading"
+  class="trackpad--controls"
+>
+  <div class="trackpad--controls--buttons">
+    <div class="trackpad--controls--buttons--inline">
+      <div class="trackpad--controls--buttons--inline--item">
+        <div
+          (click)="backtrack()"
+          [class.not-allowed]="!isBacktrackAvailable"
+          [class.visited]="isVisited(sessionService.poiService.types.backtrack)"
+          class="trackpad--controls--buttons__backtrack"
+        >
+          <i></i>
+        </div>
+        <span>
+          {{authUser.backtrack.backward}} sec <br> backtrack
+        </span>
+      </div>
+      <div
+        [class.active]="isRecording"
+        class="trackpad--controls--buttons--stopwatch--wrapper"
+      >
+        <div class="trackpad--controls--buttons--stopwatch--wrapper--progress">
+          <circle-progress
+            [percent]="progress"
+            [radius]="50"
+            [outerStrokeWidth]="4"
+            [innerStrokeWidth]="0"
+            [outerStrokeColor]="'#CDCEDE'"
+            [animation]="true"
+            [animationDuration]="300"
+          ></circle-progress>
+        </div>
+        <div class="trackpad--controls--buttons--stopwatch--wrapper__effect"></div>
+        <div
+          (click)="isRecording ? capture() : stopwatch()"
+          class="trackpad--controls--buttons--stopwatch--wrapper__button"
+        >
+          <i></i>
+          <span *ngIf="isRecording">
+        <app-date-timer [from]="startedAt.valueOf()"></app-date-timer>
+      </span>
+        </div>
+      </div>
+      <div class="trackpad--controls--buttons--inline--item">
+        <div
+          (click)="poi()"
+          [class.visited]="isVisited(sessionService.poiService.types.poi)"
+          class="trackpad--controls--buttons__poi"
+        >
+          <i></i>
+        </div>
+        <span>
+          {{authUser.poi.amount}} sec clip
+        </span>
+      </div>
+    </div>
+    <div class="trackpad--controls__duration">
+      <app-date-timer
+        (durationChanged)="progressUpdate($event)"
+        [hours]="true"
+      ></app-date-timer>
+    </div>
+  </div>
+</div>

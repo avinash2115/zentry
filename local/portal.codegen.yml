@@ -1,0 +1,28 @@
+overwrite: true
+schema: http://api:5050/graphql
+documents: './src/**/*.graphql'
+generates:
+  ./src/graphql/hooks.generated.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      reactApolloVersion: 3
+      exportFragmentSpreadSubTypes: true
+      withComponent: false
+      withHOC: false
+      withHooks: true
+      scalars:
+        Date: string
+        DateTime: string
+        Time: string
+  ./src/graphql/schema.generated.json:
+    plugins:
+      - 'introspection'
+  ./src/graphql/schema-fragments.generated.json:
+    plugins:
+      - fragment-matcher
+    config:
+      apolloClientVersion: 3
+      module: commonjs

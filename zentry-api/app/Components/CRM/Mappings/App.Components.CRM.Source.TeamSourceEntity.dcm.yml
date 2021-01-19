@@ -1,0 +1,8 @@
+App\Components\CRM\Source\TeamSourceEntity:
+  type: entity
+  manyToOne:
+    entity:
+      targetEntity: App\Components\Users\Team\TeamEntity
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

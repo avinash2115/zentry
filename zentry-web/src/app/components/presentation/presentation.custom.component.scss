@@ -1,0 +1,39 @@
+.presentation {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 95px;
+  background-color: #FFFFFF;
+  padding: 35px 65px;
+
+  @media (max-width: 1279px) {
+    padding: 35px 15px;
+  }
+
+  &__place {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  &--ad-hoc {
+    margin-left: auto;
+
+    button {
+      height: 49px;
+      width: 163px;
+      justify-content: center;
+    }
+  }
+  
+  button {
+    &.btn-outline-secondary {
+      border-radius: 100%;
+      margin-right: 10px;
+    }
+  }
+
+  @media (max-width: 415px) {
+    display: none;
+  }
+}
+
