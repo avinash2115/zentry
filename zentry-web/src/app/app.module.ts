@@ -28,6 +28,7 @@ import { SessionModule } from './modules/session/session.module';
 import { IpcService } from './shared/services/ipc.service';
 import { FormsModule } from '@angular/forms';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { ProviderModule } from './modules/provider/providers.module'
 
 declare global {
     interface Window {
@@ -131,6 +132,7 @@ export function ipcInit(ipcService: IpcService) {
         UserModule,
         SessionModule,
         ServiceModule,
+        ProviderModule,
         SharedModule,
         FormsModule,
     ],

@@ -7,6 +7,7 @@ export enum EType {
     school = 'school',
     session = 'session',
     service = 'service',
+    provider = 'provider',
 }
 
 export class SyncLogJsonapiService extends Service<SyncLogJsonapiResource> {

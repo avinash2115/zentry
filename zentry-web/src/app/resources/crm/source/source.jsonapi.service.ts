@@ -1,4 +1,4 @@
-import { Resource, Service } from '../../../../vendor/vp-ngx-jsonapi';
+import { Resource, Service  } from '../../../../vendor/vp-ngx-jsonapi';
 
 export class SourceJsonapiService extends Service<SourceJsonapiResource> {
     type = 'crms_sources';

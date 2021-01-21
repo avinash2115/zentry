@@ -36,6 +36,7 @@ import { ProgressJsonapiService as SessionProgressJsonapiService } from './sessi
 import { SyncLogJsonapiService as CrmSyncLogJsonapiService } from './crm/sync-log/sync-log.jsonapi.service';
 import { SoapJsonapiService as SessionSoapJsonapiService } from './session/soap/soap.jsonapi.service';
 import { ServiceJsonapiService } from './service/service.jsonapi.service';
+import { ProviderJsonapiService} from './provider/provider.jsonapi.service'
 
 @NgModule({
     declarations: [],
@@ -86,6 +87,10 @@ import { ServiceJsonapiService } from './service/service.jsonapi.service';
 
         // region Service
         ServiceJsonapiService,
+        // endregion
+
+        // region Service
+        ProviderJsonapiService,
         // endregion
 
         // region Session
