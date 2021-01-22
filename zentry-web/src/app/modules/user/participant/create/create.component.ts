@@ -126,10 +126,10 @@ export class CreateComponent extends BaseDetachedComponent implements OnInit {
                         this.form.get(key).updateValueAndValidity();
                     });
                 }
-                break;
+                // break;
             default:
                 this._stepActive = value;
-                break;
+                // break;
         }
 
         this.detectChanges();

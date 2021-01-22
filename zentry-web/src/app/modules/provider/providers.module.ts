@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
-import { ServiceRoutingModule } from './providers-routing.module';
+import { ProviderRoutingModule } from './providers-routing.module';
 import { ProviderService } from './providers.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,7 +19,7 @@ import { AssistantModule } from '../assistant/assistant.module';
     imports: [
         CommonModule,
         SharedModule,
-        ServiceRoutingModule,
+        ProviderRoutingModule,
         ReactiveFormsModule,
         NgSelectModule,
         AssistantModule

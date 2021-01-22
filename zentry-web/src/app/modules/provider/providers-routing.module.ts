@@ -17,7 +17,7 @@ const routes: Routes = [
                 component: CreateComponent
             },
             {
-                path: ':serviceId',
+                path: ':providerId',
                 component: ViewComponent
             }
         ]
@@ -30,5 +30,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class ServiceRoutingModule {
+export class ProviderRoutingModule {
 }
