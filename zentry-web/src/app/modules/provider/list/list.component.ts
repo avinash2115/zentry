@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { LayoutService } from '../../../shared/services/layout.service';
 import { ProviderService } from '../providers.service';
 import { ProviderJsonapiResource } from '../../../resources/provider/provider.jsonapi.service';
-import { CrmService } from '../../../shared/services/crm.service';
+// import { CrmService } from '../../../shared/services/crm.service';
 import { BaseList } from '../../assistant/list/abstractions/base.abstract';
 import { ListComponent as AssistantListComponent } from '../../assistant/list/components/list/list.component';
 import { Resource } from '../../../../vendor/vp-ngx-jsonapi';
@@ -36,7 +36,7 @@ export class ListComponent extends BaseDetachedComponent implements OnInit {
         protected layoutService: LayoutService,
         protected loaderService: LoaderService,
         protected providerService: ProviderService,
-        public crmService: CrmService
+        // public crmService: CrmService
     ) {
         super(cdr);
     }
