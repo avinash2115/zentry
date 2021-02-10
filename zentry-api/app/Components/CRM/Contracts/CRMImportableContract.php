@@ -18,6 +18,8 @@ interface CRMImportableContract extends IdentifiableContract
 
     public const CRM_ENTITY_TYPE_SERVICE = 'service';
 
+    public const CRM_ENTITY_TYPE_PROVIDER = 'provider';
+
     public const CRM_ENTITY_TYPE_PARTICIPANT = 'participant';
 
     public const CRM_ENTITY_TYPE_PARTICIPANT_GOAL = 'participant_goal';
@@ -36,6 +38,7 @@ interface CRMImportableContract extends IdentifiableContract
         self::CRM_ENTITY_TYPE_SCHOOL,
         self::CRM_ENTITY_TYPE_SESSION,
         self::CRM_ENTITY_TYPE_SERVICE,
+        self::CRM_ENTITY_TYPE_PROVIDER,
     ];
 
     /**

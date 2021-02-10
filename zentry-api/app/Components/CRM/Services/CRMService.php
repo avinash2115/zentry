@@ -8,6 +8,7 @@ use App\Assistants\CRM\Drivers\DTO\Participant\Goal\GoalDTO;
 use App\Assistants\CRM\Drivers\DTO\Participant\IEP\IEPDTO;
 use App\Assistants\CRM\Drivers\DTO\Participant\ParticipantDTO;
 use App\Assistants\CRM\Drivers\DTO\Service\ServiceDTO;
+use App\Assistants\CRM\Drivers\DTO\Provider\ProviderDTO;
 use App\Assistants\CRM\Drivers\DTO\Session\SessionDTO;
 use App\Assistants\CRM\Drivers\DTO\Team\School\SchoolDTO;
 use App\Assistants\CRM\Drivers\DTO\Team\TeamDTO;
@@ -21,12 +22,14 @@ use App\Components\CRM\Source\ParticipantIEPSourceEntity;
 use App\Components\CRM\Source\ParticipantSourceEntity;
 use App\Components\CRM\Source\SchoolSourceEntity;
 use App\Components\CRM\Source\ServiceSourceEntity;
+use App\Components\CRM\Source\ProviderSourceEntity;
 use App\Components\CRM\Source\SessionSourceEntity;
 use App\Components\CRM\Source\SourceEntity;
 use App\Components\CRM\Source\SourceReadonlyContract;
 use App\Components\CRM\Source\TeamSourceEntity;
 use App\Components\CRM\ValueObjects\Driver;
 use App\Components\Services\Services\Traits\ServiceServiceTrait;
+use App\Components\Provider\ProviderServices\Traits\ProviderServiceTrait;
 use App\Components\Sessions\Services\Traits\SessionServiceTrait;
 use App\Components\Sessions\Session\SessionReadonlyContract;
 use App\Components\Users\Participant\Goal\GoalReadonlyContract;
@@ -58,6 +61,7 @@ class CRMService implements CRMServiceContract
 {
     use UserServiceTrait;
     use ServiceServiceTrait;
+    use ProviderServiceTrait;
     use CRMServiceTrait;
     use TeamServiceTrait;
     use AuthServiceTrait;
@@ -301,6 +305,41 @@ class CRMService implements CRMServiceContract
         );
     }
 
+      /**
+     * @inheritDoc
+     */
+    public function syncProviders(): void
+    {
+        $this->_sync(
+            CRMImportableContract::CRM_ENTITY_TYPE_PROVIDER,
+            $this->configureImporterDriver()->Providers(),
+            function (ProviderSourceEntity $source, ProviderDTO $dto) {
+                $this->providerService__()->workWith($source->owner()->identity()->toString())->change(
+                    [
+                        'name' => $dto->name,
+                        'code' => $dto->code,
+                
+
+                    ]
+                );
+            },
+            function (ProviderDTO $dto) {
+                return $this->providerService__()->create($this->_user(),
+                 [
+                    'name' => $dto->name,
+                    'code' => $dto->code,
+
+
+                ])->readonly();
+            },
+            function (ProviderSourceEntity $source) {
+                $this->providerService__()->workWith(
+                    $source->owner()->identity()->toString()
+                )->remove();
+            }
+        );
+    }
+
     /**
      * @inheritDoc
      */
@@ -523,11 +562,27 @@ class CRMService implements CRMServiceContract
     /**
      * @inheritDoc
      */
+    public function syncProviderTransactions(): void
+    {
+        $providerTransactions = $this->configureImporterDriver()->providerTransactions();
+
+        $this->_syncSchools($providerTransactions->schools());
+        $this->_syncScheduledSessions($providerTransactions->sessions());
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     public function syncSchools(): void
     {
         $serviceTransactions = $this->configureImporterDriver()->serviceTransactions();
 
         $this->_syncSchools($serviceTransactions->schools());
+
+        $providerTransactions = $this->configureImporterDriver()->providerTransactions();
+
+        $this->_syncSchools($providerTransactions->schools());
     }
 
     /**
@@ -538,7 +593,12 @@ class CRMService implements CRMServiceContract
         $serviceTransactions = $this->configureImporterDriver()->serviceTransactions();
 
         $this->_syncScheduledSessions($serviceTransactions->sessions());
+
+        $providerTransactions = $this->configureImporterDriver()->serviceTransactions();
+
+        $this->_syncScheduledSessions($providerTransactions->sessions());
     }
+
 
     /**
      * @param Collection $schools

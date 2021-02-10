@@ -16,7 +16,7 @@ enum ESteps {
 }
 
 @Component({
-    selector: 'app-providers-create',
+    selector: 'app-provider-create',
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +42,7 @@ export class CreateComponent extends BaseDetachedComponent implements OnInit {
     ngOnInit(): void {
         this.loadingTrigger();
 
-        this.layoutService.changeTitle('providers | Create');
+        this.layoutService.changeTitle('provider | Create');
 
         this.build();
     }
@@ -94,9 +94,9 @@ export class CreateComponent extends BaseDetachedComponent implements OnInit {
                 .subscribe((r: ProviderJsonapiResource) => {
                     this.loaderService.hide();
 
-                    SwalService.toastSuccess({title: `Services has been created!`});
+                    SwalService.toastSuccess({title: `Providers has been created!`});
 
-                    this.router.navigate(['/providers']);
+                    this.router.navigate(['/provider']);
                 }, (error: DataError) => {
                     this.loaderService.hide();
                     this.fallback(error);

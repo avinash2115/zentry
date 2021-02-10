@@ -7,6 +7,8 @@ use App\Assistants\CRM\Drivers\DTO\Participant\Goal\GoalDTO;
 use App\Assistants\CRM\Drivers\DTO\Participant\ParticipantDTO;
 use App\Assistants\CRM\Drivers\DTO\Session\SessionDTO;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ServiceTransaction;
+use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ProviderTransaction;
+
 use Arr;
 
 /**
@@ -32,6 +34,8 @@ class Exporter extends TherapylogClient implements CRMExporterInterface
     public function createSession(SessionDTO $dto): string
     {
         return (string)$this->createServiceTransaction(self::prepareSessionDTO($dto))->id();
+        return (string)$this->createProviderTransaction(self::prepareSessionDTO($dto))->id();
+
     }
 
     /**
@@ -40,6 +44,8 @@ class Exporter extends TherapylogClient implements CRMExporterInterface
     public function updateSession(SessionDTO $dto): string
     {
         return (string)$this->updateServiceTransaction((int)$dto->id, self::prepareSessionDTO($dto))->id();
+        return (string)$this->updateProviderTransaction((int)$dto->id, self::prepareSessionDTO($dto))->id();
+
     }
 
     /**
@@ -55,6 +61,36 @@ class Exporter extends TherapylogClient implements CRMExporterInterface
                 'end_at' => $dto->scheduledTo,
                 'school_id' => (int)$dto->school->id,
                 'service_type' => ServiceTransaction::SERVICE_TYPE_SCHEDULED,
+                'document' => 0,
+                'service_appointments_attributes' => [
+                    [
+                        'service_id' => $dto->type,
+                        'student_appointments_attributes' => $dto->participants->map(
+                            static function (ParticipantDTO $participant) {
+                                return [
+                                    'student_id' => (int)$participant->id,
+                                    'student_appointment_goals_attributes' => $participant->goals->map(
+                                        static function (GoalDTO $goal) {
+                                            return [
+                                                'progressable_id' => $goal->id,
+                                                'activity' => $goal->name,
+                                            ];
+                                        }
+                                    )->toArray(),
+                                ];
+                            }
+                        )->toArray(),
+                    ],
+                ],
+            ],
+        ];
+
+        return [
+            'Provider_transaction' => [
+                'start_at' => $dto->scheduledOn,
+                'end_at' => $dto->scheduledTo,
+                'school_id' => (int)$dto->school->id,
+                'service_type' => ProviderTransaction::SERVICE_TYPE_SCHEDULED,
                 'document' => 0,
                 'service_appointments_attributes' => [
                     [

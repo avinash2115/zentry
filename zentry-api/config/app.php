@@ -9,6 +9,7 @@ use App\Assistants\Events\Providers\EventServiceProvider;
 use App\Assistants\Search\Providers\SearchServiceProvider;
 use App\Components\CRM\Providers\CRMServiceProvider;
 use App\Components\Services\Providers\ServiceServiceProvider;
+use App\Components\Providers\Providers\ProviderServiceProvider;
 use App\Components\Sessions\Providers\SessionServiceProvider;
 use App\Assistants\Transformers\Facades\JsonTransformerFacade;
 use App\Assistants\Transformers\Providers\TransformerServiceProvider;
@@ -198,6 +199,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         UserServiceProvider::class,
         ServiceServiceProvider::class,
+        ProviderServiceProvider::class,
         AuthServiceProvider::class,
         TransformerServiceProvider::class,
         QRServiceProvider::class,

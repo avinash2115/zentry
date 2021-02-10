@@ -29,6 +29,7 @@ use App\Convention\Exceptions\Unexpected\PropertyNotInit;
 use App\Providers\BaseServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Components\CRM\Source\ServiceSourceEntity;
+use App\Components\CRM\Source\ProviderSourceEntity;
 
 /**
  * Class CRMServiceProvider
@@ -167,6 +168,10 @@ class CRMServiceProvider extends BaseServiceProvider
         $this->app->alias(
             ServiceSourceEntity::class,
             CRMImportableContract::CRM_ALIAS_PREFIX . CRMImportableContract::CRM_ENTITY_TYPE_SERVICE
+        );
+        $this->app->alias(
+            ProviderSourceEntity::class,
+            CRMImportableContract::CRM_ALIAS_PREFIX . CRMImportableContract::CRM_ENTITY_TYPE_PROVIDER
         );
     }
 }

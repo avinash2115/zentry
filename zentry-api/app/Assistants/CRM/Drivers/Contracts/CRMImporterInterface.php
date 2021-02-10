@@ -3,6 +3,7 @@
 namespace App\Assistants\CRM\Drivers\Contracts;
 
 use App\Assistants\CRM\Drivers\ValueObjects\Converted\ServiceTransaction as ConvertedServiceTransaction;
+use App\Assistants\CRM\Drivers\ValueObjects\Converted\ProviderTransaction as ConvertedProviderTransaction;
 use App\Assistants\CRM\Exceptions\ConnectionFailed;
 use App\Assistants\CRM\Exceptions\InvalidCredentials;
 use App\Convention\Exceptions\Logic\NotImplementedException;
@@ -38,6 +39,12 @@ interface CRMImporterInterface
      */
     public function services(): Collection;
 
+     /**
+     * @return Collection
+     * @throws BindingResolutionException|NotImplementedException
+     */
+    public function providers(): Collection;
+
     /**
      * @return Collection
      * @throws BindingResolutionException
@@ -54,6 +61,15 @@ interface CRMImporterInterface
      * @throws Exception
      */
     public function serviceTransactions(): ConvertedServiceTransaction;
+
+     /**
+     * @return ConvertedServiceTransaction
+     * @throws BindingResolutionException
+     * @throws NotImplementedException
+     * @throws RuntimeException
+     * @throws Exception
+     */
+    public function providerTransactions(): ConvertedProviderTransaction;
 
     /**
      * @param string $participantId

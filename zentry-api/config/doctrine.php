@@ -43,6 +43,7 @@ return [
                 base_path('app/Components/Users/Mappings'),
                 base_path('app/Components/Services/Mappings'),
                 base_path('app/Components/CRM/Mappings'),
+                base_path('app/Components/Providers/Mappings'),
 
             ],
             'repository' => Doctrine\ORM\EntityRepository::class,

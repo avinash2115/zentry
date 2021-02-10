@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
+        "Macroable",
+        "Npkj",
         "angularx",
         "codelyzer",
         "consts",
@@ -8,6 +10,9 @@
         "googlemaps",
         "jasminewd",
         "localforage",
+        "mklink",
+        "newproviders",
+        "quickstart",
         "resumablejs"
     ]
 }

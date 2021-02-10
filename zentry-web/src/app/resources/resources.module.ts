@@ -89,7 +89,7 @@ import { ProviderJsonapiService} from './provider/provider.jsonapi.service'
         ServiceJsonapiService,
         // endregion
 
-        // region Service
+        // region Provider
         ProviderJsonapiService,
         // endregion
 

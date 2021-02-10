@@ -4,8 +4,8 @@ import { BaseList } from '../../modules/assistant/list/abstractions/base.abstrac
 import { EAttributeType, ISortableAttribute, ISortableRelation } from '../../modules/assistant/sorting/abstractions/base.abstract';
 
 export class ProviderJsonapiService extends BaseList<ProviderJsonapiResource>  {
-    type = 'provider';
-    path = 'provider';
+    type = 'providers';
+    path = 'providers';
     resource = ProviderJsonapiResource;
     schema: ISchema = {
         relationships: {
@@ -22,7 +22,7 @@ export class ProviderJsonapiService extends BaseList<ProviderJsonapiResource>  {
     }
 
     getSortableNamespace(): string {
-        return 'provider';
+        return 'providers';
     }
 
     getSortableAttributes(): Array<ISortableAttribute> {

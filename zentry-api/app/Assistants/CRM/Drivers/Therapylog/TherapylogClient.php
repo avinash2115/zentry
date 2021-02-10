@@ -11,7 +11,9 @@ use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Goal\Records as GoalRecor
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\IEP\Records as IEPRecords;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Provider;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Service;
+use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Providers;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ServiceTransaction;
+use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ProviderTransaction;
 use App\Assistants\CRM\Exceptions\ConnectionFailed;
 use App\Assistants\CRM\Exceptions\InvalidCredentials;
 use Arr;
@@ -147,6 +149,24 @@ class TherapylogClient
     }
 
     /**
+     * @return Collection
+     * @throws BindingResolutionException
+     */
+    public function providers(): Collection
+    {
+        $result = $this->client()->sendPrivateRequest(
+            $this->login(),
+            'providers'
+        )->body();
+
+        return collect($result['providers'])->map(
+            static function (array $item) {
+                return new Provider($item);
+            }
+        );
+    }
+
+    /**
      * @param int $districtId
      * @param int $page
      * @param int $perPage
@@ -213,6 +233,48 @@ class TherapylogClient
             collect($result['service_transactions'])->map(
                 static function (array $record) {
                     return new ServiceTransaction($record);
+                }
+            ), new Meta($result['meta'])
+        );
+    }
+
+    /**
+     * @param mixed $fromDate
+     * @param mixed $toDate
+     * @param int   $page
+     * @param int   $perPage
+     * @param int   $documented
+     * @param int   $lite
+     *
+     * @return Records
+     * @throws BindingResolutionException|InvalidCredentials|ConnectionFailed
+     */
+    public function providerTransactionRecords(
+        $fromDate,
+        $toDate,
+        int $page = 1,
+        int $perPage = self::PER_PAGE,
+        $documented = 0,
+        $lite = 0
+    ): Records {
+        $result = $this->client()->sendPrivateRequest(
+            $this->login(),
+            'provider_transactions',
+            'GET',
+            [
+                'from' => $fromDate,
+                'to' => $toDate,
+                'page' => $page,
+                'per_page' => $perPage,
+                'documented' => $documented,
+                'lite' => $lite,
+            ]
+        )->body();
+
+        return new Records(
+            collect($result['provider_transactions'])->map(
+                static function (array $record) {
+                    return new ProviderTransaction($record);
                 }
             ), new Meta($result['meta'])
         );
@@ -350,4 +412,61 @@ class TherapylogClient
 
         return new ServiceTransaction($result);
     }
+
+     /**
+     * @param array $data
+     *
+     * @return ProviderTransaction
+     * @throws BindingResolutionException
+     * @throws Exception
+     */
+    public function createProviderTransaction(array $data): ProviderTransaction
+    {
+        $result = $this->client()->sendPrivateRequest(
+            $this->login(),
+            'provider_transactions',
+            'POST',
+            $data
+        )->body();
+
+        return new ProviderTransaction($result);
+    }
+
+    /**
+     * @param int   $id
+     * @param array $data
+     *
+     * @return ProviderTransaction
+     * @throws BindingResolutionException
+     * @throws Exception
+     */
+    public function updateProviderTransaction(int $id, array $data): ProviderTransaction
+    {
+        $result = $this->client()->sendPrivateRequest(
+            $this->login(),
+            "provider_transactions/{$id}",
+            'PUT',
+            $data
+        )->body();
+
+        return new ProviderTransaction($result);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return ProviderTransaction
+     * @throws BindingResolutionException
+     * @throws Exception
+     */
+    public function providerTransaction(int $id): ProviderTransaction
+    {
+        $result = $this->client()->sendPrivateRequest(
+            $this->login(),
+            "provider_transactions/{$id}",
+        )->body();
+
+        return new ProviderTransaction($result);
+    }
 }
+

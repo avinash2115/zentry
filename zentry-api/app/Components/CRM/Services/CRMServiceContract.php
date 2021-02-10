@@ -77,6 +77,17 @@ interface CRMServiceContract
      * @throws PropertyNotInit
      * @throws RuntimeException
      */
+    public function syncProviders(): void;
+
+    /**
+     * @throws NotImplementedException
+     * @throws ConnectionFailed
+     * @throws InvalidCredentials
+     * @throws BindingResolutionException
+     * @throws InvalidArgumentException
+     * @throws PropertyNotInit
+     * @throws RuntimeException
+     */
     public function syncParticipants(): void;
 
     /**
@@ -111,6 +122,17 @@ interface CRMServiceContract
      * @throws RuntimeException
      */
     public function syncServiceTransactions(): void;
+
+    /**
+     * @throws NotImplementedException
+     * @throws ConnectionFailed
+     * @throws InvalidCredentials
+     * @throws BindingResolutionException
+     * @throws InvalidArgumentException
+     * @throws PropertyNotInit
+     * @throws RuntimeException
+     */
+    public function syncProviderTransactions(): void;
 
     /**
      * @throws NotImplementedException

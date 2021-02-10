@@ -7,6 +7,7 @@ use App\Assistants\CRM\Drivers\DTO\Participant\Goal\GoalDTO;
 use App\Assistants\CRM\Drivers\DTO\Participant\IEP\IEPDTO;
 use App\Assistants\CRM\Drivers\DTO\Participant\ParticipantDTO;
 use App\Assistants\CRM\Drivers\DTO\Service\ServiceDTO;
+use App\Assistants\CRM\Drivers\DTO\Provider\ProviderDTO;
 use App\Assistants\CRM\Drivers\DTO\Session\SessionDTO;
 use App\Assistants\CRM\Drivers\DTO\Team\School\SchoolDTO;
 use App\Assistants\CRM\Drivers\DTO\Team\TeamDTO;
@@ -17,10 +18,13 @@ use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\District;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Goal\Goal;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\IEP\IEP;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Service;
+use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\Providers;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ServiceAppointment\ServiceAppointment;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ServiceAppointment\StudentAppointment\StudentAppointment;
 use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ServiceTransaction;
+use App\Assistants\CRM\Drivers\Therapylog\ValueObjects\ServiceTransaction\ProviderTransaction;
 use App\Assistants\CRM\Drivers\ValueObjects\Converted\ServiceTransaction as ConvertedServiceTransaction;
+use App\Assistants\CRM\Drivers\ValueObjects\Converted\ProviderTransaction as ConvertedProviderTransaction;
 use App\Components\Sessions\Session\SessionReadonlyContract;
 use App\Components\Users\Participant\ParticipantReadonlyContract;
 use App\Components\Users\Participant\Therapy\TherapyReadonlyContract;
@@ -89,6 +93,24 @@ class Importer extends TherapylogClient implements CRMImporterInterface
                 $dto->status = $service->status();
                 $dto->actions = $service->actions();
 
+
+                return $dto;
+            }
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function providers(): Collection
+    {
+        return parent::providers()->map(
+            static function (provider $provider) {
+                $dto = new ProviderDTO();
+                $dto->id = (string)$provider->id();
+                $dto->name = $provider->name();
+                $dto->code = $provider->code();
+               
 
                 return $dto;
             }
@@ -306,6 +328,98 @@ class Importer extends TherapylogClient implements CRMImporterInterface
         );
 
         return new ConvertedServiceTransaction($schools->values(), $scheduledSessions->values());
+    }
+
+        /**
+     * @inheritDoc
+     */
+    public function providerTransactions(): ConvertedServiceTransaction
+    {
+        $key = $this->email() . ':providerTransactionFromDate';
+
+        if (app()->environment('local')) {
+            Cache::forget($key);
+        }
+
+        $dateFrom = Cache::get($key, toUTC(new DateTime('@-0')))->setTime(0, 0, 0);
+        $providerTransactions = collect();
+        $schools = collect();
+        $scheduledSessions = collect();
+
+        $this->allEntities(
+            'providerTransactionRecords',
+            [
+                'fromDate' => dateToISO8601($dateFrom),
+                'toDate' => dateToISO8601(toUTC((new DateTime('now'))->add(new DateInterval("P1Y")))),
+                'page' => 1,
+            ],
+            $providerTransactions
+        );
+
+        $providerTransactions->map(
+            static function (ProviderTransaction $providerTransaction) use (
+                $schools,
+                $scheduledSessions,
+                $dateFrom,
+                $key
+            ) {
+                if ($providerTransaction->updatedAt()->getTimestamp() > $dateFrom->getTimestamp()) {
+                    $dateFrom = $providerTransaction->updatedAt();
+                    Cache::put($key, $dateFrom);
+                }
+
+                $school = $providerTransaction->school();
+
+                $schoolDTO = new SchoolDTO();
+                $schoolDTO->id = (string)$school->id();
+                $schoolDTO->name = $school->name();
+                $schoolDTO->districtId = (string)$school->districtId();
+                $schoolDTO->available = (int)$school->isActive();
+                $schoolDTO->streetAddress = $school->streetAddress();
+                $schoolDTO->city = $school->city();
+                $schoolDTO->state = $school->state();
+                $schoolDTO->zip = $school->zip();
+
+                if ($school->districtId() > 0 && !$schools->has($school->id())) {
+                    $schools->put($school->id(), $schoolDTO);
+                }
+
+                if ($providerTransaction->isScheduled()) {
+                    $dto = new SessionDTO();
+                    $dto->id = (string)$providerTransaction->id();
+                    $dto->name = $providerTransaction->startAt()->format('F m Y H:i A');
+                    $dto->scheduledOn = dateTimeFormatted(toUTC($providerTransaction->startAt()));
+                    $dto->scheduledTo = dateTimeFormatted(toUTC($providerTransaction->endAt()));
+                    $dto->school = $schoolDTO;
+
+                    $dto->participants = collect();
+
+                    $providerTransaction->serviceAppointments()->each(
+                        static function (ServiceAppointment $serviceAppointment) use ($dto) {
+                            $dto->type = SessionReadonlyContract::TYPE_DEFAULT;
+
+                            $serviceDTO = new ServiceDTO();
+                            $serviceDTO->id = (string)$serviceAppointment->service()->id();
+                            $serviceDTO->name = $serviceAppointment->service()->name();
+
+                            $dto->service = $serviceDTO;
+
+                            $serviceAppointment->studentAppointments()->each(
+                                static function (StudentAppointment $studentAppointment) use ($dto) {
+                                    $participantDTO = new ParticipantDTO();
+                                    $participantDTO->id = (string)$studentAppointment->student()->id();
+                                    $dto->participants->push($participantDTO);
+                                }
+                            );
+                        }
+                    );
+
+                    $scheduledSessions->put($dto->id, $dto);
+                }
+            }
+        );
+
+        return new ConvertedProviderTransaction($schools->values(), $scheduledSessions->values());
     }
 
     /**

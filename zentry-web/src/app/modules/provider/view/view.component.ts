@@ -17,7 +17,7 @@ enum ESteps {
 }
 
 @Component({
-    selector: 'app-service-view',
+    selector: 'app-provider-view',
     templateUrl: './view.component.html',
     styleUrls: ['./view.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,7 +46,7 @@ export class ViewComponent extends BaseDetachedComponent implements OnInit {
     ngOnInit(): void {
         this.loadingTrigger();
 
-        this.layoutService.changeTitle('Service | Create');
+        this.layoutService.changeTitle('Provider | Create');
 
         this.providerService
             .entity
@@ -67,7 +67,7 @@ export class ViewComponent extends BaseDetachedComponent implements OnInit {
             });
 
         this.providerService
-            .get(this.activatedRoute.snapshot.params.serviceId)
+            .get(this.activatedRoute.snapshot.params.providerId)
             .subscribe(() => {
             }, (error: DataError) => this.fallback(error));
     }
@@ -125,7 +125,7 @@ export class ViewComponent extends BaseDetachedComponent implements OnInit {
 
                     SwalService.toastSuccess({title: `${r.name} has been created!`});
 
-                    this.router.navigate(['/service']);
+                    this.router.navigate(['/provider']);
                 }, (error: DataError) => {
                     this.loaderService.hide();
                     this.fallback(error);

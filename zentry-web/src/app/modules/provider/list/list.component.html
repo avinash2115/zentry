@@ -1,24 +1,24 @@
 <ng-container *ngIf="!embedded">
-  <div class="services--toolbar">
-    <div class="services--toolbar--summary">
-      <div class="services--toolbar--summary--item">
-        <div class="services--toolbar--summary--item__header">
-          Total Services
+  <div class="providers--toolbar">
+    <div class="providers--toolbar--summary">
+      <div class="providers--toolbar--summary--item">
+        <div class="providers--toolbar--summary--item__header">
+          Total providers
         </div>
-        <div class="services--toolbar--summary--item--body">
-          <div class="services--toolbar--summary--item--body__content">
+        <div class="providers--toolbar--summary--item--body">
+          <div class="providers--toolbar--summary--item--body__content">
             {{count}}
           </div>
-          <div class="services--toolbar--summary--item--body__notation">
+          <div class="providers--toolbar--summary--item--body__notation">
           </div>
         </div>
       </div>
     </div>
-    <div class="services--toolbar--actions">
-      <!-- <app-crm-button
+    <div class="providers--toolbar--actions">
+      <app-crm-button
         (synced)="fetch()"
-        [type]="crmService.types.service"
-      ></app-crm-button> -->
+        [type]="crmService.types.provider"
+      ></app-crm-button>
       <a [routerLink]="['create']" class="btn btn__standard btn--color__primary btn--radius__md">
         <fa-icon icon="user-plus"></fa-icon>
         Add Provider
@@ -33,46 +33,47 @@
   (response)="onResponse($event)"
   [service]="service"
   [paginationLimit]="limit"
-  paginationSelector=".services--list--item"
+  paginationSelector=".providers--list--item"
 >
   <ng-template appListBodyTemplate>
-    <div class="services--list">
-      <div class="services--list--header">
-        <div class="services--list--header--general">
+    <div class="providers--list">
+      <div class="providers--list--header">
+        <div class="providers--list--header--general">
           Name
         </div>
-        <div class="services--list--header--general">
+        <div class="providers--list--header--general">
           Code
         </div>
         
-        <div class="services--list--header--actions"></div>
+        <div class="providers--list--header--actions"></div>
       </div>
+    
       <div
-        *ngFor="let service of data; trackBy: trackByFn"
-        class="services--list--item"
+        *ngFor="let provider of data; trackBy: trackByFn"
+        class="providers--list--item"
       >
-        <div class="services--list--item--general">
+        <div class="providers--list--item--general">
           <a
-            [routerLink]="['/service', service.id]"
+            [routerLink]="['/provider', provider.id]"
             [ngbTooltip]=""
             class="force cut-long-text"
           >
-            {{service.name}}
+            {{provider.name}}
             
           </a>
           <a
-            [routerLink]="['/service', service.id]"
+            [routerLink]="['/provider', provider.id]"
             [ngbTooltip]=""
             class="force cut-long-text"
           >
-            {{service.code}}
+            {{provider.code}}
             
           </a>
          
          
         </div>
-        <div class="services--list--item--actions">
-          <ng-container *ngIf="service.hasSources">
+        <div class="providers--list--item--actions">
+          <ng-container *ngIf="provider.hasSources">
             <div
               ngbTooltip="Imported from TeleTeachers"
               container="body"
@@ -81,9 +82,9 @@
               TT
             </div>
           </ng-container>
-          <ng-container *ngIf="!service.hasSources && !embedded">
+          <ng-container *ngIf="!provider.hasSources && !embedded">
             <a
-              [routerLink]="['/service', service.id]"
+              [routerLink]="['/provider', provider.id]"
               [queryParams]="{edit: 'true'}"
               ngbTooltip="Edit"
               placement="bottom"
@@ -93,7 +94,7 @@
               <fa-icon icon="pen"></fa-icon>
             </a>
             <a
-              (click)="remove(service)"
+              (click)="remove(provider)"
               ngbTooltip="Remove"
               placement="bottom"
               container="body"
