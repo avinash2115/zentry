@@ -8,7 +8,7 @@ use App\Convention\Contracts\Arrayable;
 /**
  * Class ProviderDTO
  *
- * @package App\Assistants\CRM\Drivers\DTO\Provider
+ * @package App\Assistants\CRM\Drivers\DTO\Sessions
  */
 class ProviderDTO implements Arrayable
 {

@@ -46,7 +46,7 @@ export class ViewComponent extends BaseDetachedComponent implements OnInit {
     ngOnInit(): void {
         this.loadingTrigger();
 
-        this.layoutService.changeTitle('Provider | Create');
+        this.layoutService.changeTitle('Providers | Create');
 
         this.providerService
             .entity
