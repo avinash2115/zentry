@@ -1,0 +1,175 @@
+image: registry.gitlab.trisk.us/supplies/docker/php-fpm:7.4
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - export CI_PROJECT_NAME="api"
+  - export CI_PROJECT_OWNER="zentry"
+  - export CI_PROJECT_NAMESPACE="zentry_api"
+  - export CI_PROJECT_BRANCH=$(echo "${CI_COMMIT_REF_NAME}" | cut -d "/" -f 1  )
+  - export CI_PROJECT_TICKET=$(echo "${CI_COMMIT_REF_NAME}" | cut -d "-" -f 2  )
+  - export CI_PROJECT_COMMIT="${CI_COMMIT_SHA}"
+  - export CI_BUILD_EXTENSION=".tar"
+  - export CI_BUILD_NAME="${CI_PROJECT_NAMESPACE}_${CI_PROJECT_BRANCH}_${CI_PROJECT_COMMIT}"
+  - export CI_BUILD_FULLNAME="${CI_BUILD_NAME}${CI_BUILD_EXTENSION}"
+
+stages:
+  - make
+  - verification
+  - housekeeping
+  - deploy
+
+make:build:
+  stage: make
+  script:
+    - cp .env.example .env
+    - composer install
+    - php artisan key:generate
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: push
+    untracked: true
+
+verification:unit:
+  stage: verification
+  variables:
+    MYSQL_DATABASE: laravel
+    MYSQL_ROOT_PASSWORD: laravel
+    APP_ENV: testing
+    DB_DATABASE: laravel
+    DB_USERNAME: root
+    DB_PASSWORD: laravel
+    MONGO_PORT: 27017
+    MAIL_MAILER: log
+    FILESYSTEM_DRIVER: local
+    BROADCAST_DRIVER: log
+    QUEUE_CONNECTION: sync
+  services:
+    - name: registry.gitlab.trisk.us/supplies/docker/percona:latest
+      alias: percona
+    - name: registry.gitlab.trisk.us/supplies/docker/mongo:latest
+      alias: mongo
+  script:
+    - php artisan config:clear
+    - php artisan cache:clear
+    - php artisan test --env=testing
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull
+    untracked: true
+
+verification:phpstan:
+  stage: verification
+  script:
+    - php -d memory_limit=-1 vendor/bin/phpstan analyse -l 7 -c phpstan.neon app
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull
+    untracked: true
+
+housekeeping:prepare:
+  stage: housekeeping
+  script:
+    - "rm -rf .git \
+        .gitattributes \
+        .gitignore \
+        .gitlab-ci.yml \
+        .styleci.yml \
+        .env \
+        .env.example \
+        .editorconfig \
+        laravel-echo-server.js \
+        laravel-echo-server.lock \
+        echo.json \
+        apiary.apib \
+        CHANGELOG.md \
+        README.md \
+        phpstan.neon \
+        phpunit.xml \
+        server.php \
+        webpack.mix.js \
+        package.json \
+        package-lock.json \
+        docker \
+        tests \
+        storage/logs/* \
+        storage/framework/cache/* \
+        storage/framework/sessions/* \
+        storage/framework/testing/* \
+        storage/framework/views/* "
+    - touch ${CI_BUILD_FULLNAME}
+    - tar --exclude=${CI_BUILD_FULLNAME} -zcf ${CI_BUILD_FULLNAME} .
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull
+    untracked: true
+  artifacts:
+    expire_in: 1 week
+    name: "$CI_BUILD_FULLNAME"
+    paths:
+      - ./*.tar
+
+.deploy:template:
+  stage: deploy
+  when: manual
+  script:
+    - cp -r /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/storage/app /opt/treasure/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - rm -rf /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - mkdir -p /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - tar zxf ${CI_BUILD_FULLNAME} -C /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/
+    - cp -r /opt/treasure/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/app /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/storage
+    - cd /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - cp -r /opt/knox/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/* .
+    - cp -r /opt/knox/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/.env .
+    - php artisan migrate --force
+    - docker-compose -f /opt/execution/docker-compose.yml -p zentry restart php-fpm
+    - docker-compose -f /opt/execution/docker-compose.yml -p zentry exec -T node bash -c "pm2 startOrReload ${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/echo.json"
+  tags:
+    - zentry-stage
+  cache: {}
+  dependencies:
+    - housekeeping:prepare
+
+deploy:stage:
+  extends: .deploy:template
+  environment:
+    name: STAGE-API
+  only:
+    - /^develop/
+    - /^feature/
+    - /^bugfix/
+    - /^hotfix/
+
+deploy:production:
+  stage: deploy
+  when: manual
+  script:
+    - cp -r /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/storage/app /opt/treasure/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - rm -rf /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - mkdir -p /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - tar zxf ${CI_BUILD_FULLNAME} -C /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/
+    - cp -r /opt/treasure/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/app /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/storage
+    - cd /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - cp -r /opt/knox/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/* .
+    - cp -r /opt/knox/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/.env .
+    - php artisan migrate --force
+    - docker-compose -f /opt/execution/docker-compose.yml -p zentry restart php-fpm
+    - docker-compose -f /opt/execution/docker-compose.yml -p zentry exec -T node bash -c "pm2 startOrReload ${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/echo.json"
+  environment:
+    name: PRODUCTION-API
+  only:
+    - master
+  tags:
+    - zentry-production
+  cache: {}
+  dependencies:
+    - housekeeping:prepare

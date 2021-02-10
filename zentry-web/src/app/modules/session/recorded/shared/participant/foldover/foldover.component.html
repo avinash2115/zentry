@@ -1,0 +1,108 @@
+<div
+  *ngIf="!!participant"
+  class="foldover"
+>
+  <div class="foldover--header">
+    <div class="foldover--header__title">
+      Student Information
+    </div>
+    <div class="foldover--header--actions">
+      <button
+        (click)="closeFoldover()"
+        type="button"
+        class="btn btn__standard btn--radius__sm btn-outline-secondary"
+      >
+        Close
+      </button>
+      <ng-container *ngIf="participant.hasSources">
+        <div
+          ngbTooltip="Imported from TeleTeachers"
+          container="body"
+          class="source--exists ml-auto"
+        >
+          TT
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="foldover--body">
+    <div class="foldover--body--user">
+      <div class="foldover--body--user--avatar avatar-wrapper">
+        <img *ngIf="false; else participantAvatar" [src]="" [alt]="participant.initials" class="avatar avatar__sm">
+        <ng-template #participantAvatar>
+          <span class="avatar avatar__sm">{{participant.initials}}</span>
+        </ng-template>
+      </div>
+      <div class="foldover--body--user--text">
+        <div class="foldover--body--user--text--name">
+          {{ participant.fullname }}
+        </div>
+        <div class="foldover--body--user--text--email" *ngIf="participant.email">
+          {{ participant.email }}
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="foldover--body--progress">
+      <div class="foldover--body--progress--bar">
+        <div class="foldover--body--progress--bar__header">
+          Current session goals progress
+        </div>
+        <div class="foldover--body--progress--bar--progress">
+          <div class="progress">
+            <div
+              *ngFor="let progress of recorded.participantsProgressCalculation(participant)"
+              [style.width.%]="progress.percents"
+              [style.background-color]="progress.tracker.color"
+              class="progress-bar"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <div class="foldover--body--progress--info">
+        <div class="foldover--body--progress--info--item">
+          <div class="foldover--body--progress--info--item--label">
+            <div class="foldover--body--progress--info--item--label--icon">
+              <fa-icon icon="school"></fa-icon>
+            </div>
+            School:
+          </div>
+          <div class="foldover--body--progress--info--item--text">
+            {{recorded.school.name}}
+          </div>
+        </div>
+        <div class="foldover--body--progress--info--item">
+          <div class="foldover--body--progress--info--item--label">
+            <div class="foldover--body--progress--info--item--label--icon">
+              <fa-icon icon="file-medical"></fa-icon>
+            </div>
+            Service:
+          </div>
+          <div class="foldover--body--progress--info--item--text">
+            {{recorded.service.name}}
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <app-session-recorded-participant-list-soap
+        [progress]="recorded.participantsProgress(participant)"
+        [soaps]="recorded.participantsSoaps(participant)"
+        [goals]="participant.goalsSortedActual">
+      </app-session-recorded-participant-list-soap>
+      <div class="divider"></div>
+      <app-session-recorded-participant-list-goal
+        [progress]="recorded.participantsProgress(participant)">
+      </app-session-recorded-participant-list-goal>
+    </div>
+  </div>
+  <div class="foldover--footer">
+    <a
+      [routerLink]="['/session/recorded', recorded.id]"
+      [ngbTooltip]="recorded.name"
+      placement="top"
+      container="body"
+      class="foldover--footer--link btn--color__contextual--outline"
+    >
+      View Detailed Information
+  </a>
+</div>

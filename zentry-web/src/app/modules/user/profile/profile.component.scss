@@ -1,0 +1,94 @@
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+  &--card, &--form {
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  &--card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 305px;
+    margin-right: 30px;
+    padding: 30px;
+
+    @media (max-width: 415px) {
+      display: none;
+    }
+
+    &__fullname {
+      margin-top: 20px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #E9E9F1;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    &--details {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-top: 30px;
+      color: #888997;
+      font-size: 14px;
+
+      &__item {
+        display: flex;
+        align-items: center;
+
+        &:not(:first-child) {
+          margin-top: 10px;
+        }
+
+        fa-icon {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  &--form {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    width: 100%;
+
+    &__title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      color: #4983FF;
+      font-size: 20px;
+      font-weight: 800;
+
+      label {
+        margin-left: 30px;
+      }
+    }
+
+    form {
+      label {
+        font-weight: 700;
+      }
+
+      input {
+        height: 59px;
+        color: #35404E;
+      }
+
+      .error {
+        margin-bottom: 20px;
+      }
+    }
+
+    .divide {
+      margin: 50px 0;
+    }
+  }
+}

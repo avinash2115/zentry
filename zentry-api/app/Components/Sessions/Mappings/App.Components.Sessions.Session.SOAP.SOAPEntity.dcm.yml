@@ -1,0 +1,49 @@
+App\Components\Sessions\Session\SOAP\SOAPEntity:
+  type: entity
+  table: sessions_soaps
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    present:
+      type: boolean
+    rate:
+      type: string
+      nullable: false
+    activity:
+      type: string
+      nullable: false
+    note:
+      type: string
+      nullable: false
+    plan:
+      type: string
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    session:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: session_id
+        referencedColumnName: id
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+    goal:
+      targetEntity: App\Components\Users\Participant\Goal\GoalEntity
+      joinColumn:
+        name: goal_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]

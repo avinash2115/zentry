@@ -1,0 +1,44 @@
+App\Components\Sessions\Session\Note\NoteEntity:
+  type: entity
+  table: sessions_notes
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    text:
+      type: string
+    url:
+      type: string
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    session:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: session_id
+        referencedColumnName: id
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+    poi:
+      targetEntity: App\Components\Sessions\Session\Poi\PoiEntity
+      joinColumn:
+        name: poi_id
+        referencedColumnName: id
+    poiParticipant:
+      targetEntity: App\Components\Sessions\Session\Poi\Participant\ParticipantEntity
+      joinColumn:
+        name: poi_participant_id
+        referencedColumnName: id

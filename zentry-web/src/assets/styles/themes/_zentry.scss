@@ -1,0 +1,311 @@
+body {
+  &.theme-zentry {
+
+    a {
+      margin-top: 0;
+    }
+
+    a[href^="/"], a[href^=".."], a.force {
+      &:not(.btn--actions__logout) {
+        color: #2C9BD6;
+
+        &:hover {
+          color: #2179A8;
+        }
+      }
+    }
+
+    tag-input {
+      .ng2-tag-input {
+        border: 1px solid #2C9BD6 !important;
+
+        .ng2-tags-container {
+
+          tag {
+            border: 1px solid #2C9BD6;
+            color: #2C9BD6 !important;
+
+            delete-icon {
+              path {
+                fill: #2C9BD6 !important;
+              }
+            }
+
+            &:hover {
+              background: #2179A8 !important;;
+            }
+          }
+        }
+      }
+
+      &.readonly {
+        .ng2-tag-input {
+          padding: 0 !important;
+          border: 1px solid transparent !important;
+
+          tag-input-form {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .logo {
+      width: 106px;
+      height: 39px;
+      background-image: url('assets/img/icons/themes/zentry/zentry.svg');
+      background-position: center center;
+      background-repeat: no-repeat;
+      margin-right: 15px;
+    }
+
+    .logo-partner {
+      width: 140px;
+      height: 24px;
+      background-image: url('assets/img/icons/themes/zentry/tt.svg');
+      background-position: center center;
+      background-repeat: no-repeat;
+      margin-right: 0;
+    }
+
+    .navbar {
+      a {
+        &:not(.btn--actions__logout) {
+          &.active, &.active > a, .adaptive-menu__toggle {
+            color: #2C9BD6 !important;
+          }
+
+          &:hover, > a:hover {
+            color: #2179A8 !important;
+          }
+        }
+      }
+
+      .navbar-nav {
+        .adaptive-menu {
+          &__toggle {
+            svg {
+              path {
+                fill: #2C9BD6;
+              }
+            }
+
+            &:hover {
+              color: #FFFFFF !important;
+            }
+          }
+        }
+      }
+
+      .navbar-right {
+        .profile {
+          &:hover, &.profile__active {
+            color: #2C9BD6 !important;
+
+            .avatar-wrapper {
+              cursor: pointer;
+
+              .avatar {
+                border-color: #2179A8 !important;
+                color: #2179A8 !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .btn {
+      &--color {
+        &__primary {
+          color: #FFFFFF !important;
+          background-color: #2C9BD6;
+
+          &:hover {
+            color: #FFFFFF !important;
+            background-color: #2179A8;
+          }
+        }
+
+        &__contextual {
+          color: #FFFFFF !important;
+          background-color: #F1583B;
+
+          &:hover {
+            color: #FFFFFF !important;
+            background-color: #C2462E;
+          }
+        }
+
+        &__contextual--outline {
+          color: #F1583B !important;
+          background-color: #FFFFFF;
+
+          &:hover {
+            color: #C2462E !important;
+            background-color: #FFFFFF;
+          }
+        }
+
+        &__gradient {
+          border: none;
+          color: #FFFFFF;
+          background: linear-gradient(225deg, #0FCDFF 0%, #3BEAB6 100%);
+
+          &:hover {
+            color: #FFFFFF;
+            background: linear-gradient(224.72deg, #2FDDFF 0%, #45FFC7 100%)
+          }
+        }
+      }
+
+      &.btn-outline-primary {
+        border: 1px solid #2C9BD6;
+        color: #2C9BD6;
+        background-color: transparent;
+
+        &:hover, &[aria-expanded="true"] {
+          color: #FFFFFF;
+          background-color: #2179A8;
+
+          svg {
+            path {
+              fill: #FFFFFF;
+            }
+          }
+        }
+      }
+    }
+
+    .progress-bar {
+      background-color: #2C9BD6;
+    }
+
+    .border-hover {
+      &:hover {
+        border: 2px solid #2C9BD6;
+      }
+    }
+
+    .storage {
+      &__default {
+        background-image: url("/assets/img/icons/themes/zentry/storage/default.svg");
+      }
+    }
+
+    .asset--widget {
+      &__image {
+        width: 784px;
+        height: 294px;
+        background-image: url("/assets/img/icons/themes/zentry/asset/widget/image-widget.png");
+      }
+    }
+
+    .profile {
+      &--form {
+        &__title {
+          color: #2C9BD6;
+        }
+      }
+    }
+
+    .recorded {
+      &--date {
+        background: #EEFCF8;
+        color: #2C9BD6;
+      }
+
+      &--header {
+        &--info {
+          &--title {
+            &__text {
+              & .confirmation {
+                input {
+                  border: 1px solid #2C9BD6 !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    form {
+      .form-control {
+        height: auto;
+        border: 1px solid #939393;
+        border-radius: 7px;
+
+        &:not(.free) {
+          padding: 20px;
+        }
+
+        &--sm {
+          padding: 5px 10px;
+        }
+      }
+
+      .ng-select {
+        &.rounder-simple {
+          .ng-select-container {
+            border: 1px solid #939393;
+            border-radius: 7px;
+          }
+        }
+
+        &.rounder {
+          .ng-select-container {
+            border: 1px solid #939393;
+            border-radius: 7px;
+            height: auto !important;
+
+            .ng-value-container {
+              padding: 20px;
+
+              .ng-input {
+                top: 20px !important;
+                padding-left: 20px !important;
+              }
+            }
+          }
+
+          .ng-arrow-wrapper {
+            padding-right: 20px;
+          }
+        }
+      }
+    }
+
+    .source {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      color: #2C9BD6;
+
+      span {
+        margin-right: 10px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      &--exists {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 27px;
+        min-width: 27px;
+        height: 27px;
+        min-height: 27px;
+        border-radius: 100%;
+        background-color: #F1583B;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 800;
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+

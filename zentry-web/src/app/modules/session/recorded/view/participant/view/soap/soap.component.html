@@ -1,0 +1,182 @@
+<div
+  *ngIf="!isLoading && entity && form"
+  class="soap"
+>
+  <form [formGroup]="form">
+    <div class="soap--body">
+      <div class="soap--body--presence">
+        <div class="soap--body--presence__text">
+          Was the student present for this session?
+        </div>
+        <div class="soap--body--presence--buttons">
+          <button
+            [disabled]="recorded.isLocked"
+            (click)="present()"
+            [class.btn--color__green]="form.get('present').value"
+            [class.btn-outline-secondary]="!form.get('present').value"
+            type="button"
+            class="btn btn__standard btn--radius__md"
+          >
+            Yes
+          </button>
+          <button
+            [disabled]="recorded.isLocked"
+            (click)="absent()"
+            [class.btn--color__red]="!form.get('present').value"
+            [class.btn-outline-secondary]="form.get('present').value"
+            type="button"
+            class="btn btn__standard btn--radius__md"
+          >
+            No
+          </button>
+        </div>
+      </div>
+      <div
+        *ngIf="form.get('present').value"
+        class="soap--body--list"
+      >
+        <div class="soap--body--list--navigation">
+          <div
+            (click)="goalNavigate(true)"
+            *ngIf="goalCurrent"
+            [class.more]="goalsNavigatable"
+            class="soap--body--list--navigation--backward"
+          >
+            <fa-icon icon="chevron-left"></fa-icon>
+            Previous Goal
+          </div>
+          <div class="soap--body--list--navigation--count">
+            Goal {{goalCurrentIndexHuman}} of {{goals.length}}
+          </div>
+          <div
+            (click)="goalNavigate()"
+            *ngIf="goalCurrent"
+            [class.more]="goalsNavigatable"
+            class="soap--body--list--navigation--forward"
+          >
+            <fa-icon icon="chevron-right"></fa-icon>
+            Next Goal
+          </div>
+        </div>
+        <div class="soap--body--list--current">
+          <div class="soap--body--list--current--name">
+            <ng-container *ngIf="goalCurrent">
+              {{goalCurrent.name}}
+              <div *ngIf="!recorded.isLocked" class="soap--body--list--current--name--actions">
+                <a
+                  (click)="removeGoal(goalCurrent)"
+                  ngbTooltip="Remove Goal"
+                  placement="top"
+                  class="color--action__red inverse"
+                >
+                  <fa-icon icon="trash"></fa-icon>
+                </a>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!goalCurrent">
+              {{ 'There are no goals for ' + (entity.fullname || entity.email) }}
+            </ng-container>
+          </div>
+        </div>
+        <div
+          *ngIf="goalCurrent && goalCurrent.trackers.length"
+          class="soap--body--list--controls"
+        >
+          <div
+            *ngFor="let tracker of goalCurrent.trackers"
+            class="soap--body--list--controls--tracker"
+          >
+            <button
+              [style.color]="tracker.color"
+              class="btn btn--color__white"
+            >
+              <fa-icon
+                [icon]="tracker.icon"
+              ></fa-icon>
+            </button>
+            <div
+              [style.color]="amount(goalCurrent, tracker) > 0 ? tracker.color : ''"
+              class="soap--body--list--controls--tracker__amount"
+            >
+              {{amount(goalCurrent, tracker)}}
+            </div>
+            <div class="soap--body--list--controls--tracker__name">
+              {{tracker.name}}
+            </div>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="goals.length"
+          formArrayName="goals"
+        >
+          <ng-container [formGroup]="form.get('goals.' + goalCurrentIndex)">
+            <div class="form-group">
+              <label for="rate" class="required">Rate Progress</label>
+              <ng-select
+                #ngSelectComponentRate
+                (change)="ngSelectComponentRate.close(); detectChanges()"
+                (focus)="detectChanges()"
+                (blur)="detectChanges()"
+                (clear)="detectChanges()"
+                (search)="detectChanges()"
+                [items]="rates"
+                [clearable]="true"
+                [searchable]="true"
+                bindLabel="label"
+                bindValue="value"
+                appControlError
+                formControlName="rate"
+                placeholder="Start typing or select ..."
+                id="rate"
+                class="rounder"
+              ></ng-select>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="form.get('present').value && goals.length">
+        <div class="form-group">
+          <label for="activity" class="required">Activity</label>
+          <textarea formControlName="activity" id="activity" class="form-control rounder"></textarea>
+          <!-- <a
+            *ngIf="form.get('activity').value.length"
+            (click)="copyActivityToGroup()"
+            class="soap--body--form-controls--link force"
+          >
+            Copy Activity to group
+          </a> -->
+        </div>
+        <div class="form-group">
+          <label for="note" class="required">Note</label>
+          <textarea formControlName="note" id="note" class="form-control rounder"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="plan" class="required">Plan</label>
+          <textarea formControlName="plan" id="plan" class="form-control rounder"></textarea>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!form.get('present').value || !goals.length">
+        <div class="form-group">
+          <label for="absent_note" class="required">Note</label>
+          <textarea formControlName="note" id="absent_note" class="form-control rounder"></textarea>
+        </div>
+      </ng-container>
+      <div class="soap--body--buttons" *ngIf="!recorded.isLocked">
+        <button
+          (click)="submit()"
+          class="btn btn__standard btn--radius__md btn--color__green"
+        >
+          Save
+        </button>
+        <button
+          (click)="cancel()"
+          class="btn btn__standard btn--radius__md btn-outline-secondary"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<app-loader *ngIf="isLoading"></app-loader>

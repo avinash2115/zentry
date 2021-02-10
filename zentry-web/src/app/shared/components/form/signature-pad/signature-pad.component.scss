@@ -1,0 +1,40 @@
+.signature-pad {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #6B6C7E;
+  border-radius: 7px;
+  background-color: #FFFFFF;
+  overflow: hidden;
+  position: relative;
+  &--clear {
+    color: #F1583B;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0;
+    line-height: 20px;
+
+    position: absolute;
+    top: 13px;
+    right: 12px;
+
+    cursor: pointer;
+  }
+  &--placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    color: #888997;
+    font-size: 23px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
+    pointer-events: none;
+  }
+  &--canvas {
+    width: 100%;
+    height: 100%;
+  }
+}

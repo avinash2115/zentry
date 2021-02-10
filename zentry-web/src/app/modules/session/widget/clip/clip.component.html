@@ -1,0 +1,155 @@
+<div
+  *ngIf="!isEditing"
+  [perfectScrollbar]="scrollbarConfig"
+  #selectedList="ngxPerfectScrollbar"
+  class="clips"
+>
+  <ng-container *ngIf="poi">
+    <div class="clips--item watch">
+      <div class="clips--item--type">
+        <i
+          [class.clips--item--type__backtrack]="poi.isPoiType(sessionService.poiService.types.backtrack)"
+          [class.clips--item--type__poi]="poi.isPoiType(sessionService.poiService.types.poi)"
+          [class.clips--item--type__stopwatch]="poi.isPoiType(sessionService.poiService.types.stopwatch)"
+        ></i>
+      </div>
+      <div class="clips--item__frame">
+        <span
+          (focusin)="editingInline(poi)"
+          (focusout)="editingInlineCancel()"
+          (input)="poi.name = $event.target.textContent"
+          [innerHTML]="poi.name ? poi.name : (!isEditingInline(poi) ? poi.startedAtHuman(session) + ' - capturing ...' : '')"
+          contenteditable
+          class="cut-long-text"
+        ></span>
+        <fa-icon
+          (click)="edit(poi)"
+          *ngIf="!isEditingInline(poi)"
+          [class.color--action__green]="poi.name"
+          icon="pen"
+        ></fa-icon>
+        <fa-icon
+          (click)="editingInlineCancel()"
+          *ngIf="isEditingInline(poi)"
+          icon="check"
+          class="color--action__green"
+        ></fa-icon>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="pois.length || poi; else emptyListTemplate">
+    <div
+      *ngFor="let poi of pois"
+      [class.not-allowed]="poi.readonly"
+      [class.watch]="isEditingInline(poi)"
+      class="clips--item"
+    >
+      <div class="clips--item--type">
+        <i
+          [class.clips--item--type__backtrack]="poi.isPoiType(sessionService.poiService.types.backtrack)"
+          [class.clips--item--type__poi]="poi.isPoiType(sessionService.poiService.types.poi)"
+          [class.clips--item--type__stopwatch]="poi.isPoiType(sessionService.poiService.types.stopwatch)"
+        ></i>
+      </div>
+      <div class="clips--item__frame">
+        <span
+          (focusin)="editingInline(poi)"
+          (focusout)="editingInlineCancel()"
+          (input)="poi.name = $event.target.textContent"
+          [innerHTML]="poi.name ? poi.name : (!isEditingInline(poi) ? poi.startedAtHuman(session) + ' - ' + poi.endedAtHuman(session) : '')"
+          contenteditable
+          class="cut-long-text"
+        ></span>
+        <fa-icon
+          (click)="edit(poi)"
+          *ngIf="!isEditingInline(poi)"
+          [class.color--action__green]="poi.name"
+          icon="pen"
+        ></fa-icon>
+        <fa-icon
+          (click)="editingInlineCancel()"
+          *ngIf="isEditingInline(poi)"
+          icon="check"
+          class="color--action__green"
+        ></fa-icon>
+      </div>
+      <ng-container *ngIf="!isEditingInline(poi)">
+        <div class="clips--item__duration">
+          {{poi.durationHuman}}
+        </div>
+        <div
+          (click)="remove(poi)"
+          ngbTooltip="Remove clip"
+          placement="left"
+          container="body"
+          class="clips--item__remove"
+        >
+          <fa-icon icon="trash" [classes]="['fa--default']"></fa-icon>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyListTemplate>
+    <div class="clips--empty">
+      <img
+        src="/assets/img/icons/session/widget/poi-grey.svg"
+        alt="List of your clips is empty"
+        class="clips--empty__icon"
+      >
+      <div class="clips--empty__explanation">Your clips will appear here</div>
+    </div>
+  </ng-template>
+</div>
+
+<div
+  *ngIf="isEditing"
+  class="clips clips--edit"
+>
+  <div class="form-group">
+    <input
+      #clipName
+      (ngModelChange)="poiEdit.name = $event; detectChanges()"
+      [ngModel]="poiEdit.name"
+      [placeholder]="poiEdit.is_new ? '' : poiEdit.startedAtHuman(session) + ' - ' + poiEdit.endedAtHuman(session)"
+      type="text"
+      class="form-control"
+    >
+  </div>
+  <div class="form-group">
+    <tag-input
+      (onAdd)="detectChanges()"
+      (onRemove)="detectChanges()"
+      (onFocus)="detectChanges()"
+      (onValidationError)="detectChanges()"
+      (onSelect)="detectChanges()"
+      (onPaste)="detectChanges()"
+      (onBlur)="detectChanges()"
+      (ngModelChange)="poiEdit.tags = $event; detectChanges()"
+      [addOnBlur]="true"
+      [ngModel]="poiEdit.tags"
+      [removable]="true"
+      [identifyBy]="'tag'"
+      [displayBy]="'tag'"
+      [animationDuration]="{enter: '0ms', leave: '0ms'}"
+      theme='bootstrap'
+    >
+    </tag-input>
+  </div>
+
+  <div class="clips--edit--buttons">
+    <button
+      (click)="save()"
+      class="btn btn--radius__md btn--color__green btn__wide"
+    >
+      Update
+    </button>
+
+    <button
+      (click)="cancel()"
+      class="btn btn--radius__md btn-outline-secondary btn__wide"
+    >
+      Cancel
+    </button>
+  </div>
+</div>

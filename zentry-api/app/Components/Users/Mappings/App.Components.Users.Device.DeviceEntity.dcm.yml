@@ -1,0 +1,32 @@
+App\Components\Users\Device\DeviceEntity:
+  type: entity
+  table: users_devices
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    type:
+      type: string
+      nullable: false
+    model:
+      type: string
+      nullable: false
+    reference:
+      type: string
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

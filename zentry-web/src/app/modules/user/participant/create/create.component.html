@@ -1,0 +1,297 @@
+<div class="participant--wizard">
+  <div
+    *ngIf="!isLoading"
+    class="participant--wizard--statusbar"
+  >
+    <div
+      [class.active]="stepIsActive(steps.general)"
+      [class.completed]="stepIsValid(steps.general)"
+      class="participant--wizard--statusbar--item"
+    >
+      <div class="participant--wizard--statusbar--item__body">
+        <fa-icon icon="address-card"></fa-icon>
+      </div>
+      <div class="participant--wizard--statusbar--item__title">
+        General Information
+      </div>
+    </div>
+    <div
+      [class.active]="stepIsActive(steps.therapy)"
+      [class.completed]="stepIsValid(steps.therapy)"
+      class="participant--wizard--statusbar--item"
+    >
+      <div class="participant--wizard--statusbar--item__body">
+        <fa-icon icon="notes-medical"></fa-icon>
+      </div>
+      <div class="participant--wizard--statusbar--item__title">
+        Therapy Profile
+      </div>
+    </div>
+  </div>
+  <div class="participant--wizard--content">
+    <ng-container *ngIf="!isLoading">
+      <form
+        (submit)="detectChanges()"
+        [formGroup]="form"
+      >
+        <div
+          [class.d-none]="!stepIsActive(steps.general)"
+          class="participant--wizard--content--wrapper"
+        >
+          <div class="form-group">
+            <label for="first_name" class="required">First Name</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="first_name"
+              placeholder="Enter First Name"
+              id="first_name"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="last_name" class="required">Last Name</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="last_name"
+              placeholder="Enter Last Name"
+              id="last_name"
+              name="last_name"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="email"
+              placeholder="example@domain.com"
+              id="email"
+              type="email"
+            >
+          </div>
+          <div class="form-group">
+            <label for="dob" class="required">Date of Birth</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="dob"
+              placeholder="example@domain.com"
+              id="dob"
+              type="date"
+            >
+          </div>
+          <div class="form-group">
+            <label for="gender" class="required">Gender</label>
+            <ng-select
+              #ngSelectComponentGender
+              (change)="ngSelectComponentGender.close(); detectChanges()"
+              (focus)="detectChanges()"
+              (blur)="detectChanges()"
+              (clear)="detectChanges()"
+              (search)="detectChanges()"
+              [items]="genders"
+              [clearable]="false"
+              [searchable]="true"
+              bindLabel="label"
+              bindValue="value"
+              appControlError
+              formControlName="gender"
+              placeholder="Start typing or select ..."
+              id="gender"
+              class="rounder"
+            ></ng-select>
+          </div>
+          <div class="form-group">
+            <label for="phone_number">Phone Number</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="phone_number"
+              id="phone_number"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="parent_email">Parent Email Address</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="parent_email"
+              placeholder="example@domain.com"
+              id="parent_email"
+              type="email"
+            >
+          </div>
+          <div class="form-group">
+            <label for="parent_phone_number">Parent Phone Number</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="parent_phone_number"
+              id="parent_phone_number"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="team_id">District</label>
+            <ng-select
+              #ngSelectComponentDistrict
+              (change)="ngSelectComponentDistrict.close(); detectChanges()"
+              (focus)="detectChanges()"
+              (blur)="detectChanges()"
+              (clear)="detectChanges()"
+              (search)="detectChanges()"
+              [items]="teams"
+              [clearable]="true"
+              [searchable]="true"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="team_id"
+              placeholder="Start typing or select ..."
+              id="team_id"
+              class="rounder"
+            ></ng-select>
+          </div>
+          <div class="form-group">
+            <label for="school_id">School</label>
+            <ng-select
+              #ngSelectComponentSchool
+              (change)="ngSelectComponentSchool.close(); detectChanges()"
+              (focus)="detectChanges()"
+              (blur)="detectChanges()"
+              (clear)="detectChanges()"
+              (search)="detectChanges()"
+              [items]="schools"
+              [clearable]="true"
+              [searchable]="true"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="school_id"
+              placeholder="Start typing or select ..."
+              id="school_id"
+              class="rounder"
+            ></ng-select>
+          </div>
+        </div>
+        <div
+          [class.d-none]="!stepIsActive(steps.therapy)"
+          class="participant--wizard--content--wrapper"
+        >
+          <div class="form-group">
+            <label for="diagnosis" class="required">Diagnosis</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="diagnosis"
+              placeholder="Enter diagnosis here"
+              id="diagnosis"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="frequency" class="required">Frequency</label>
+            <ng-select
+              #ngSelectComponentFrequency
+              (change)="ngSelectComponentFrequency.close(); detectChanges()"
+              (focus)="detectChanges()"
+              (blur)="detectChanges()"
+              (clear)="detectChanges()"
+              (search)="detectChanges()"
+              [items]="frequencies"
+              [clearable]="false"
+              [searchable]="true"
+              bindLabel="label"
+              bindValue="value"
+              appControlError
+              formControlName="frequency"
+              placeholder="Start typing or select ..."
+              id="frequency"
+              class="rounder"
+            ></ng-select>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="sessions_amount_planned">Planned number of sessions</label>
+              <input
+                appControlError
+                class="form-control"
+                formControlName="sessions_amount_planned"
+                placeholder="0"
+                id="sessions_amount_planned"
+                type="number"
+              >
+            </div>
+            <div class="form-group col-md-6">
+              <label for="treatment_amount_planned">Total minutes</label>
+              <input
+                appControlError
+                class="form-control"
+                formControlName="treatment_amount_planned"
+                placeholder="0 minutes"
+                id="treatment_amount_planned"
+                type="number"
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea
+              appControlError
+              class="form-control"
+              formControlName="notes"
+              id="notes"
+              type="text"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="private_notes">Private Notes</label>
+            <textarea
+              appControlError
+              class="form-control"
+              formControlName="private_notes"
+              id="private_notes"
+              type="text"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <app-loader *ngIf="isLoading"></app-loader>
+  </div>
+  <div
+    *ngIf="!isLoading"
+    class="participant--wizard--navigation"
+  >
+    <ng-container *ngIf="stepIsActive(steps.general)">
+      <button class="btn btn__standard btn--radius__md btn-outline-secondary">
+        Cancel
+      </button>
+      <button
+        (click)="stepActivate(steps.therapy)"
+        class="btn btn__standard btn--radius__md btn--color__contextual right"
+      >
+        Next
+        <fa-icon icon="arrow-right"></fa-icon>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="stepIsActive(steps.therapy)">
+      <button
+        (click)="stepActivate(steps.general)"
+        class="btn btn__standard btn--radius__md btn-outline-secondary left"
+      >
+        <fa-icon icon="arrow-left"></fa-icon>
+        Back
+      </button>
+      <button
+        (click)="submit()"
+        class="btn btn__standard btn--radius__md btn--color__contextual left"
+      >
+        <fa-icon icon="check"></fa-icon>
+        Add Student
+      </button>
+    </ng-container>
+  </div>
+</div>

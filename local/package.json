@@ -1,0 +1,9 @@
+{
+  "name": "local",
+  "version": "1.0.0",
+  "description": "Shortcuts to run local docker commands",
+  "main": "index.js",
+  "repository": "https://github.com/teleteachers/local.git",
+  "author": "Kiran Kota <kirank@ensar.com>",
+  "license": "commercial"
+}

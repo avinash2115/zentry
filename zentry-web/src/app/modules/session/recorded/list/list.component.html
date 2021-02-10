@@ -1,0 +1,105 @@
+<app-assistant-list
+  #assistantListComponent
+  (fetching)="onFetching($event)"
+  (response)="onResponse($event)"
+  [service]="service"
+  [toolbar]="!embedded"
+  [query]="!embedded"
+  [pagination]="!embedded"
+  [paginationLimit]="limit"
+  [filterIncludes]="filterIncludes"
+  [filterRemote]="filterRemote"
+  [filterBy]="filterBy"
+  paginationSelector=".recorded"
+>
+  <ng-template appListBodyTemplate>
+    <ng-container *ngFor="let recorded of data; trackBy: trackByFn">
+      <div
+        [class.vertical]="vertical"
+        class="recorded"
+      >
+        <div class="recorded--date">
+          <span class="recorded--date__day">{{recorded.startedAt | date: 'd'}}</span>
+          <span class="recorded--date__month">{{recorded.startedAt | date: 'MMM'}}</span>
+        </div>
+        <div class="recorded--content">
+          <div class="recorded--content--preview">
+            <img [src]="recorded.thumbnailUrl || '/assets/img/icons/session/recorded/no-preview.svg'" [alt]="recorded.name">
+          </div>
+          <div class="recorded--content--body">
+            <div class="recorded--content--body--general">
+              <div class="recorded--content--body--general__icon zoom">
+              </div>
+              <div class="recorded--content--body--general--info">
+                <a
+                  [routerLink]="['/session/recorded', recorded.id]"
+                  [ngbTooltip]="recorded.name"
+                  placement="bottom"
+                  container="body"
+                  class="recorded--content--body--general--info__title cut-long-text"
+                >
+                  {{recorded.name}}
+                </a>
+                <div class="recorded--content--body--general--info__time">{{recorded.startedAt | date: 'h:mm a'}} - {{recorded.endedAt | date: 'h:mm a'}}</div>
+              </div>
+              <div *ngIf="recorded.isShared" class="recorded--content--body--general__shared">
+                <span>Shared</span><fa-icon icon="external-link-alt"></fa-icon>
+              </div>
+            </div>
+            <div class="recorded--content--body--assets">
+              <div class="recorded--content--body--assets--participants">
+                <app-session-recorded-shared-participant
+                  [recorded]="recorded"
+                  [readonly]="true"
+                  [directly]="true"
+                ></app-session-recorded-shared-participant>
+              </div>
+              <div class="recorded--content--body--assets--media">
+                <div class="recorded--content--body--assets--media--clips">
+                  <div class="recorded--content--body--assets--media--clips__icon clip"></div>
+                  <div class="recorded--content--body--assets--media--clips__amount">
+                    {{recorded.pois.length}}
+
+                    <ng-container [ngPlural]="recorded.pois.length">
+                      <ng-template ngPluralCase="=1">Clip</ng-template>
+                      <ng-template ngPluralCase="other">Clips</ng-template>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="recorded--content--body--assets--media--notes">
+                  <div class="recorded--content--body--assets--media--notes__icon note"></div>
+                  <div class="recorded--content--body--assets--media--notes__amount">
+                    {{recorded.notes.length}}
+
+                    <ng-container [ngPlural]="recorded.notes.length">
+                      <ng-template ngPluralCase="=1">Note</ng-template>
+                      <ng-template ngPluralCase="other">Notes</ng-template>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template
+    *ngIf="!data.length"
+    appListBodyStates
+  >
+    <div>
+      <div
+        [class.vertical]="vertical"
+        class="recorded recorded--empty"
+      >
+        <div class="recorded--empty__icon"></div>
+        <div class="recorded--empty--explanation">
+          <div class="recorded--empty--explanation__title">No sessions found!</div>
+          <div class="recorded--empty--explanation__subtitle">Click on the Quick Start button to start a session.</div>
+        </div>
+        <div class="recorded--empty__navigation"></div>
+      </div>
+    </div>
+  </ng-template>
+</app-assistant-list>

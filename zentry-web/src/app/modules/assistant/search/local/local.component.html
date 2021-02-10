@@ -1,0 +1,25 @@
+<form
+  (ngSubmit)="submit()"
+  autocomplete="off"
+  class="local-search"
+>
+  <label>
+    <input
+      (ngModelChange)="termChange($event)"
+      (search)="termChange($event)"
+      [ngModel]="term"
+      type="text"
+      name="search"
+      placeholder="Search..."
+      class="form-control with-icon"
+    >
+    <button
+      *ngIf="term"
+      (click)="reset()"
+      type="reset"
+      class="btn color--action"
+    >
+      <fa-icon icon="times"></fa-icon>
+    </button>
+  </label>
+</form>

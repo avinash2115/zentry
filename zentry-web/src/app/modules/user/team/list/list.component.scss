@@ -1,0 +1,289 @@
+:host {
+  a, a.force {
+    margin-top: 0 !important;
+  }
+}
+
+.team {
+  &--toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px 25px;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    box-shadow: 0 -2px 15px 0 rgba(0,0,0,0.06);
+
+    &--summary {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+
+      &--item {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        border-right: 1px solid #D2D2D8;
+        padding: 0 25px;
+
+        &:first-child {
+          padding-left: 0;
+        }
+
+        &__header {
+          color: #888997;
+          font-size: 14px;
+          font-weight: bold;
+        }
+
+        &--body {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+
+          &__content {
+            font-size: 22px;
+            line-height: 22px;
+            font-weight: bold;
+          }
+
+          &__notation {
+            margin-left: 10px;
+            color: #F1583B;
+            font-size: 13px;
+            font-weight: 800;
+          }
+        }
+      }
+    }
+
+    &--actions {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      padding-left: 10%;
+
+      .btn {
+        &:not(:last-child) {
+          margin-right: 30px;
+        }
+
+        fa-icon {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  &--list {
+    display: flex;
+    flex-direction: column;
+
+    &--item {
+      display: flex;
+      flex-direction: column;
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+
+      &--header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        border: 2px solid transparent;
+        border-radius: 7px;
+        background-color: #FFFFFF;
+        box-shadow: 0 5px 12px 0 rgba(0,0,0,0.06);
+        padding: 25px 30px;
+
+        &__toggle {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          min-width: 28px;
+          height: 28px;
+          min-height: 28px;
+          background-color: #EEEEF2;
+          border-radius: 100%;
+          font-size: 18px;
+          color: #494953;
+          cursor: pointer;
+        }
+
+        &__name {
+          display: flex;
+          flex: 1;
+          margin-left: 20px;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+
+        &--summary {
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+          align-items: center;
+          margin-left: auto;
+          padding-left: 20px;
+
+          &--item {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            align-items: center;
+            border-left: 1px solid #D2D2D8;
+            padding: 15px;
+            font-size: 14px;
+            color: #D2D2D8;
+
+            &__title {
+              margin-left: 15px;
+              color: #293F70;
+              font-size: 16px;
+              font-weight: 900;
+            }
+
+            &__subtitle {
+              margin-left: 5px;
+              color: #293F70;
+              font-size: 16px;
+              font-weight: 600;
+            }
+
+            &__notation {
+              margin-left: auto;
+              color: #F1583B;
+              font-size: 13px;
+              font-weight: 800;
+            }
+          }
+        }
+
+        &--actions {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: auto;
+
+          a {
+            color: #95A4C6;
+            font-size: 16px;
+
+            &:not(:last-child) {
+              margin-right: 20px;
+            }
+          }
+        }
+
+        &.toggled {
+          border: 2px solid #2C9BD6;
+          background-color: #EFF9FF;
+        }
+      }
+
+      &--content {
+        display: none;
+        flex-direction: column;
+        position: relative;
+        z-index: 1;
+        border-radius: 0 0 7px 7px;
+        background-color: #FFFFFF;
+        box-shadow: 0 5px 12px 0 rgba(0,0,0,0.06);
+        margin: 0 20px;
+        margin-top: -5px;
+        padding: 20px 30px;
+
+        &--actions {
+          display: flex;
+          flex-direction: row;
+          margin-bottom: 10px;
+
+          .btn {
+            fa-icon {
+              margin-right: 10px;
+            }
+          }
+        }
+
+        &--item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+
+          &:not(:first-child) {
+            padding-top: 20px;
+          }
+
+          &:not(:last-child) {
+            border-bottom: 2px solid #D2D2D8;
+            padding-bottom: 20px;
+          }
+
+          &__name {
+            display: flex;
+            flex-direction: row;
+            min-width: 30%;
+            width: 100%;
+            margin-top: 0;
+            font-size: 16px;
+            font-weight: bold;
+          }
+
+          &__address {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            padding: 0 20px;
+            color: #888997;
+            font-size: 14px;
+            font-weight: 600;
+          }
+
+          &--summary {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            padding: 0 20px;
+            color: #D2D2D8;
+            font-size: 14px;
+
+            a {
+              margin-left: 15px;
+              font-weight: bold;
+            }
+          }
+
+          &--actions {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: auto;
+
+            a {
+              font-size: 16px;
+
+              &:not(:last-child) {
+                margin-right: 20px;
+              }
+            }
+          }
+        }
+
+        &.toggled {
+          display: flex;
+        }
+      }
+    }
+  }
+}

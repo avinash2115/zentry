@@ -1,0 +1,48 @@
+<app-assistant-list
+  #assistantListComponent
+  (fetching)="onFetching($event)"
+  (response)="onResponse($event)"
+  [service]="service"
+  [paginationLimit]="limit"
+  paginationSelector=".list--participant"
+>
+  <ng-template appListBodyTemplate>
+    <div class="list">
+      <div
+        [routerLink]="['create']"
+        class="list--participant fresh"
+      >
+        <div class="avatar-wrapper">
+        <span class="avatar avatar__md">
+          <fa-icon icon="user"></fa-icon>
+        </span>
+        </div>
+        <div class="list--participant__name">Add {{terms('participant')}}</div>
+      </div>
+      <ng-container *ngFor="let participant of data; trackBy: trackByFn">
+        <div
+          [routerLink]="[participant.id]"
+          class="list--participant border-hover"
+        >
+          <div
+            (click)="$event.stopPropagation(); remove(participant)"
+            ngbTooltip="Remove"
+            placement="auto"
+            class="remove remove-wrapper"
+          >
+            <fa-icon icon="trash" [classes]="['fa--default']"></fa-icon>
+          </div>
+          <div class="avatar-wrapper">
+            <img *ngIf="false; else simpleAvatar" [src]="" [alt]="participant.initials" class="avatar avatar__md">
+            <ng-template #simpleAvatar>
+              <span class="avatar avatar__md">{{participant.initials}}</span>
+            </ng-template>
+          </div>
+          <div class="list--participant__name">{{participant.fullname}}</div>
+          <div class="list--participant__email">{{participant.email}}</div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</app-assistant-list>
+

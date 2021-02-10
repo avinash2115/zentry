@@ -1,0 +1,8 @@
+App\Components\CRM\Source\SessionSourceEntity:
+  type: entity
+  manyToOne:
+    entity:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

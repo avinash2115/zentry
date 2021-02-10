@@ -1,0 +1,75 @@
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+  &--form {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    width: 100%;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.06);
+    position: relative;
+
+    .remove {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+
+      @media (max-width: 415px) {
+        span {
+          display: none;
+        }
+
+        fa-icon {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &--preview {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &__fullname {
+        margin-left: 20px;
+        font-size: 20px;
+        font-weight: 800;
+
+        @media (max-width: 415px) {
+          display: none;
+        }
+      }
+    }
+
+    form {
+      width: 50%;
+
+      label {
+        font-weight: 700;
+      }
+
+      input {
+        height: 59px;
+        color: #35404E;
+      }
+
+      .error {
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 1279px) {
+        width: 100%;
+      }
+    }
+
+    .form-row, .form-group {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,360 @@
+<ng-container *ngIf="!isLoading">
+  <div class="recorded">
+    <div class="recorded--header">
+      <div class="recorded--header--top">
+        <div class="recorded--header--top--visor">
+          <ng-container
+            *ngIf="(entity.isEntirelyRecorded && entity.streamByType(streamTypes.combined).isConverted) || (!entity.isEntirelyRecorded && videoURL); else convertProgressTemplate">
+            <div class="recorded--header--top--visor__player">
+              <video
+                *ngIf="videoURL"
+                [src]="videoURL"
+                preload="auto"
+                controls
+                controlsList="nodownload"
+                #videoPlayer
+              ></video>
+            </div>
+          </ng-container>
+          <ng-template #convertProgressTemplate>
+            <ng-container *ngIf="entity.isEntirelyRecorded">
+              <div class="recorded--header--top--visor--convert">
+                <div class="recorded--header--top--visor--convert__image">
+                </div>
+                <div class="recorded--header--top--visor--convert__title heading">
+                  Please wait while recording is being converted ...
+                </div>
+                <div class="recorded--header--top--visor--convert--progress">
+                  <div class="recorded--header--top--visor--convert--progress__title">
+                    CONVERTING ...
+                  </div>
+                  <div class="recorded--header--top--visor--convert--progress__bar">
+                    <div class="progress">
+                      <div
+                        [style.width.%]="entity.streamByType(streamTypes.combined).convertProgress"
+                        class="progress-bar"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!entity.isEntirelyRecorded">
+              <app-loader></app-loader>
+            </ng-container>
+          </ng-template>
+        </div>
+        <div class="recorded--header--top--right">
+          <div class="recorded--header--top--right--info">
+            <a class="recorded--header--top--right--info--title">
+              <ng-container *ngIf="!isEditMode('name')">
+                <div
+                  *ngIf="!entity.readonly"
+                  (click)="onEditMode('name')"
+                  ngbTooltip="Edit recording name"
+                  placement="auto"
+                  container="body"
+                  class="recorded--header--top--right--info--title__icon"
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                </div>
+                <div
+                  [ngbTooltip]="entity.name"
+                  placement="auto"
+                  container="body"
+                  class="recorded--header--top--right--info--title__text cut-long-text"
+                >
+                  {{entity.name}}
+                </div>
+              </ng-container>
+              <div *ngIf="isEditMode('name')" class="recorded--header--top--right--info--title__text">
+                <div class="input-group confirmation">
+                  <input
+                    #name
+                    (blur)="save('name', $event)"
+                    [value]="entity.name"
+                    [(ngModel)]="entity.name"
+                    type="text"
+                    class="form-control"
+                  >
+                  <div class="input-group-append">
+                    <button
+                      (click)="save('name')"
+                      class="btn"
+                    >
+                      <fa-icon icon="check"></fa-icon>
+                    </button>
+                    <button
+                      (click)="cancel('name')"
+                      id="cancel"
+                      class="btn"
+                    >
+                      <fa-icon icon="times"></fa-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <div class="recorded--header--top--right--info__time">
+              <fa-icon icon="calendar"></fa-icon>
+              <strong>{{entity.startedAt | date: 'MMMM d, y'}}</strong> {{entity.startedAt | date: 'h:mm a'}}
+              - {{entity.endedAt | date: 'h:mm a'}}
+            </div>
+          </div>
+          <div class="recorded--header--top--right--meta">
+            <div class="recorded--header--top--right--meta--location">
+              <div class="recorded--header--top--right--meta--location__icon">
+                <fa-icon icon="school" [classes]="['fa--default']"></fa-icon>
+                School:
+              </div>
+              <div
+                class="recorded--header--top--right--meta--location__place"
+              >
+                <ng-select
+                  #ngSelectComponentSchool
+                  [(ngModel)]="schoolId"
+                  (change)="ngSelectComponentSchool.blur(); detectChanges()"
+                  (focus)="detectChanges()"
+                  (blur)="detectChanges()"
+                  (clear)="detectChanges()"
+                  (search)="detectChanges()"
+                  [items]="schools"
+                  [clearable]="true"
+                  [searchable]="true"
+                  [disabled]="entity.isLocked"
+                  bindLabel="name"
+                  bindValue="id"
+                  placeholder="Start typing or select ..."
+                  id="school_id"
+                  class="rounder"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="recorded--header--top--right--meta--service">
+              <div class="recorded--header--top--right--meta--service__icon">
+                <fa-icon icon="file-medical" [classes]="['fa--default']"></fa-icon>
+                Service:
+              </div>
+              <div
+                class="recorded--header--top--right--meta--service__place"
+              >
+                <ng-select
+                  #ngSelectComponentSchool
+                  [(ngModel)]="serviceId"
+                  (change)="ngSelectComponentSchool.blur(); detectChanges()"
+                  (focus)="detectChanges()"
+                  (blur)="detectChanges()"
+                  (clear)="detectChanges()"
+                  (search)="detectChanges()"
+                  [items]="services"
+                  [clearable]="true"
+                  [searchable]="true"
+                  [disabled]="entity.isLocked"
+                  bindLabel="name"
+                  bindValue="id"
+                  placeholder="Start typing or select ..."
+                  id="service_id"
+                  class="rounder"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="recorded--header--top--right--meta--tags">
+              <div class="recorded--header--top--right--meta--tags__icon">
+                <fa-icon icon="tag" [classes]="['fa--default']"></fa-icon>
+                Tags:
+              </div>
+              <div class="recorded--header--top--right--meta--tags--list">
+                <div
+                  *ngIf="!entity.tags.length && !isEditMode('tags')"
+                  class="recorded--header--top--right--meta--tags--list__empty"
+                >
+                  Tags are not defined
+                </div>
+                <div *ngIf="entity.tags.length || isEditMode('tags')" class="input-group confirmation">
+                  <tag-input
+                    (onAdd)="detectChanges()"
+                    (onRemove)="detectChanges()"
+                    (onFocus)="detectChanges()"
+                    (onValidationError)="detectChanges()"
+                    (onSelect)="detectChanges()"
+                    (onPaste)="detectChanges()"
+                    (onBlur)="save('tags')"
+                    (ngModelChange)="detectChanges()"
+                    [addOnBlur]="true"
+                    [(ngModel)]="entity.tags"
+                    [removable]="isEditMode('tags')"
+                    [identifyBy]="'tag'"
+                    [displayBy]="'tag'"
+                    [disable]="entity.isLocked"
+                    [class.readonly]="!isEditMode('tags')"
+                    [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                    theme='bootstrap'
+                  >
+                  </tag-input>
+                  <div
+                    *ngIf="isEditMode('tags')"
+                    class="input-group-append"
+                  >
+                    <button
+                      (click)="save('tags')"
+                      class="btn"
+                    >
+                      <fa-icon icon="check"></fa-icon>
+                    </button>
+                    <button
+                      (click)="cancel('tags')"
+                      class="btn"
+                    >
+                      <fa-icon icon="times"></fa-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <a
+                (click)="onEditMode('tags')"
+                *ngIf="!entity.readonly && !isEditMode('tags')"
+                class="recorded--header--top--right--meta--tags__action force"
+              >
+                {{entity.tags.length ? 'Edit tags' : 'Define tags'}}
+              </a>
+            </div>
+          </div>
+          <div class="recorded--header--top--right--bottom">
+            <div
+              *ngIf="entity.isEntirelyRecorded && !entity.readonly"
+              class="recorded--header--top--right--bottom--assets"
+            >
+              <a
+                (click)="share()"
+                [class.outline__green]="entity.isShared"
+                [ngbTooltip]="entity.isShared ? 'Edit Access' : 'Share Recording'"
+                [class.not-allowed]="entity.isLocked"
+                placement="auto"
+                container="body"
+                class="recorded--header--top--right--bottom--assets__item"
+              >
+                <fa-icon icon="share-square"></fa-icon>
+              </a>
+              <a
+                (click)="download()"
+                ngbTooltip="Download recording"
+                placement="auto"
+                container="body"
+                class="recorded--header--top--right--bottom--assets__item"
+              >
+                <fa-icon icon="file-download"></fa-icon>
+              </a>
+              <div class="recorded--header--top--right--bottom--assets__lock">
+                <ng-container *ngIf="entity.isLocked">
+                  <span class="recorded--header--top--right--bottom--assets__lock--text recorded--header--top--right--bottom--assets__lock--text--green">
+                    <fa-icon icon="lock"></fa-icon>
+                    Documented & Locked
+                  </span>
+                  <a (click)="unlock()" class="recorded--header--top--right--bottom--assets__lock--text recorded--header--top--right--bottom--assets__lock--text--red">
+                    Unlock
+                    <fa-icon icon="lock-open"></fa-icon>
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="!entity.isLocked">
+                  <button (click)="document()" class="btn btn__standard btn--radius__md btn--color__green">
+                    Document
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recorded--body">
+      <div class="recorded--body--participants">
+        <app-session-recorded-participant
+          [recorded]="entity"
+      ></app-session-recorded-participant>
+      </div>
+
+      <ng-container [ngSwitch]="viewActive">
+        <div
+          *ngSwitchCase="views.notes"
+          class="recorded--body--notes-view"
+        >
+          <div class="recorded--body--notes-view__title">Session Notes - {{entity.notes.length}}</div>
+          <app-session-recorded-view-note></app-session-recorded-view-note>
+        </div>
+        <div
+          *ngSwitchCase="views.participant"
+          class="recorded--body--participant-view"
+        >
+          <app-session-recorded-participant-view
+            (sourceSeeked)="onClipSeeked($event)"
+            (sourceReplaced)="onClipReplaced($event)"
+            (shared)="onClipShared($event)"
+          ></app-session-recorded-participant-view>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>
+
+<ng-template #shareModal let-modal>
+  <input type="text" style="display:none"/>
+  <div (click)="modal.dismiss('Cross click')" class="close">
+    <fa-icon icon="times"></fa-icon>
+  </div>
+  <div class="modal-icon color color__primary">
+    <fa-icon icon="external-link-alt"></fa-icon>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Share your Recording or Clip</h4>
+    <div class="modal-subtitle">With this public link, anyone can view shared recording or clip, but can’t edit any
+      information.
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <input (click)="shareCopy()" [value]="sharedURL" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="modal-buttons">
+      <button (click)="modal.close(10)" class="btn btn__standard btn--radius__md btn--color__green">
+        Copy Link
+      </button>
+      <button (click)="modal.close(20)" class="btn btn__standard  btn--radius__md btn--color__red">
+        Stop Sharing
+      </button>
+      <button (click)="modal.close(30)" class="btn btn__standard  btn--radius__md btn-outline-dark">
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #signModal let-modal>
+  <input type="text" style="display:none"/>
+  <div class="modal-header">
+    <h4 class="modal-title">Sign to Document</h4>
+  </div>
+  <div (click)="modal.dismiss('Cross click')" class="close">
+    <fa-icon icon="times"></fa-icon>
+  </div>
+  <div class="modal-body modal-body--no-indentation">
+    <div class="recorded--sign-pad-modal--input">
+      <app-signature-pad (onDrawEnd)="setSign($event)"></app-signature-pad>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="recorded--sign-pad-modal--buttons">
+      <button (click)="modal.close(10)" class="recorded--sign-pad-modal--buttons--btn btn btn__standard btn--radius__md btn--color__green">
+        Document
+      </button>
+      <button (click)="modal.close(20)" class="recorded--sign-pad-modal--buttons--btn btn btn__standard  btn--radius__md btn-outline-dark">
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>

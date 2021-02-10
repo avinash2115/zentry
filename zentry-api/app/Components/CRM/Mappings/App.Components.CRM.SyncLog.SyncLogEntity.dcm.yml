@@ -1,0 +1,21 @@
+App\Components\CRM\SyncLog\SyncLogEntity:
+  type: entity
+  table: crms_sync_logs
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    type:
+      column: type
+      type: string
+    createdAt:
+      type: datetime
+      column: created_at
+  manyToOne:
+    crm:
+      targetEntity: App\Components\Users\User\CRM\CRMEntity
+      joinColumn:
+        name: crm_id
+        referencedColumnName: id

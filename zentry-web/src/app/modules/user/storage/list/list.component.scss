@@ -1,0 +1,119 @@
+.storage--list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin: 0 -15px;
+
+  &:after {
+    content: "";
+    display: block;
+    flex: auto;
+  }
+
+  &--option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 calc(25% - 30px);
+    align-items: center;
+    min-height: 240px;
+    padding: 25px;
+    margin: 15px;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.15);
+
+    @media (max-width: 1279px) {
+      flex: 0 0 calc(33.3% - 30px);
+    }
+
+    @media (max-width: 768px) {
+      flex: 0 0 calc(50% - 30px);
+    }
+
+    @media (max-width: 415px) {
+      flex: 0 0 calc(100% - 30px);
+    }
+
+    &--default {
+      border: 2px solid #29D2A0;
+
+      &__alerted {
+        border: 2px solid #F45F68;
+      }
+    }
+
+    &--heading {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      width: 100%;
+
+      .btn, &__active {
+        margin-left: auto;
+        font-size: 13px;
+      }
+
+      &__active {
+        color: #29D2A0;
+        font-size: 14px;
+        font-weight: 800;
+      }
+    }
+
+    &__title {
+      width: 100%;
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    &__configuration, &__threshold {
+      width: 100%;
+      margin-top: 30px;
+      color: #888997;
+      font-size: 13px;
+    }
+
+    &__configuration {
+      margin-top: auto;
+    }
+
+    &__threshold {
+      color: #F45F68;
+      margin-bottom: 10px;
+    }
+
+    &--capacity {
+      display: flex;
+      flex-direction: column;
+      margin-top: auto;
+      width: 100%;
+
+      &--annotation {
+        display: flex;
+        margin-bottom: 10px;
+
+        span {
+          color: #888997;
+          font-size: 14px;
+          font-weight: bold;
+
+          &:last-child {
+            margin-left: auto;
+          }
+        }
+      }
+
+      .progress {
+        width: 100%;
+        height: 8px;
+        border-radius: 5.5px;
+
+        .progress-bar {
+          border-radius: 5.5px;
+        }
+      }
+    }
+  }
+}

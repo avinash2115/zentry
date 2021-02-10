@@ -1,0 +1,26 @@
+<div
+  *ngIf="loaded"
+  class="crm--button"
+>
+  <div class="crm--button--text">
+    <div class="crm--button--text__title">
+      {{!connected ? 'Not connected' : 'Last sync:'}}
+    </div>
+    <div
+      *ngIf="connected"
+      class="crm--button--text__value"
+    >
+      {{syncLog ? (syncLog.createdAt | date: 'short') : 'never'}}
+    </div>
+  </div>
+  <button
+    (click)="sync()"
+    [class.not-allowed]="!connected || syncing"
+    [class.spin]="syncing"
+    type="button"
+    class="btn btn__standard btn--color__primary btn--radius__md"
+  >
+    <fa-icon icon="sync"></fa-icon>
+    Sync with TeleTeachers
+  </button>
+</div>

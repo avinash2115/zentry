@@ -1,0 +1,157 @@
+:host {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+::ng-deep .ps__rail-y {
+  opacity: 0.6;
+}
+
+.clips {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.06);
+
+  &--empty {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    &__icon {
+      width: 22px;
+      height: 63px;
+    }
+
+    &__explanation {
+      margin-top: 21px;
+      color: #888997;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+
+  &--item {
+    padding: 12px 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #E7E7F1;
+    }
+
+    &--type {
+      min-width: 15px;
+      margin-right: 5px;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+      &__backtrack {
+        width: 13px;
+        height: 16px;
+        background-image: url("/assets/img/icons/session/widget/clips/backtrack.svg");
+      }
+
+      &__poi {
+        width: 10px;
+        height: 16px;
+        background-image: url("/assets/img/icons/session/widget/clips/poi.svg");
+      }
+
+      &__stopwatch {
+        width: 16px;
+        height: 16px;
+        background-image: url("/assets/img/icons/session/widget/clips/stopwatch.svg");
+      }
+
+      i {
+        display: block;
+      }
+    }
+
+    &__frame {
+      display: flex;
+      min-width: 150px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 11.5px;
+      background-color: #F6F8FB;
+      padding: 4px 7px;
+
+      span {
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      fa-icon {
+        margin-left: auto;
+        cursor: pointer;
+      }
+    }
+
+    &__duration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 5px;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 11.5px;
+      background-color: #F6F8FB;
+    }
+
+    &__remove {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      min-width: 30px;
+      height: 30px;
+      margin-left: auto;
+      background-color: #F6F8FB;
+      border-radius: 100%;
+    }
+
+    &.watch  {
+      background-color: #5f94f452;
+    }
+
+    &.watch & {
+      &__frame {
+        width: 100%;
+      }
+    }
+  }
+
+  &--edit {
+    padding: 15px;
+
+    &--buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      width: 100%;
+
+      button {
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .form-group {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+}

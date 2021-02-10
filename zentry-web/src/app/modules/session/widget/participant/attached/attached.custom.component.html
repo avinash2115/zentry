@@ -1,0 +1,66 @@
+<div class="participant">
+  <ng-container *ngIf="participant">
+    <ng-container *ngIf="goals.length > 0">
+      <div class="participant__title">{{participant.fullname}} Goals</div>
+      <div class="participant--content">
+        <div class="participant--content--goals">
+          <ng-container *ngFor="let goal of goals">
+            <div class="participant--content--goals--navigation">
+              <div class="participant--content--goals--navigation--current">
+                <div class="clamp">
+                  {{goal.name}}
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="goal && goal.trackers.length"
+              class="participant--content--goals--controls"
+            >
+              <div
+                *ngFor="let tracker of goal.trackers"
+                class="participant--content--goals--controls--tracker"
+              >
+                <button
+                  (click)="track(goal, tracker)"
+                  [style.color]="tracker.color"
+                  class="btn btn--color__white"
+                >
+                  <fa-icon
+                    [icon]="tracker.icon"
+                  ></fa-icon>
+                </button>
+                <div
+                  [style.color]="amount(goal, tracker) > 0 ? tracker.color : ''"
+                  class="participant--content--goals--controls--tracker__amount"
+                >
+                  {{amount(goal, tracker)}}
+                </div>
+                <div class="participant--content--goals--controls--tracker__name">
+                  {{tracker.name}}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <button
+        [class.not-allowed]="!goalsHaveProgress()"
+        (click)="undo()"
+        class="participant--undo btn btn--color__white"
+      >
+        <fa-icon icon="undo"></fa-icon> undo
+      </button>
+    </ng-container>
+    <ng-container *ngIf="goals.length === 0">
+      <div class="participant__message">
+        {{ 'There are no goals for ' + (participant.fullname || participant.email) }}
+      </div>
+    </ng-container>
+  </ng-container>
+  <div
+    *ngIf="!participant"
+    class="participant--content__empty"
+  >
+    Click on student card for view goals
+  </div>
+</div>

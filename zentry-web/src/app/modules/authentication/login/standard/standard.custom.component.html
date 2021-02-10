@@ -1,0 +1,77 @@
+<div class="text-center">
+  <div class="heading">
+    Login into your {{applicationName}} account!
+  </div>
+
+  <div
+    *ngIf="subtitle"
+    class="sub-heading sub-heading--muted"
+  >
+    Please provide the information below
+  </div>
+
+  <div class="divider"></div>
+</div>
+
+<form
+  (submit)="submit()"
+  [formGroup]="form"
+  appFormSubmit
+  class="w-100"
+>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input
+      appControlError
+      class="form-control with-icon"
+      formControlName="email"
+      id="email"
+      name="email"
+      type="email"
+    >
+  </div>
+
+  <div class="form-group mb-0">
+    <label for="password">Password</label>
+    <div class="input-group-password">
+      <input
+        appControlError
+        class="form-control with-icon"
+        formControlName="password"
+        id="password"
+        name="password"
+        [type]="isPasswordVisible ? 'text' : 'password'"
+      >
+      <fa-icon *ngIf="!isPasswordVisible" (click)="togglePasswordVisibility()" icon="eye" [classes]="['show-password']"></fa-icon>
+      <fa-icon *ngIf="isPasswordVisible" (click)="togglePasswordVisibility()" icon="eye-slash" [classes]="['show-password', 'show-password--active']"></fa-icon>
+    </div>
+    <div class="margin--top--10">
+      <a [routerLink]="['/auth/forgot']">Forgot password?</a>
+    </div>
+  </div>
+
+  <div
+    *ngIf="error"
+    class="error"
+  >{{error}}</div>
+
+  <ng-container *ngIf="!isSending">
+    <button
+      class="btn btn--radius__md btn--color__contextual"
+      type="submit"
+    >
+      Login
+    </button>
+
+    <div class="in-divider">or Sign In with</div>
+
+    <app-authentication-social></app-authentication-social>
+
+    <div class="navigation">
+      <span>Don't have an account?</span>
+      <a routerLink="/auth/registration">Register</a>
+    </div>
+  </ng-container>
+
+  <app-loader *ngIf="isSending"></app-loader>
+</form>

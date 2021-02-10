@@ -1,0 +1,240 @@
+input[type=search], input[name=search] {
+  &.with-icon {
+    padding-left: 40px !important;
+    background-image: url('assets/img/icons/search.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+  }
+}
+
+input[type=email], input[name=email] {
+  &.with-icon {
+    padding-left: 50px !important;
+    background-image: url('assets/img/icons/email.svg');
+    background-position: 15px center;
+    background-repeat: no-repeat;
+  }
+}
+
+input[type=password], input[name=password], input[name=passwordRepeat] {
+  &.with-icon {
+    padding-left: 50px !important;
+    background-image: url('assets/img/icons/password.svg');
+    background-position: 15px center;
+    background-repeat: no-repeat;
+  }
+}
+
+input, textarea {
+  &.form-control {
+    border: 1px solid #939393;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    color: #35404E;
+    font-size: 16px;
+    padding: 10px 15px;
+    height: auto;
+  }
+
+  &.ng-touched {
+    &.ng-invalid {
+      border-color: #F45F68;
+    }
+  }
+}
+
+.input-group-password {
+  position: relative;
+
+  input {
+    padding-right: 55px;
+  }
+
+  .show-password {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 21px;
+    color: #888997;
+
+    &:hover, &--active {
+      color: #4983FF
+    }
+
+    &--active {
+      right: 19px;
+    }
+  }
+}
+
+.input-group {
+  &.confirmation {
+    flex-wrap: nowrap;
+
+    & .input-group-append {
+      height: 40px;
+      margin-left: 0;
+      box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.20);
+      border-radius: 0 0 6px 6px;
+
+      button {
+        background: #FFFFFF;
+        font-size: 16px;
+        min-width: 40px;
+
+        &:first-child {
+          color: #29D2A0;
+        }
+
+        &:last-child {
+          border-left: 1px solid #E7E7F1;
+          color: #6B6C7E;
+        }
+
+        &:hover {
+          background: #F5F5F8;
+        }
+      }
+    }
+  }
+}
+
+tag-input {
+  .ng2-tag-input {
+    border: 1px solid #4983FF !important;
+    border-radius: 3px;
+    padding: 0 10px !important;
+
+    &__text-input {
+      height: auto !important;
+    }
+
+    .ng2-tags-container {
+      min-height: 40px;
+      padding: 5px 0;
+      align-items: center;
+
+      tag {
+        height: 25px !important;
+        background: #FFFFFF !important;
+        border: 1px solid #4983FF;
+        border-radius: 14px !important;
+        font-size: 12px !important;
+        line-height: inherit !important;
+        color: #4983FF !important;
+
+        .tag-wrapper {
+          align-items: center;
+          height: 100%;
+        }
+
+        delete-icon {
+          height: auto !important;
+
+          &:hover {
+            transform: scale(1) translateY(0px) !important;
+          }
+
+          svg {
+            vertical-align: middle !important;
+            height: auto !important;
+          }
+
+          path {
+            fill: #4983FF !important;
+          }
+        }
+
+        &:hover {
+          background: #4983FF !important;;
+          color: #FFFFFF !important;
+
+          delete-icon {
+            path {
+              fill: #FFFFFF !important;
+            }
+          }
+        }
+      }
+
+      tag-input-form {
+        form {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  &.readonly {
+    .ng2-tag-input {
+      padding: 0 !important;
+      border: 1px solid transparent !important;
+
+      tag-input-form {
+        display: none;
+      }
+    }
+  }
+}
+
+.form-control:disabled, .form-control[readonly] {
+  background-color: transparent;
+  opacity: 0.5;
+  color: #35404E !important;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 15px;
+  margin: 0;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &--slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #D7D7E2;
+    -webkit-transition: .4s;
+    transition: .4s;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 22.5px;
+      width: 22.5px;
+      left: -2px;
+      bottom: -3px;
+      background-color: #FFFFFF;
+      transition: .4s;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    &__round {
+      border-radius: 34px;
+
+      &:before {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+input:checked + .switch--slider {
+  background-color: #C8FBEB;
+}
+
+input:checked + .switch--slider:before {
+  transform: translateX(26px);
+  background-color: #29D2A0;
+}

@@ -1,0 +1,22 @@
+App\Components\Users\Login\Token\TokenEntity:
+  type: entity
+  table: login_tokens
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    referer:
+      type: string
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+  manyToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

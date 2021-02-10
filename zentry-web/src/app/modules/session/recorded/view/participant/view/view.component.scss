@@ -1,0 +1,60 @@
+:host {
+  display: flex;
+  flex: 1;
+  min-width: 0
+}
+
+.participant-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: 20px;
+
+  &--header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 0;
+
+    .avatar-wrapper .avatar {
+      background-color: #F4F5F8;
+      border: 2px solid #DADAE3;
+      line-height: 35px;
+      transition: all .2s ease-in-out;
+    }
+
+    &__fullname {
+      margin-left: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+
+  &--buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 15px;
+
+    button {
+      font-size: 16px;
+      font-weight: bold;
+
+      &:not(:last-child) {
+        margin-right: 5px;
+      }
+
+      fa-icon {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &--body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 25px;
+  }
+}

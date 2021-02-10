@@ -1,0 +1,30 @@
+App\Components\Sessions\Session\Goal\GoalEntity:
+  type: entity
+  table: session_participants_goals
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    createdAt:
+      type: datetime
+      column: created_at
+  manyToOne:
+    session:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: session_id
+        referencedColumnName: id
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+    goal:
+      targetEntity: App\Components\Users\Participant\Goal\GoalEntity
+      joinColumn:
+        name: goal_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]

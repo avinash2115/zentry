@@ -1,0 +1,171 @@
+<div class="widget">
+  <div class="widget--wrapper">
+    <app-notification></app-notification>
+    <ng-container *ngIf="!isLoading">
+      <div class="widget--top-bar">
+        <ng-container *ngIf="!service.isStarted">
+          <div *ngIf="authUser" class="avatar-wrapper">
+            <img *ngIf="false; else simpleAvatar" [src]="" [alt]="authUser.initials" class="avatar__sm">
+            <ng-template #simpleAvatar>
+              <span class="avatar avatar__sm">{{authUser.initials}}</span>
+            </ng-template>
+          </div>
+          <div class="widget--top-bar--greetings">
+            <div class="widget--top-bar--greetings__title cut-long-text">
+              Hi, {{authUser.profile.fullname}}
+            </div>
+            <div class="widget--top-bar--greetings__date">
+              <app-date-today></app-date-today>
+            </div>
+          </div>
+          <div class="widget--top-bar--logout">
+            <a
+              (click)="logout()"
+              [class.not-allowed]="service.isFinished || isPreparing"
+              class="btn btn-outline-secondary btn--radius__sm btn--actions__logout"
+            >
+              <i></i>
+            </a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="service.isStarted">
+          <div
+            *ngIf="sessionQRCode"
+            class="widget--top-bar--qr-hot"
+          >
+            <img
+              [src]='sessionQRCode'
+              [alt]="'Scan this code in ' + applicationName + ' Mobile to quickly use your device in this session'"
+            >
+          </div>
+          <div class="widget--top-bar--finish">
+            <button
+              (click)="stop()"
+              [disabled]="!canFinish"
+              class="btn btn__standard btn--color__red"
+            >
+              End Session
+            </button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="widget--sub-bar">
+        <app-session-widget-upload></app-session-widget-upload>
+      </div>
+
+      <ng-container *ngIf="service.isStarted">
+        <div class="widget--participants">
+          <div class="widget--participants--session__name">
+            {{session.name}}
+          </div>
+          <app-session-widget-participant-custom *ngIf="!service.isFinished"></app-session-widget-participant-custom>
+        </div>
+        <div class="widget--trackpad">
+          <div class="widget--trackpad--wrapper">
+            <div class="widget--trackpad--wrapper--controls">
+              <app-session-widget-trackpad-custom
+                (activatedAt)="trackpadActivated($event)"
+              ></app-session-widget-trackpad-custom>
+            </div>
+            <div class="widget--trackpad--wrapper--waveform">
+              <app-media-audio-waveform
+                [stream]="stream"
+                [highlight]="waveformHighlight"
+                [highlights]="session.poisAsHighlights"
+              ></app-media-audio-waveform>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <app-session-widget-soap
+        (completed)="finish()"
+        *ngIf="service.isFinished"
+      >
+      </app-session-widget-soap>
+
+      <ng-container *ngIf="!service.isStarted && !service.isFinished">
+        <div class="widget--launcher">
+          <app-media-desktop-picker (isSelecting)="togglePreparing($event)"></app-media-desktop-picker>
+          <ng-container *ngIf="!isPreparing">
+            <app-session-widget-calendar
+              (started)="startDirect($event)"
+            ></app-session-widget-calendar>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <div class="widget--footer">
+        <ng-container *ngIf="service.isStarted">
+          <div class="widget--controls">
+            <button
+              (click)="mediaService.toggleAudio(); detectChanges()"
+              [class.widget--controls__inactive]="!mediaService.isAudioActive"
+              [ngbTooltip]="mediaService.isAudioActive ? null : 'Audio will be automatically enabled if you\'ll make a clip'"
+              placement="auto"
+              class="btn btn--square btn-outline-dark"
+            >
+              <fa-icon [icon]="mediaService.isAudioActive ? 'microphone' : 'microphone-slash'"></fa-icon>
+              {{mediaService.isAudioActive ? 'Mute' : 'Unmute'}} Audio
+            </button>
+            <button
+              (click)="mediaService.toggleDesktop(); detectChanges()"
+              [class.widget--controls__inactive]="!mediaService.isDesktopActive"
+              class="btn btn--square btn-outline-dark"
+            >
+              <fa-icon [icon]="mediaService.isDesktopActive ? 'video' : 'video-slash'"></fa-icon>
+              {{mediaService.isDesktopActive ? 'Stop' : 'Start'}} Capturing
+            </button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!service.isStarted && !service.isFinished && !isPreparing">
+          <div class="widget--launcher">
+            <div
+              *ngIf="formQuickStart"
+              [formGroup]="formQuickStart"
+              class="form-group"
+            >
+              <label for="service_id" class="required">Service</label>
+              <ng-select
+                #ngSelectComponentService
+                (change)="ngSelectComponentService.close(); detectChanges()"
+                (focus)="detectChanges()"
+                (blur)="detectChanges()"
+                (clear)="detectChanges()"
+                (search)="detectChanges()"
+                [items]="services"
+                [clearable]="true"
+                [searchable]="true"
+                bindLabel="name"
+                bindValue="id"
+                formControlName="service_id"
+                placeholder="Start typing or select service..."
+                id="service_id"
+                class="rounder"
+              ></ng-select>
+            </div>
+            <button
+              (click)="start()"
+              [disabled]="!formQuickStart || !formQuickStart.get('service_id').value"
+              class="widget--launcher__launch btn btn__standard btn--radius__md btn--color__contextual"
+            >
+              <fa-icon icon="bolt"></fa-icon>
+              Quick Start
+            </button>
+            <a
+              (click)="external()"
+              class="widget--launcher__open-recordings force"
+            >Go to Documentation</a>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    <div *ngIf="isLoading" class="widget--wrapper__loader">
+      <app-loader></app-loader>
+    </div>
+  </div>
+</div>
+
+<app-loader *ngIf="loadingFullScreen" [fullscreen]="true"></app-loader>

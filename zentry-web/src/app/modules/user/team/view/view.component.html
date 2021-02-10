@@ -1,0 +1,107 @@
+<ng-container *ngIf="!isLoading">
+  <div class="school--profile">
+    <div class="school--profile--content">
+      <div class="school--profile--content--main">
+        <div class="school--profile--content--main--info flex-one">
+          <div class="school--profile--content--main--info__title cut-long-text">
+            {{entity.name}}
+          </div>
+        </div>
+        <ng-container *ngIf="entity.hasSources">
+          <div class="source ml-auto">
+            <span>Imported from TeleTeachers</span>
+            <div class="source--exists">
+              TT
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!entity.hasSources">
+          <button
+            (click)="build()"
+            [disabled]="!!form"
+            type="button"
+            class="btn btn__standard btn--radius__md btn--color__primary school--profile--content--main__edit"
+          >
+            <fa-icon icon="pen"></fa-icon>
+            Edit Profile
+          </button>
+        </ng-container>
+      </div>
+      <div class="school--profile--content--body">
+        <ng-container *ngIf="form">
+          <form
+            (submit)="detectChanges()"
+            [formGroup]="form"
+          >
+            <div class="school--profile--content--body--left">
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="name" class="required">District Name</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="name"
+                    placeholder="Enter District Name"
+                    id="name"
+                    type="text"
+                  >
+                </div>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+      <div
+        *ngIf="!!form"
+        class="school--profile--content--actions"
+      >
+        <button
+          (click)="cancel()"
+          class="btn btn__standard btn--radius__md btn-outline-secondary"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="submit()"
+          class="btn btn__standard btn--radius__md btn--color__contextual left"
+        >
+          <fa-icon icon="check"></fa-icon>
+          Update District Profile
+        </button>
+      </div>
+    </div>
+    <div class="school--profile--content">
+      <div class="school--profile--content--main--info">
+        <div class="school--profile--content--main--info__title">
+          Independent Students
+        </div>
+      </div>
+      <div class="school--profile--content--body columned">
+        <app-user-participant-list-custom
+          [embedded]="true"
+          [filter]="makeStudentsFilter()"
+        ></app-user-participant-list-custom>
+      </div>
+      <ng-container *ngFor="let school of entity.schools">
+        <div class="school--profile--content--main--info">
+          <div class="school--profile--content--main--info__title">
+            {{school.name}}
+          </div>
+          <div class="school--profile--content--main--info__subtitle">
+            Students related to school
+          </div>
+        </div>
+        <div class="school--profile--content--body columned">
+          <app-user-participant-list-custom
+            [embedded]="true"
+            [filter]="makeStudentsFilter(school)"
+          ></app-user-participant-list-custom>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

@@ -1,0 +1,251 @@
+<ng-container *ngIf="!isLoading">
+  <div class="team--toolbar">
+    <div class="team--toolbar--summary">
+      <div class="team--toolbar--summary--item">
+        <div class="team--toolbar--summary--item__header">
+          Districts
+        </div>
+        <div class="team--toolbar--summary--item--body">
+          <div class="team--toolbar--summary--item--body__content">
+            {{teamsCount}}
+          </div>
+          <div class="team--toolbar--summary--item--body__notation">
+          </div>
+        </div>
+      </div>
+      <div class="team--toolbar--summary--item">
+        <div class="team--toolbar--summary--item__header">
+          Schools
+        </div>
+        <div class="team--toolbar--summary--item--body">
+          <div class="team--toolbar--summary--item--body__content">
+            {{schoolsCount}}
+          </div>
+          <div class="team--toolbar--summary--item--body__notation">
+          </div>
+        </div>
+      </div>
+      <div class="team--toolbar--summary--item">
+        <div class="team--toolbar--summary--item__header">
+          Students
+        </div>
+        <div class="team--toolbar--summary--item--body">
+          <div class="team--toolbar--summary--item--body__content">
+            {{participantsCount}}
+          </div>
+          <div class="team--toolbar--summary--item--body__notation">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="team--toolbar--actions">
+      <app-crm-button
+        (synced)="fetch()"
+        [type]="crmService.types.session"
+      ></app-crm-button>
+      <a
+        [routerLink]="['/user/districts/create']"
+        class="btn btn__standard btn--color__primary btn--radius__md"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        Add District
+      </a>
+      <a
+        [routerLink]="['/user/districts/schools/create']"
+        class="btn btn__standard btn--color__primary btn--radius__md"
+      >
+        <fa-icon icon="school"></fa-icon>
+        Add School
+      </a>
+    </div>
+  </div>
+</ng-container>
+
+<app-assistant-list
+  #assistantListComponent
+  (fetching)="onFetching($event)"
+  (response)="onResponse($event)"
+  [service]="service"
+  [paginationLimit]="limit"
+  paginationSelector=".team--list--item"
+>
+  <ng-template appListBodyTemplate>
+    <div class="team--list">
+      <div
+        *ngFor="let team of data; trackBy: trackByFn"
+        class="team--list--item"
+      >
+        <div
+          [class.toggled]="isToggled(team)"
+          class="team--list--item--header"
+        >
+          <div
+            (click)="toggle(team)"
+            class="team--list--item--header__toggle"
+          >
+            <fa-icon [icon]="isToggled(team) ? 'angle-up' : 'angle-down'"></fa-icon>
+          </div>
+          <a
+            [routerLink]="['/user/districts/', team.id]"
+            class="team--list--item--header__name cut-long-text"
+          >
+          <span
+            [ngbTooltip]="team.name"
+            placement="bottom"
+            container="body"
+          >
+            {{team.name}}
+          </span>
+          </a>
+          <div class="team--list--item--header--summary">
+            <div class="team--list--item--header--summary--item">
+              <fa-icon icon="school"></fa-icon>
+              <div class="team--list--item--header--summary--item__title">
+                {{team.schools.length}}
+              </div>
+              <div class="team--list--item--header--summary--item__subtitle">
+                <ng-container [ngPlural]="team.schools.length">
+                  <ng-template ngPluralCase="=1">School</ng-template>
+                  <ng-template ngPluralCase="other">Schools</ng-template>
+                </ng-container>
+              </div>
+              <div class="team--list--item--header--summary--item__notation">
+              </div>
+            </div>
+            <div class="team--list--item--header--summary--item">
+              <fa-icon icon="users"></fa-icon>
+              <div class="team--list--item--header--summary--item__title">
+                {{team.participants.length}}
+              </div>
+              <div class="team--list--item--header--summary--item__subtitle">
+                <ng-container [ngPlural]="team.participants.length">
+                  <ng-template ngPluralCase="=1">Student</ng-template>
+                  <ng-template ngPluralCase="other">Students</ng-template>
+                </ng-container>
+              </div>
+              <div class="team--list--item--header--summary--item__notation">
+              </div>
+            </div>
+          </div>
+          <div class="team--list--item--header--actions">
+            <ng-container *ngIf="team.hasSources">
+              <div
+                ngbTooltip="Imported from TeleTeachers"
+                container="body"
+                class="source--exists"
+              >
+                TT
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!team.hasSources">
+              <a
+                [routerLink]="['/user/districts/', team.id]"
+                [queryParams]="{edit: true}"
+                ngbTooltip="Edit"
+                placement="bottom"
+                container="body"
+                class="color--action inverse"
+              >
+                <fa-icon icon="pen"></fa-icon>
+              </a>
+              <a
+                (click)="remove(team)"
+                ngbTooltip="Remove"
+                placement="bottom"
+                container="body"
+                class="color--action__red inverse"
+              >
+                <fa-icon icon="trash"></fa-icon>
+              </a>
+            </ng-container>
+          </div>
+        </div>
+        <div
+          [class.toggled]="isToggled(team)"
+          class="team--list--item--content"
+        >
+          <div class="team--list--item--content--actions">
+            <a
+              [routerLink]="['/user/districts/', team.id, 'schools', 'create']"
+              class="btn btn__standard btn--color__primary btn--radius__md ml-auto"
+            >
+              <fa-icon icon="school"></fa-icon>
+              Add School
+            </a>
+          </div>
+
+          <div
+            *ngFor="let school of team.schools"
+            class="team--list--item--content--item"
+          >
+            <a
+              [routerLink]="['/user/districts/', team.id, 'schools', school.id]"
+              [ngbTooltip]="school.name"
+              placement="bottom"
+              class="team--list--item--content--item__name force cut-long-text"
+            >
+              {{school.name}}
+            </a>
+            <div
+              [ngbTooltip]="school.streetAddress"
+              placement="bottom"
+              class="team--list--item--content--item__address cut-long-text"
+            >
+              {{school.streetAddress}}
+            </div>
+            <div
+              [ngbTooltip]="school.generalAddress"
+              placement="bottom"
+              class="team--list--item--content--item__address cut-long-text"
+            >
+              {{school.generalAddress}}
+            </div>
+            <div class="team--list--item--content--item--summary">
+              <fa-icon icon="users"></fa-icon>
+              <a class="force">
+                {{school.participants.length}}
+
+                <ng-container [ngPlural]="school.participants.length">
+                  <ng-template ngPluralCase="=1">student</ng-template>
+                  <ng-template ngPluralCase="other">students</ng-template>
+                </ng-container>
+              </a>
+            </div>
+            <div class="team--list--item--content--item--actions">
+              <ng-container *ngIf="school.hasSources">
+                <div
+                  ngbTooltip="Imported from TeleTeachers"
+                  container="body"
+                  class="source--exists"
+                >
+                  TT
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!school.hasSources">
+                <a
+                  [routerLink]="['/user/districts/', team.id, 'schools', school.id]"
+                  [queryParams]="{edit: true}"
+                  ngbTooltip="Edit"
+                  placement="bottom"
+                  container="body"
+                  class="color--action inverse"
+                >
+                  <fa-icon icon="pen"></fa-icon>
+                </a>
+                <a
+                  (click)="remove(team)"
+                  ngbTooltip="Remove"
+                  placement="bottom"
+                  container="body"
+                  class="color--action__red inverse"
+                >
+                  <fa-icon icon="trash"></fa-icon>
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-assistant-list>

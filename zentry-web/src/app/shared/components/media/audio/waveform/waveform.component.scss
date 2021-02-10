@@ -1,0 +1,10 @@
+canvas#waveform {
+  width: 300px;
+  height: 80px;
+}
+
+.waveform {
+  &__stroke {
+    color: #36DAA9;
+  }
+}

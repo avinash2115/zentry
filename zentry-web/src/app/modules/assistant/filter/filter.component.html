@@ -1,0 +1,71 @@
+<div
+  *ngIf="(filterService.state | async) === statesAvailable.open"
+  @filter
+  class="filter open backdrop-dark"
+  data-fullscreen-on-mobile
+  id="filter"
+>
+  <header class="filter-header">
+    <p class="filter-title fs-16 fw-500">Filter</p>
+    <button
+      (click)="close()"
+      class="close"
+      type="button"
+    >
+      <i class="ti-close"></i>
+    </button>
+  </header>
+
+  <perfect-scrollbar
+    #ps
+    id="filter-container"
+  >
+    <div
+      *ngIf="!isLoading"
+      class="filter-body sidebar-navigation b-0"
+    >
+      <ng-container *ngIf="filterKeys.length; else noFilters">
+        <ng-container *ngFor="let filter of filterKeys; let last = last">
+          <ng-container [ngSwitch]="filter.type">
+            <app-assistant-filter-controls-datepicker
+              *ngSwitchCase="filterTypes.datepicker"
+              [filterKey]="filter.key"
+            >
+            </app-assistant-filter-controls-datepicker>
+            <app-assistant-filter-controls-select
+              *ngSwitchCase="filterTypes.select"
+              [filterKey]="filter.key"
+            ></app-assistant-filter-controls-select>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-template #noFilters>
+        No available filters.
+      </ng-template>
+    </div>
+
+    <app-loader *ngIf="isLoading"></app-loader>
+  </perfect-scrollbar>
+
+  <div class="filter-footer">
+    <button
+      (click)="apply()"
+      class="btn btn-success"
+      type="button"
+    >Apply
+    </button>
+    <button
+      (click)="clear()"
+      class="btn btn-secondary"
+      type="button"
+    >Clear
+    </button>
+  </div>
+</div>
+
+<div
+  (click)="close()"
+  *ngIf="(filterService.state | async) === statesAvailable.open"
+  @backdrop
+  class="app-backdrop backdrop-filter"
+></div>

@@ -1,0 +1,101 @@
+version: '3.6'
+services:
+  elasticsearch:
+    image: registry.gitlab.trisk.us/supplies/docker/elasticsearch:latest
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data:cached
+    ports:
+      - "9200:9200"
+    depends_on:
+      - mongo
+    networks:
+      - api
+
+  mongo:
+    image: registry.gitlab.trisk.us/supplies/docker/mongo:4.2.8
+    volumes:
+      - ./data/mongo/db:/data/db:cached
+      - ./data/mongo/configdb:/data/configdb:cached
+    ports:
+      - "27017:27017"
+    depends_on:
+      - percona
+    networks:
+      - api
+
+  percona:
+    image: registry.gitlab.trisk.us/supplies/docker/percona:latest
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel
+      - MYSQL_PASSWORD=laravel
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - "./data/percona:/var/lib/mysql:cached"
+    ports:
+      - "3306:3306"
+    depends_on:
+      - redis
+    networks:
+      - api
+
+  redis:
+    image: registry.gitlab.trisk.us/supplies/docker/redis:latest
+    ports:
+      - "6379:6379"
+    depends_on:
+      - nginx
+    networks:
+      - api
+      - golden-gate
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - "../:/var/www:cached"
+      - /var/www/docker/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - php-fpm
+    networks:
+      - api
+      - golden-gate
+
+  node:
+    image: registry.gitlab.trisk.us/supplies/docker/node:latest
+    volumes:
+      - "../:/var/www:cached"
+      - /var/www/docker/
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "6001:6001"
+    depends_on:
+      - php-fpm
+    tty: true
+    networks:
+      - api
+
+  php-fpm:
+    build:
+      context: ./php-fpm
+    volumes:
+      - "../:/var/www:cached"
+      - /var/www/docker/
+    networks:
+      - api
+
+networks:
+  api:
+    driver: bridge
+  golden-gate:
+    external: true

@@ -1,0 +1,40 @@
+App\Components\Users\User\Profile\ProfileEntity:
+  type: entity
+  table: users_profiles
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    firstName:
+      type: string
+      column: first_name
+      nullable: false
+    lastName:
+      type: string
+      column: last_name
+      nullable: false
+    phoneCode:
+      type: string
+      column: phone_code
+      nullable: true
+    phoneNumber:
+      type: string
+      column: phone_number
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  oneToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      inversedBy: profile
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

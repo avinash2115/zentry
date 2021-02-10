@@ -1,0 +1,323 @@
+<ng-container *ngIf="!isLoading">
+  <div class="user--profile">
+    <div class="user--profile--card">
+      <div class="user--profile--card--main">
+        <div class="avatar-wrapper">
+          <img *ngIf="false; else simpleAvatar" [src]="" [alt]="entity.initials" class="avatar avatar__sl">
+          <ng-template #simpleAvatar>
+            <span class="avatar avatar__sl">{{entity.initials}}</span>
+          </ng-template>
+        </div>
+        <div class="user--profile--card--main--info">
+          <div class="user--profile--card--main--info__fullname cut-long-text">
+            {{entity.profile.fullname}}
+          </div>
+          <div class="user--profile--card--main--info__email cut-long-text">
+            {{entity.email}}
+          </div>
+        </div>
+      </div>
+      <div class="user--profile--card--menu">
+        <div
+          (click)="stepActivate(steps.general)"
+          [class.active]="stepIsActive(steps.general)"
+          class="user--profile--card--menu--item"
+        >
+          <fa-icon icon="id-card"></fa-icon>
+          General Information
+        </div>
+        <div
+          (click)="stepActivate(steps.security)"
+          [class.active]="stepIsActive(steps.security)"
+          class="user--profile--card--menu--item"
+        >
+          <fa-icon icon="lock"></fa-icon>
+          Security
+        </div>
+        <div
+          (click)="stepActivate(steps.integrations)"
+          [class.active]="stepIsActive(steps.integrations)"
+          class="user--profile--card--menu--item"
+        >
+          <fa-icon icon="puzzle-piece"></fa-icon>
+          TeleTeachers
+        </div>
+      </div>
+    </div>
+    <div class="user--profile--content">
+      <ng-container *ngIf="stepIsActive(steps.general)">
+        <div class="user--profile--content--main">
+          <div class="avatar-wrapper">
+            <img *ngIf="false; else simpleAvatar" [src]="" [alt]="entity.initials" class="avatar avatar__lg">
+            <ng-template #simpleAvatar>
+              <span class="avatar avatar__lg">{{entity.initials}}</span>
+            </ng-template>
+          </div>
+          <div class="user--profile--content--main--info">
+            <div class="user--profile--content--main--info__title cut-long-text">
+              {{entity.profile.fullname}}
+            </div>
+          </div>
+          <button
+            (click)="build()"
+            [disabled]="!!form"
+            type="button"
+            class="btn btn__standard btn--radius__md btn--color__primary user--profile--content--main__edit"
+          >
+            <fa-icon icon="pen"></fa-icon>
+            Edit Profile
+          </button>
+        </div>
+        <div class="user--profile--content--body">
+          <ng-container *ngIf="!form">
+            <div class="user--profile--content--body--left">
+              <div class="user--profile--content--body--item">
+                <div class="user--profile--content--body--item__title">First Name:</div>
+                <div class="user--profile--content--body--item__content">{{entity.profile.firstName}}</div>
+              </div>
+              <div class="user--profile--content--body--item">
+                <div class="user--profile--content--body--item__title">Last Name:</div>
+                <div class="user--profile--content--body--item__content">{{entity.profile.lastName}}</div>
+              </div>
+              <div class="user--profile--content--body--item">
+                <div class="user--profile--content--body--item__title">Email:</div>
+                <div class="user--profile--content--body--item__content">{{entity.email}}</div>
+              </div>
+              <div class="user--profile--content--body--item">
+                <div class="user--profile--content--body--item__title">Phone Number:</div>
+                <div class="user--profile--content--body--item__content">{{entity.profile.phone}}</div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="form">
+            <form
+              (submit)="detectChanges()"
+              [formGroup]="form"
+            >
+              <div class="user--profile--content--body--left">
+                <div class="user--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="first_name" class="required">First Name</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="first_name"
+                      placeholder="Enter First Name"
+                      id="first_name"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="user--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="last_name" class="required">Last Name</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="last_name"
+                      placeholder="Enter Last Name"
+                      id="last_name"
+                      name="last_name"
+                      type="text"
+                    >
+                  </div>
+                </div>
+                <div class="user--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="email" class="required">Email</label>
+                    <input
+                      appControlError
+                      class="form-control with-icon"
+                      formControlName="email"
+                      placeholder="example@domain.com"
+                      id="email"
+                      type="email"
+                    >
+                  </div>
+                </div>
+                <div class="user--profile--content--body--item">
+                  <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input
+                      appControlError
+                      class="form-control"
+                      formControlName="phone_number"
+                      id="phone_number"
+                      type="text"
+                    >
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </div>
+        <div
+          *ngIf="!!form"
+          class="user--profile--content--actions"
+        >
+          <button
+            (click)="cancel()"
+            class="btn btn__standard btn--radius__md btn-outline-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="save()"
+            class="btn btn__standard btn--radius__md btn--color__contextual left"
+          >
+            <fa-icon icon="check"></fa-icon>
+            Update Profile
+          </button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="stepIsActive(steps.security)">
+        <div class="user--profile--content--main">
+          <div class="user--profile--content--main--info">
+            <div class="user--profile--content--main--info__title">
+              Security
+            </div>
+            <div class="user--profile--content--main--info__subtitle">
+              Update your current password
+            </div>
+          </div>
+        </div>
+        <div class="user--profile--content--body">
+          <form
+            *ngIf="!!formPassword"
+            (submit)="detectChanges()"
+            [formGroup]="formPassword"
+          >
+            <div class="user--profile--content--body--left">
+              <div class="user--profile--content--body--item">
+                <div class="form-group">
+                  <label for="password" class="required">New Password</label>
+                  <div class="input-group-password">
+                    <input
+                      appControlError
+                      class="form-control with-icon"
+                      formControlName="password"
+                      id="password"
+                      [type]="isPasswordVisible ? 'text' : 'password'"
+                    >
+                    <fa-icon *ngIf="!isPasswordVisible" (click)="togglePasswordVisibility()" icon="eye"
+                             [classes]="['show-password']"></fa-icon>
+                    <fa-icon *ngIf="isPasswordVisible" (click)="togglePasswordVisibility()" icon="eye-slash"
+                             [classes]="['show-password', 'show-password--active']"></fa-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="user--profile--content--body--item">
+                <div class="form-group">
+                  <label for="passwordRepeat" class="required">Repeat New Password</label>
+                  <div class="input-group-password">
+                    <input
+                      appControlError
+                      class="form-control with-icon"
+                      formControlName="passwordRepeat"
+                      id="passwordRepeat"
+                      [type]="isPasswordRepeatVisible ? 'text' : 'password'"
+                    >
+                    <fa-icon *ngIf="!isPasswordRepeatVisible" (click)="togglePasswordRepeatVisibility()" icon="eye"
+                             [classes]="['show-password']"></fa-icon>
+                    <fa-icon *ngIf="isPasswordRepeatVisible" (click)="togglePasswordRepeatVisibility()" icon="eye-slash"
+                             [classes]="['show-password', 'show-password--active']"></fa-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="user--profile--content--body--item d-flex">
+                <button
+                  (click)="savePassword()"
+                  class="btn btn__standard btn--radius__md btn--color__primary margin--right--15"
+                >
+                  Update Password
+                </button>
+                <button
+                  (click)="cancel()"
+                  class="btn btn__standard btn--radius__md btn-outline-secondary"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="stepIsActive(steps.integrations)">
+        <div class="user--profile--content--main">
+          <div class="user--profile--content--main--info">
+            <div class="user--profile--content--main--info__title">
+              TeleTeachers integration
+            </div>
+            <div class="user--profile--content--main--info__subtitle">
+              {{!!formIntegration && formIntegration.get('resource').value.active ? 'Your integration is established, you can change or update credentials below if it is needed': 'Fill the information below to setup integration'}}
+            </div>
+          </div>
+          <div
+            *ngIf="!!formIntegration"
+            [class.text-danger]="formIntegration.get('resource').value.is_new"
+            [class.text-success]="!formIntegration.get('resource').value.is_new && formIntegration.get('resource').value.active"
+            class="user--profile--content--main__edit"
+          >
+            <fa-icon icon="power-off"></fa-icon>
+            {{formIntegration.get('resource').value.active ? 'Connected' : 'Not Connected'}}
+          </div>
+        </div>
+        <div class="user--profile--content--body">
+          <form
+            *ngIf="!!formIntegration"
+            (submit)="detectChanges()"
+            [formGroup]="formIntegration"
+          >
+            <div class="user--profile--content--body--left">
+              <div class="user--profile--content--body--item">
+                <div class="form-group">
+                  <label for="integration_email" class="required">Email</label>
+                  <input
+                    appControlError
+                    class="form-control with-icon"
+                    formControlName="email"
+                    placeholder="example@domain.com"
+                    id="integration_email"
+                    type="email"
+                  >
+                </div>
+              </div>
+              <div class="user--profile--content--body--item">
+                <div class="form-group">
+                  <label for="integration_password" class="required">Password</label>
+                  <div class="input-group-password">
+                    <input
+                      appControlError
+                      class="form-control with-icon"
+                      formControlName="password"
+                      id="integration_password"
+                      type="password"
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="user--profile--content--body--item d-flex">
+                <button
+                  (click)="saveIntegration()"
+                  class="btn btn__standard btn--radius__md btn--color__primary margin--right--15"
+                >
+                  {{formIntegration.get('resource').value.active ? 'Change Credentials' : 'Setup Integration'}}
+                </button>
+                <button
+                  (click)="cancel()"
+                  class="btn btn__standard btn--radius__md btn-outline-secondary"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

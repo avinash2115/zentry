@@ -1,0 +1,16 @@
+<div
+  *ngIf="!isLoading"
+  class="authentication-social"
+>
+  <div
+    (click)="authorize(driver)"
+    *ngFor="let driver of drivers"
+    class="authentication-social--provider btn btn__standard btn--radius__md"
+  >
+    <fa-icon
+      [classes]="['color']"
+      [icon]="['fab', icon(driver)]"
+    ></fa-icon>
+    {{driver.title}}
+  </div>
+</div>

@@ -1,0 +1,8 @@
+App\Components\CRM\Source\ProviderSourceEntity:
+  type: entity
+  manyToOne:
+    entity:
+      targetEntity: App\Components\Providers\ProviderService\ProviderEntity
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

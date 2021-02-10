@@ -1,0 +1,316 @@
+<ng-container *ngIf="!isLoading">
+  <div class="recorded">
+    <div class="recorded--header">
+      <div class="recorded--header--top">
+        <div class="recorded--header--top__icon zoom">
+        </div>
+        <div class="recorded--header--top--info">
+          <a class="recorded--header--top--info--title">
+            <ng-container *ngIf="!isEditMode('name')">
+              <div
+                *ngIf="!entity.readonly"
+                (click)="onEditMode('name')"
+                ngbTooltip="Edit session name"
+                placement="auto"
+                class="recorded--header--top--info--title__icon"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+              </div>
+              <div
+                [ngbTooltip]="entity.name"
+                placement="right"
+                container="body"
+                class="recorded--header--top--info--title__text cut-long-text"
+              >
+                {{entity.name}}
+              </div>
+            </ng-container>
+            <div
+              *ngIf="isEditMode('name')"
+              class="recorded--header--top--info--title__text"
+            >
+              <div class="input-group confirmation">
+                <input
+                  #name
+                  (blur)="save('name', $event)"
+                  [value]="entity.name"
+                  [(ngModel)]="entity.name"
+                  type="text"
+                  class="form-control"
+                >
+                <div class="input-group-append">
+                  <button
+                    (click)="save('name')"
+                    class="btn"
+                  >
+                    <fa-icon icon="check"></fa-icon>
+                  </button>
+                  <button
+                    (click)="cancel('name')"
+                    id="cancel"
+                    class="btn"
+                  >
+                    <fa-icon icon="times"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </a>
+          <div class="recorded--header--top--info__time">
+            <strong>{{entity.startedAt | date: 'MMMM d, y'}}</strong> {{entity.startedAt | date: 'h:mm a'}}
+            - {{entity.endedAt | date: 'h:mm a'}}
+          </div>
+        </div>
+        <div
+          *ngIf="entity.isEntirelyRecorded && !entity.readonly"
+          class="recorded--header--top--assets"
+        >
+          <a
+            (click)="share()"
+            [class.outline__green]="entity.isShared"
+            [ngbTooltip]="entity.isShared ? 'Edit Access' : 'Share Session'"
+            placement="auto"
+            class="recorded--header--top--assets__share"
+          >
+            <fa-icon icon="external-link-alt"></fa-icon>
+          </a>
+          <a
+            (click)="download()"
+            ngbTooltip="Download session"
+            placement="auto"
+            class="recorded--header--top--assets__download"
+          >
+            <fa-icon icon="file-download"></fa-icon>
+          </a>
+        </div>
+      </div>
+      <div class="recorded--header--bottom">
+        <div class="recorded--header--bottom--meta">
+          <div class="recorded--header--bottom--meta--location">
+            <div class="recorded--header--bottom--meta--location__icon">
+              <fa-icon icon="map-marker-alt" [classes]="['fa--default']"></fa-icon>
+            </div>
+            <div
+              class="recorded--header--bottom--meta--location__place"
+            >
+              {{entity.geo && entity.geo.place ? entity.geo.place : 'Location is not defined'}}
+            </div>
+            <a
+              (click)="locationModalOpen(locationModal)"
+              *ngIf="!entity.readonly"
+              class="recorded--header--bottom--meta--location__action force"
+            >
+              {{entity.geo && entity.geo.place ? 'Change location' : 'Define location'}}
+            </a>
+          </div>
+          <div class="recorded--header--bottom--meta--tags">
+            <div class="recorded--header--bottom--meta--tags__icon">
+              <fa-icon icon="tag" [classes]="['fa--default']"></fa-icon>
+            </div>
+            <div class="recorded--header--bottom--meta--tags--list">
+              <div
+                *ngIf="!entity.tags.length && !isEditMode('tags')"
+                class="recorded--header--bottom--meta--tags--list__empty"
+              >
+                Tags are not defined
+              </div>
+              <div *ngIf="entity.tags.length || isEditMode('tags')" class="input-group confirmation">
+                <tag-input
+                  #tags
+                  (onAdd)="detectChanges()"
+                  (onRemove)="detectChanges()"
+                  (onFocus)="detectChanges()"
+                  (onValidationError)="detectChanges()"
+                  (onSelect)="detectChanges()"
+                  (onPaste)="detectChanges()"
+                  (onBlur)="save('tags')"
+                  (ngModelChange)="detectChanges()"
+                  [addOnBlur]="true"
+                  [(ngModel)]="entity.tags"
+                  [removable]="isEditMode('tags')"
+                  [identifyBy]="'tag'"
+                  [displayBy]="'tag'"
+                  [class.readonly]="!isEditMode('tags')"
+                  [animationDuration]="{enter: '0ms', leave: '0ms'}"
+                  theme='bootstrap'
+                >
+                </tag-input>
+                <div
+                  *ngIf="isEditMode('tags')"
+                  class="input-group-append"
+                >
+                  <button
+                    (click)="save('tags')"
+                    class="btn"
+                  >
+                    <fa-icon icon="check"></fa-icon>
+                  </button>
+                  <button
+                    (click)="cancel('tags')"
+                    class="btn"
+                  >
+                    <fa-icon icon="times"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <a
+              (click)="onEditMode('tags')"
+              *ngIf="!entity.readonly && !isEditMode('tags')"
+              class="recorded--header--bottom--meta--tags__action force"
+            >
+              {{entity.tags.length ? 'Edit tags' : 'Define tags'}}
+            </a>
+          </div>
+        </div>
+        <div class="recorded--header--bottom--participants">
+          <app-session-recorded-shared-participant
+            [recorded]="entity"
+            [readonly]="entity.readonly"
+          ></app-session-recorded-shared-participant>
+        </div>
+      </div>
+    </div>
+    <div class="recorded--body">
+      <div class="recorded--body--visor">
+        <ng-container
+          *ngIf="(entity.isEntirelyRecorded && entity.streamByType(streamTypes.combined).isConverted) || (!entity.isEntirelyRecorded && videoURL); else convertProgressTemplate">
+          <div class="recorded--body--visor__player">
+            <video
+              *ngIf="videoURL"
+              [src]="videoURL"
+              preload="auto"
+              controls
+              controlsList="nodownload"
+              #videoPlayer
+            ></video>
+          </div>
+        </ng-container>
+        <ng-template #convertProgressTemplate>
+          <ng-container *ngIf="entity.isEntirelyRecorded">
+            <div class="recorded--body--visor--convert">
+              <div class="recorded--body--visor--convert__image">
+              </div>
+              <div class="recorded--body--visor--convert__title heading">
+                Please wait while the session is being converted ...
+              </div>
+              <div class="recorded--body--visor--convert__subtitle sub-heading sub-heading--muted">
+                <p>We are processing your video and audio to get the best quality</p>
+              </div>
+              <div class="recorded--body--visor--convert--progress">
+                <div class="recorded--body--visor--convert--progress__title">
+                  CONVERTING ...
+                </div>
+                <div class="recorded--body--visor--convert--progress__bar">
+                  <div class="progress">
+                    <div
+                      [style.width.%]="entity.streamByType(streamTypes.combined).convertProgress"
+                      class="progress-bar"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!entity.isEntirelyRecorded">
+            <app-loader></app-loader>
+          </ng-container>
+        </ng-template>
+
+        <div class="recorded--body--visor--transcript">
+          <app-session-recorded-view-transcript></app-session-recorded-view-transcript>
+        </div>
+      </div>
+      <div class="recorded--body--clips">
+        <app-session-recorded-view-clip
+          (sourceSeeked)="onClipSeeked($event)"
+          (sourceReplaced)="onClipReplaced($event)"
+          (shared)="onClipShared($event)"
+        ></app-session-recorded-view-clip>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>
+
+<ng-template #locationModal let-modal>
+  <div (click)="modal.dismiss('Cross click')" class="close">
+    <fa-icon icon="times"></fa-icon>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Session location</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="searchLocation">
+        <fa-icon icon="map-marker-alt" [classes]="['fa--default']"></fa-icon>
+        Session location
+      </label>
+      <input
+        (keydown.enter)="$event.preventDefault()"
+        [value]="geo && geo.place"
+        type="text"
+        id="searchLocation"
+        class="form-control"
+      >
+    </div>
+    <div class="form-group">
+      <label>Or select your own location on the map</label>
+      <agm-map
+        *ngIf="geo"
+        [latitude]="geo.lat"
+        [longitude]="geo.lng"
+        [zoom]="14"
+        [streetViewControl]="false"
+      >
+        <agm-marker
+          [latitude]="geo.lat"
+          [longitude]="geo.lng"
+          [markerDraggable]="true"
+          (dragEnd)="locationMarkerDragEnd($event)"
+        ></agm-marker>
+      </agm-map>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="modal.close(true)" class="btn btn--radius__md btn--color__blue">Save Location</button>
+    <button (click)="modal.close(false)" class="btn btn--radius__md btn-outline-dark">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #shareModal let-modal>
+  <input type="text" style="display:none"/>
+  <div (click)="modal.dismiss('Cross click')" class="close">
+    <fa-icon icon="times"></fa-icon>
+  </div>
+  <div class="modal-icon color color__primary">
+    <fa-icon icon="external-link-alt"></fa-icon>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Share your Session or Clip</h4>
+    <div class="modal-subtitle">With this public link, anyone can view shared session or clip, but can’t edit any
+      information.
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <input (click)="shareCopy()" [value]="sharedURL" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="modal-buttons">
+      <button (click)="modal.close(10)" class="btn btn__standard btn--radius__md btn--color__green">
+        Copy Link
+      </button>
+      <button (click)="modal.close(20)" class="btn btn__standard  btn--radius__md btn--color__red">
+        Stop Sharing
+      </button>
+      <button (click)="modal.close(30)" class="btn btn__standard  btn--radius__md btn-outline-dark">
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>

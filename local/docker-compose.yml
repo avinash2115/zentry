@@ -1,0 +1,112 @@
+version: "2.1"
+services:
+  api:
+    image: node:12-alpine
+    ports:
+      - "5050:5050"
+      - "15050:15050"
+    environment:
+      - DATABASE_HOST=db
+    volumes:
+      - ../api:/usr/src/app
+    working_dir: /usr/src/app
+    command: yarn run docker:run
+    depends_on:
+      db:
+        condition: service_healthy
+  portal:
+    image: node:12-alpine
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      - DATABASE_HOST=db
+    command: yarn start
+    volumes:
+      - ../portal:/usr/src/app
+    working_dir: /usr/src/app
+    stdin_open: true
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: teleteachers
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123
+    volumes:
+      - ./database-service:/docker-entrypoint-initdb.d
+    ports:
+      - "3309:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  elasticsearch:
+    image: elasticsearch:6.6.0
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data:cached
+    ports:
+      - "9200:9200"
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo/db:/data/db:cached
+      - ./data/mongo/configdb:/data/configdb:cached
+    depends_on:
+      - db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  zentry-web:
+    image: node:12-alpine
+    ports:
+      - "4200:4200"
+    depends_on:
+      - php-fpm
+    command: npm run start
+    volumes:
+      - ../zentry-web:/usr/src/app
+    working_dir: /usr/src/app
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+    ports:
+      - "9000:9000"
+    volumes:
+      - "../zentry-api:/var/www:cached"
+      - /var/www/docker/
+  nginx:
+    build:
+      context: ./docker/nginx
+    volumes:
+      - "../zentry-api:/var/www:cached"
+      - /var/www/docker/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - php-fpm
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8082:8080
+    depends_on:
+      - api

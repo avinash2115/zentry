@@ -1,0 +1,93 @@
+:host {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.pagination {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  z-index: 1;
+
+  &__up-btn {
+    position: absolute;
+    right: 20px;
+    z-index: 10;
+
+    button {
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 18px;
+      text-align: center;
+      box-shadow: 0 4px 9px 0 rgba(0, 115, 255, 0.52);
+      padding: 5px 13px;
+      outline: none;
+      cursor: pointer;
+
+      &:focus,
+      &:hover {
+        opacity: 1;
+      }
+
+      i {
+        color: #FFFFFF;
+        font-size: 13px;
+        line-height: 13px;
+        text-align: center;
+      }
+    }
+  }
+
+  perfect-scrollbar {
+    height: 100%;
+
+    .ps-content {
+      position: relative;
+    }
+  }
+
+  app-loader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 9;
+  }
+
+  app-loader.spinner-top {
+    top: 0;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 35%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  app-loader.spinner-bottom {
+    bottom: 0;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 35%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  .reached-text {
+    color: #4D5259;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    text-align: center;
+    padding: 30px 0;
+
+    &--top {
+      top: 0;
+      background: rgb(255, 255, 255);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 1) 35%, rgba(255, 255, 255, 0) 100%);
+    }
+
+    &--bottom {
+      bottom: 0;
+      background: rgb(255, 255, 255);
+      background: linear-gradient(0deg, rgba(255, 255, 255, 1) 35%, rgba(255, 255, 255, 0) 100%);
+    }
+  }
+}

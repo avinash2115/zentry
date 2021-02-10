@@ -1,0 +1,49 @@
+App\Components\Sessions\Session\Poi\PoiEntity:
+  type: entity
+  table: sessions_pois
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    type:
+      type: string
+      nullable: false
+    name:
+      type: string
+      nullable: true
+    tags:
+      column: tags
+      type: tags
+    thumbnail:
+      type: string
+      nullable: true
+    stream:
+      type: string
+      nullable: true
+    startedAt:
+      type: datetime
+      nullable: false
+      column: started_at
+    endedAt:
+      type: datetime
+      nullable: false
+      column: ended_at
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+  manyToOne:
+    session:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: session_id
+        referencedColumnName: id
+  oneToMany:
+    participants:
+      targetEntity: App\Components\Sessions\Session\Poi\Participant\ParticipantEntity
+      mappedBy: poi
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true

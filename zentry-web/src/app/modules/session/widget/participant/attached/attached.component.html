@@ -1,0 +1,19 @@
+<div
+  *ngIf="participant"
+  class="participant--attached"
+>
+  <div
+    class="avatar-wrapper"
+  >
+    <img *ngIf="false; else simpleAvatar" [src]="" [alt]="participant.initials" class="avatar avatar__sl">
+    <ng-template #simpleAvatar>
+      <span class="avatar avatar__sl">{{participant.initials}}</span>
+    </ng-template>
+  </div>
+  <div
+    (click)="$event.stopPropagation(); remove()"
+    class="participant--attached--remove"
+  >
+    <fa-icon icon="times"></fa-icon>
+  </div>
+</div>

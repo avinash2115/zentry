@@ -1,0 +1,28 @@
+App\Components\Sessions\Session\Transcription\TranscriptionEntity:
+  type: document
+  collection: sessions_transcriptions
+  fields:
+    identity:
+      type: identity
+      id: true
+      strategy: NONE
+    userIdentity:
+      type: identity
+    sessionIdentity:
+      type: identity
+    poiIdentity:
+      type: identity
+      nullable: true
+    word:
+      type: string
+    startedAt:
+      type: float
+    endedAt:
+      type: float
+    speakerTag:
+      type: int
+      default: 0
+    createdAt:
+      type: date
+      nullable: false
+

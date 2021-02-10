@@ -1,0 +1,95 @@
+image: registry.gitlab.trisk.us/supplies/docker/node:latest
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - export CI_PROJECT_NAME="web"
+  - export CI_PROJECT_OWNER="zentry"
+  - export CI_PROJECT_NAMESPACE="zentry_web"
+  - export CI_PROJECT_BRANCH=$(echo "${CI_COMMIT_REF_NAME}" | cut -d "/" -f 1  )
+  - export CI_PROJECT_TICKET=$(echo "${CI_COMMIT_REF_NAME}" | cut -d "-" -f 2  )
+  - export CI_PROJECT_COMMIT="${CI_COMMIT_SHA}"
+  - export CI_BUILD_EXTENSION=".tar"
+  - export CI_BUILD_NAME="${CI_PROJECT_NAMESPACE}_${CI_PROJECT_BRANCH}_${CI_PROJECT_COMMIT}"
+  - export CI_BUILD_FULLNAME="${CI_BUILD_NAME}${CI_BUILD_EXTENSION}"
+
+stages:
+  - make
+  - build
+  - housekeeping
+  - deploy
+
+make:build:
+  stage: make
+  script:
+    - npm install
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: push
+    untracked: true
+
+build:angular:
+  stage: build
+  script:
+    - cp src/index.example.js src/index.js
+    - node --max_old_space_size=4096 /usr/local/bin/ng build --prod --sourceMap=false --build-optimizer=true --vendor-chunk=true --configuration=production
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull-push
+    untracked: true
+
+housekeeping:prepare:
+  stage: housekeeping
+  script:
+    - touch ${CI_BUILD_FULLNAME}
+    - tar --exclude=${CI_BUILD_FULLNAME} -zcf ${CI_BUILD_FULLNAME} ./dist
+  tags:
+    - workhorse
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull
+    untracked: true
+  artifacts:
+    expire_in: 1 week
+    name: "$CI_BUILD_FULLNAME"
+    paths:
+      - ./*.tar
+
+deploy:stage:
+  stage: deploy
+  when: manual
+  script:
+    - rm -rf /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - mkdir -p /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - tar zxf ${CI_BUILD_FULLNAME} -C /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - cp -r /opt/knox/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/index.js /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/dist/
+  environment:
+    name: STAGE-WEB
+  tags:
+    - zentry-stage
+  cache: {}
+  dependencies:
+    - housekeeping:prepare
+
+deploy:productiom:
+  stage: deploy
+  when: manual
+  script:
+    - rm -rf /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - mkdir -p /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - tar zxf ${CI_BUILD_FULLNAME} -C /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}
+    - cp -r /opt/knox/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/index.js /opt/playground/${CI_PROJECT_OWNER}/${CI_PROJECT_NAME}/dist/
+  environment:
+    name: PRODUCTION-WEB
+  only:
+    - master
+  tags:
+    - zentry-web-production
+  cache: {}
+  dependencies:
+    - housekeeping:prepare

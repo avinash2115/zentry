@@ -1,0 +1,81 @@
+@import "../../../../assets/styles/custom/variables";
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100%;
+
+  &--logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .logo {
+      margin-right: 0 !important;
+      margin-bottom: 5px;
+    }
+  }
+
+  .content {
+    background: #FFFFFF;
+    padding: 0 20px;
+    max-width: 500px;
+    width: 100%;
+    flex-grow: 0;
+
+    &__native {
+      min-width: $native-min-width;
+      max-width: $native-max-width;
+      margin-top: 30px;
+      padding: 20px;
+    }
+
+    .sub-heading {
+      margin-top: 15px;
+    }
+
+    .divider {
+      margin-top: 25px;
+    }
+
+    form {
+      input {
+        height: auto;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+
+      button[type=submit], button[type=button] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 52px;
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: 800;
+
+        fa-icon {
+          margin-left: 20px;
+        }
+      }
+    }
+
+    .navigation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      a {
+        margin-left: 10px;
+        margin-top: 0;
+      }
+    }
+
+  }
+}

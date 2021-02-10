@@ -1,0 +1,81 @@
+<div class="service--wizard">
+  <div
+    *ngIf="!isLoading"
+    class="service--wizard--statusbar"
+  >
+    <div
+      [class.active]="stepIsActive(steps.general)"
+      [class.completed]="stepIsValid(steps.general)"
+      class="service--wizard--statusbar--item"
+    >
+      <div class="service--wizard--statusbar--item__body">
+        <fa-icon icon="address-card"></fa-icon>
+      </div>
+      <div class="service--wizard--statusbar--item__title">
+        General Information
+      </div>
+    </div>
+  </div>
+  <div class="service--wizard--content">
+    <ng-container *ngIf="!isLoading">
+      <form
+        (submit)="detectChanges()"
+        [formGroup]="form"
+      >
+        <div
+          [class.d-none]="!stepIsActive(steps.general)"
+          class="service--wizard--content--wrapper"
+        >
+          <div class="form-group">
+            <label for="name" class="required">Name</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="name"
+              placeholder="Enter provider name"
+              id="name"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="code" class="required">Code</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="code"
+              placeholder="Enter provider code"
+              id="code"
+              type="text"
+            >
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <app-loader *ngIf="isLoading"></app-loader>
+  </div>
+  <div
+    *ngIf="!isLoading"
+    class="service--wizard--navigation"
+  >
+    <ng-container *ngIf="stepIsActive(steps.general)">
+
+      <ng-container *ngIf="entity.hasSources">
+        <div class="source">
+          <span>Imported from TeleTeachers</span>
+          <div class="source--exists">
+            TT
+          </div>
+        </div>
+      </ng-container>
+
+      <button
+        *ngIf="!entity.hasSources"
+        (click)="submit()"
+        class="btn btn__standard btn--radius__md btn--color__contextual left"
+      >
+        <fa-icon icon="check"></fa-icon>
+        Update Providers
+      </button>
+    </ng-container>
+  </div>
+</div>

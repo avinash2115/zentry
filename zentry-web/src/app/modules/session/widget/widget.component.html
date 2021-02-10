@@ -1,0 +1,180 @@
+<div class="widget">
+  <div class="widget--wrapper">
+    <ng-container *ngIf="!isLoading">
+      <div class="widget--top-bar">
+        <div *ngIf="authUser" class="avatar-wrapper">
+          <img *ngIf="false; else simpleAvatar" [src]="" [alt]="authUser.initials" class="avatar__sm">
+          <ng-template #simpleAvatar>
+            <span class="avatar avatar__sm">{{authUser.initials}}</span>
+          </ng-template>
+        </div>
+        <div class="widget--top-bar--greetings">
+          <div class="widget--top-bar--greetings__title cut-long-text">
+            Hi, {{authUser.profile.fullname}}
+          </div>
+          <div class="widget--top-bar--greetings__date">
+            <app-date-today></app-date-today>
+          </div>
+        </div>
+        <div *ngIf="service.isStarted && sessionQRCode" class="widget--top-bar--qr-hot">
+          <img [src]='sessionQRCode'
+               [alt]="'Scan this code in ' + applicationName + ' Mobile to quickly use your device in this session'">
+        </div>
+      </div>
+      <div class="widget--sub-bar">
+        <app-session-widget-participant *ngIf="!service.isFinished"></app-session-widget-participant>
+        <app-session-widget-upload></app-session-widget-upload>
+      </div>
+      <div perfectScrollbar class="perfect-scrollbar">
+        <ng-container *ngIf="service.isStarted">
+          <div class="widget--body">
+            <div class="widget--body--session--name cut-long-text">
+              <ng-container *ngIf="!isEditMode()">
+                <div
+                  (click)="onEditMode()"
+                  ngbTooltip="Edit session name"
+                  placement="auto"
+                  container="body"
+                  class="widget--body--session--name__icon"
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                </div>
+                <div
+                  [ngbTooltip]="session.name"
+                  placement="auto"
+                  container="body"
+                  class="widget--body--session--name__text cut-long-text"
+                >
+                  {{session.name}}
+                </div>
+              </ng-container>
+              <div
+                *ngIf="isEditMode()"
+                class="widget--body--session--name"
+              >
+                <div class="input-group confirmation">
+                  <input
+                    #name
+                    (blur)="save($event)"
+                    (ngModelChange)="session.name = $event"
+                    [value]="session.name"
+                    [ngModel]="session.name"
+                    type="text"
+                    class="form-control"
+                  >
+                  <div class="input-group-append">
+                    <button (click)="save()" class="btn">
+                      <fa-icon icon="check"></fa-icon>
+                    </button>
+                    <button (click)="cancel()" class="btn" id="cancel">
+                      <fa-icon icon="times"></fa-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <app-session-widget-trackpad (activatedAt)="trackpadActivated($event)"></app-session-widget-trackpad>
+          </div>
+          <div class="widget--waveform">
+            <app-media-audio-waveform
+              [stream]="stream"
+              [highlight]="waveformHighlight"
+              [highlights]="session.poisAsHighlights"
+            ></app-media-audio-waveform>
+          </div>
+          <div class="widget--controls">
+            <button
+              (click)="mediaService.toggleAudio(); detectChanges()"
+              [class.widget--controls__inactive]="!mediaService.isAudioActive"
+              [ngbTooltip]="mediaService.isAudioActive ? null : 'Audio will be automatically enabled if you\'ll make a clip'"
+              placement="right"
+              class="btn btn--radius__sm btn-outline-dark"
+            >
+              <fa-icon [icon]="mediaService.isAudioActive ? 'microphone' : 'microphone-slash'"></fa-icon>
+              {{mediaService.isAudioActive ? 'Mute' : 'Unmute'}} Audio
+            </button>
+            <button
+              (click)="mediaService.toggleDesktop(); detectChanges()"
+              [class.widget--controls__inactive]="!mediaService.isDesktopActive"
+              class="btn btn--radius__sm btn-outline-dark"
+            >
+              <fa-icon [icon]="mediaService.isDesktopActive ? 'video' : 'video-slash'"></fa-icon>
+              {{mediaService.isDesktopActive ? 'Stop' : 'Start'}} Capturing
+            </button>
+          </div>
+          <div class="widget--clips">
+            <app-session-widget-clip
+              (editing)="toggleFooter(!$event)"
+            ></app-session-widget-clip>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="service.isFinished">
+          <div class="widget--complete">
+            <div class="widget--complete__image-success"></div>
+            <div class="widget--complete__title heading">
+              This Session has ended
+            </div>
+            <div class="widget--complete__subtitle sub-heading sub-heading--muted">
+              <p>Recorded desktop video, audio and clips are being uploaded to your Echoist account. You may start recording a new session from the Dashboard</p>
+            </div>
+            <div class="widget--complete--controls">
+              <a
+                (click)="finish()"
+                class="widget--complete--controls__open btn btn__wide btn--radius__md btn--color__blue"
+              >Dashboard</a>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!service.isStarted && !service.isFinished">
+          <div class="widget--launcher">
+            <app-media-desktop-picker (isSelecting)="togglePreparing($event)"></app-media-desktop-picker>
+            <ng-container *ngIf="!isPreparing">
+              <app-session-widget-calendar
+                (started)="startDirect($event)"
+              ></app-session-widget-calendar>
+              <button
+                (click)="start()"
+                class="widget--launcher__launch btn btn__standard btn--radius__md btn--color__gradient"
+              >
+                Quick Start
+              </button>
+              <a
+                (click)="external()"
+                class="widget--launcher__open-recordings force"
+              >Go to My Echoist Account</a>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <div
+        *ngIf="service.isStarted && isFooterVisible"
+        class="widget--footer"
+      >
+        <button
+          (click)="stop()"
+          [disabled]="!canFinish"
+          class="btn btn-outline-primary btn__wide"
+        >
+          End Session
+        </button>
+      </div>
+      <div
+        *ngIf="!service.isStarted"
+        class="widget--footer"
+      >
+        <button
+          (click)="logout()"
+          [disabled]="service.isFinished || isPreparing"
+          class="btn btn-outline-primary btn__wide"
+        >
+          Change Account
+        </button>
+      </div>
+    </ng-container>
+    <div *ngIf="isLoading" class="widget--wrapper__loader">
+      <app-loader></app-loader>
+    </div>
+  </div>
+</div>
+
+<app-loader *ngIf="loadingFullScreen" [fullscreen]="true"></app-loader>

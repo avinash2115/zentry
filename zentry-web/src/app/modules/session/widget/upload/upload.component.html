@@ -1,0 +1,79 @@
+<div
+  *ngIf="queueList.length" [class.expand]="listToggled"
+  class="upload-queue"
+>
+  <div class="upload-queue--list">
+    <div
+      *ngFor="let item of queueList"
+      class="upload-queue--list--item"
+    >
+      <div class="upload-queue--list--item__name cut-long-text">
+        {{item.name}}
+      </div>
+      <ng-container *ngIf="(isPaused(item) && !isPausing(item)) || isResuming(item)">
+        <div
+          *ngIf="!isResuming(item)"
+          class="upload-queue--list--item__action"
+        >
+          Paused
+        </div>
+        <div
+          *ngIf="isResuming(item)"
+          class="upload-queue--list--item__action"
+        >
+          Resuming
+        </div>
+        <div
+          (click)="resume(item)"
+          [class.not-allowed]="locked"
+          class="upload-queue--list--item__button color--action__green"
+        >
+          <fa-icon icon="play-circle"></fa-icon>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="(!isPaused(item) && !isResuming(item)) || isPausing(item)">
+        <div
+          *ngIf="!isRecording(item) && isCurrent(item) && !isPausing(item)"
+          class="upload-queue--list--item--progress"
+        >
+          <div class="progress">
+            <div class="progress-bar" [style.width.%]="currentProgress"></div>
+          </div>
+        </div>
+        <div
+          *ngIf="isRecording(item) || !isCurrent(item) || isPausing(item)"
+          class="upload-queue--list--item__action"
+        >
+          <ng-container *ngIf="isRecording(item)">
+            {{isPausing(item) ? 'Pausing' : 'Recording'}}
+          </ng-container>
+          <ng-container *ngIf="!isRecording(item)">
+            {{!isCurrent(item) ? 'Pending' : 'Pausing'}}
+          </ng-container>
+        </div>
+        <div
+          (click)="pause(item)"
+          *ngIf="isCurrent(item)"
+          [class.not-allowed]="locked"
+          class="upload-queue--list--item__button"
+        >
+          <fa-icon icon="pause-circle"></fa-icon>
+        </div>
+        <div
+          (click)="resume(item)"
+          *ngIf="!isCurrent(item)"
+          [class.not-allowed]="locked"
+          class="upload-queue--list--item__button color--action__green"
+        >
+          <fa-icon icon="play-circle"></fa-icon>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div
+    (click)="queueToggle()"
+    class="upload-queue--arrow"
+  >
+    <fa-icon [icon]="listToggled ? 'chevron-up' : 'chevron-down'"></fa-icon>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="list-states">
+  <ng-container [ngSwitch]="activeState">
+    <ng-container *ngSwitchCase="states.blank">
+      <div class="list-states__icon">
+        <i class="trisk-icon-list-blank"></i>
+      </div>
+      <div class="list-states__text">
+        There are no items on the list.
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="states.blankBySearch">
+      <div class="list-states__icon">
+        <i class="trisk-icon-list-blank-search"></i>
+      </div>
+      <div class="list-states__text">
+        Sorry, there are no results matching your request. <br>
+        <span>Please change or <button
+          (click)="reset()"
+          type="button"
+        >reset search</button></span>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="states.blankByFilters">
+      <div class="list-states__icon">
+        <i class="trisk-icon-list-blank-filter"></i>
+      </div>
+      <div class="list-states__text">
+        Sorry, there are no results matching your request. <br>
+        <span>Please adjust or <button
+          (click)="reset()"
+          type="button"
+        >reset filters</button></span>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="states.blankByFiltersSearch">
+      <div class="list-states__icon">
+        <i class="trisk-icon-list-blank-filter-search"></i>
+      </div>
+      <div class="list-states__text">
+        Sorry, there are no results matching your request. <br>
+        <span>Please change or <button
+          (click)="reset()"
+          type="button"
+        >reset search and filters</button></span>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

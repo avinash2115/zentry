@@ -1,0 +1,39 @@
+.crm {
+  &--button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &--text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-right: 15px;
+
+      &__title {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      &__value {
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+    }
+
+    button {
+      margin-right: 15px;
+
+      fa-icon {
+        margin-right: 10px;
+      }
+
+      &.spin {
+        fa-icon {
+          animation: spin infinite .75s linear;
+        }
+      }
+    }
+  }
+}

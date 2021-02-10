@@ -1,0 +1,31 @@
+App\Components\Sessions\Session\Stream\StreamEntity:
+  type: entity
+  table: sessions_streams
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    type:
+      type: string
+      nullable: false
+    name:
+      type: string
+      nullable: false
+    url:
+      type: string
+      nullable: false
+    convertProgress:
+      type: integer
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+  manyToOne:
+    session:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: session_id
+        referencedColumnName: id

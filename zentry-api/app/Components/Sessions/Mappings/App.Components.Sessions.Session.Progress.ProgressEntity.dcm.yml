@@ -1,0 +1,40 @@
+App\Components\Sessions\Session\Progress\ProgressEntity:
+  type: entity
+  table: sessions_progress
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    datetime:
+      type: datetime
+  manyToOne:
+    session:
+      targetEntity: App\Components\Sessions\Session\SessionEntity
+      joinColumn:
+        name: session_id
+        referencedColumnName: id
+    poi:
+      targetEntity: App\Components\Sessions\Session\Poi\PoiEntity
+      joinColumn:
+        name: poi_id
+        referencedColumnName: id
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+    goal:
+      targetEntity: App\Components\Users\Participant\Goal\GoalEntity
+      joinColumn:
+        name: goal_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+    tracker:
+      targetEntity: App\Components\Users\Participant\Goal\Tracker\TrackerEntity
+      joinColumn:
+        name: tracker_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]

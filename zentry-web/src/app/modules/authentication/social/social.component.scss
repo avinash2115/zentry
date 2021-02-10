@@ -1,0 +1,27 @@
+.authentication-social {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &--provider {
+    display: flex;
+    flex-grow: 1;
+    border: 1px solid #888997;
+    background-color: #FFFFFF;
+    color: #37404D;
+    font-size: 16px;
+    font-weight: bold;
+
+    &:hover {
+      background-color: #EBEBEE;
+    }
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    fa-icon {
+      margin-right: 10px;
+    }
+  }
+}

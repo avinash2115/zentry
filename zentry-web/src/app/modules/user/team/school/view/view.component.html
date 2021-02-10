@@ -1,0 +1,198 @@
+<ng-container *ngIf="!isLoading">
+  <div class="school--profile">
+    <div class="school--profile--content">
+      <div class="school--profile--content--main">
+        <div class="school--profile--content--main--info flex-one">
+          <div class="school--profile--content--main--info__title cut-long-text">
+            {{entity.name}}
+          </div>
+        </div>
+        <ng-container *ngIf="entity.hasSources">
+          <div class="source ml-auto">
+            <span>Imported from TeleTeachers</span>
+            <div class="source--exists">
+              TT
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!entity.hasSources">
+          <button
+            (click)="build()"
+            [disabled]="!!form"
+            type="button"
+            class="btn btn__standard btn--radius__md btn--color__primary school--profile--content--main__edit"
+          >
+            <fa-icon icon="pen"></fa-icon>
+            Edit Profile
+          </button>
+        </ng-container>
+      </div>
+      <div class="school--profile--content--body">
+        <ng-container *ngIf="!form">
+          <div class="school--profile--content--body--left">
+            <div class="school--profile--content--body--item">
+              <div class="school--profile--content--body--item__title">District:</div>
+              <div class="school--profile--content--body--item__content">{{team.name}}</div>
+            </div>
+            <div class="school--profile--content--body--item">
+              <div class="school--profile--content--body--item__title">Address:</div>
+              <div class="school--profile--content--body--item__content">{{entity.streetAddress}}</div>
+            </div>
+            <div class="school--profile--content--body--item">
+              <div class="school--profile--content--body--item__title">City:</div>
+              <div class="school--profile--content--body--item__content capitalize">{{entity.city}}</div>
+            </div>
+            <div class="school--profile--content--body--item">
+              <div class="school--profile--content--body--item__title">State:</div>
+              <div class="school--profile--content--body--item__content">{{entity.stateLabel}}</div>
+            </div>
+            <div class="school--profile--content--body--item">
+              <div class="school--profile--content--body--item__title">Zip:</div>
+              <div class="school--profile--content--body--item__content">{{entity.zip}}</div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="form">
+          <form
+            (submit)="detectChanges()"
+            [formGroup]="form"
+          >
+            <div class="school--profile--content--body--left">
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="name" class="required">School Name</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="name"
+                    placeholder="Enter School Name"
+                    id="name"
+                    type="text"
+                  >
+                </div>
+              </div>
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="team_id" class="required">Select District</label>
+                  <ng-select
+                    #ngSelectComponentDistrict
+                    (change)="ngSelectComponentDistrict.close(); detectChanges()"
+                    (focus)="detectChanges()"
+                    (blur)="detectChanges()"
+                    (clear)="detectChanges()"
+                    (search)="detectChanges()"
+                    [items]="teams"
+                    [clearable]="false"
+                    [searchable]="true"
+                    bindLabel="name"
+                    bindValue="id"
+                    formControlName="team_id"
+                    placeholder="Start typing or select ..."
+                    id="team_id"
+                    class="rounder"
+                  ></ng-select>
+                </div>
+              </div>
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="address" class="required">Address</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="address"
+                    placeholder="Address line"
+                    id="address"
+                    type="text"
+                  >
+                </div>
+              </div>
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="city" class="required">City</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="city"
+                    placeholder="Enter City"
+                    id="city"
+                    type="text"
+                  >
+                </div>
+              </div>
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="state" class="required">Select State</label>
+                  <ng-select
+                    #ngSelectComponentState
+                    (change)="ngSelectComponentState.close(); detectChanges()"
+                    (focus)="detectChanges()"
+                    (blur)="detectChanges()"
+                    (clear)="detectChanges()"
+                    (search)="detectChanges()"
+                    [items]="states"
+                    [clearable]="false"
+                    [searchable]="true"
+                    bindLabel="label"
+                    bindValue="value"
+                    formControlName="state"
+                    placeholder="Start typing or select ..."
+                    id="state"
+                    class="rounder"
+                  ></ng-select>
+                </div>
+              </div>
+              <div class="school--profile--content--body--item">
+                <div class="form-group">
+                  <label for="zip" class="required">ZIP</label>
+                  <input
+                    appControlError
+                    class="form-control"
+                    formControlName="zip"
+                    placeholder="Enter ZIP/Postal Code"
+                    id="zip"
+                    type="text"
+                  >
+                </div>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+      <div
+        *ngIf="!!form"
+        class="school--profile--content--actions"
+      >
+        <button
+          (click)="cancel()"
+          class="btn btn__standard btn--radius__md btn-outline-secondary"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="submit()"
+          class="btn btn__standard btn--radius__md btn--color__contextual left"
+        >
+          <fa-icon icon="check"></fa-icon>
+          Update School Profile
+        </button>
+      </div>
+    </div>
+    <div class="school--profile--content">
+      <div class="school--profile--content--main--info">
+        <div class="school--profile--content--main--info__title">
+          Students
+        </div>
+      </div>
+      <div class="school--profile--content--body columned">
+        <app-user-participant-list-custom
+          [embedded]="true"
+          [filter]="studentsFilter"
+        ></app-user-participant-list-custom>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

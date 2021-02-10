@@ -1,0 +1,27 @@
+App\Components\Users\User\Backtrack\BacktrackEntity:
+  type: entity
+  table: users_backtrack
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    backward:
+      type: integer
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  oneToOne:
+    user:
+      targetEntity: App\Components\Users\User\UserEntity
+      inversedBy: backtrack
+      joinColumn:
+        name: user_id
+        referencedColumnName: id

@@ -1,0 +1,54 @@
+App\Components\Users\Participant\Goal\GoalEntity:
+  type: entity
+  table: users_participants_goals
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    name:
+      type: string
+    description:
+      type: string
+    reached:
+      type: boolean
+    meta:
+      type: participant_goal_meta
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+  manyToOne:
+    participant:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: participant_id
+        referencedColumnName: id
+  oneToOne:
+    iep:
+      targetEntity: App\Components\Users\Participant\IEP\IEPEntity
+      joinColumn:
+        name: iep_id
+        referencedColumnName: id
+      cascade: [ "persist", "merge" ]
+  oneToMany:
+    sources:
+      targetEntity: App\Components\CRM\Source\ParticipantGoalSourceEntity
+      mappedBy: entity
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id
+    trackers:
+      targetEntity: App\Components\Users\Participant\Goal\Tracker\TrackerEntity
+      mappedBy: goal
+      indexBy: identity
+      cascade: ["persist", "merge", "remove"]
+      orphanRemoval: true

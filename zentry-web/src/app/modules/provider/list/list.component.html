@@ -1,0 +1,111 @@
+<ng-container *ngIf="!embedded">
+  <div class="providers--toolbar">
+    <div class="providers--toolbar--summary">
+      <div class="providers--toolbar--summary--item">
+        <div class="providers--toolbar--summary--item__header">
+          Total providers
+        </div>
+        <div class="providers--toolbar--summary--item--body">
+          <div class="providers--toolbar--summary--item--body__content">
+            {{count}}
+          </div>
+          <div class="providers--toolbar--summary--item--body__notation">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="providers--toolbar--actions">
+      <app-crm-button
+        (synced)="fetch()"
+        [type]="crmService.types.provider"
+      ></app-crm-button>
+      <a [routerLink]="['create']" class="btn btn__standard btn--color__primary btn--radius__md">
+        <fa-icon icon="user-plus"></fa-icon>
+        Add Provider
+      </a>
+    </div>
+  </div>
+</ng-container>
+
+<app-assistant-list
+  #assistantListComponent
+  (fetching)="onFetching($event)"
+  (response)="onResponse($event)"
+  [service]="service"
+  [paginationLimit]="limit"
+  paginationSelector=".providers--list--item"
+>
+  <ng-template appListBodyTemplate>
+    <div class="providers--list">
+      <div class="providers--list--header">
+        <div class="providers--list--header--general">
+          Name
+        </div>
+        <div class="providers--list--header--general">
+          Code
+        </div>
+        
+        <div class="providers--list--header--actions"></div>
+      </div>
+    
+      <div
+        *ngFor="let provider of data; trackBy: trackByFn"
+        class="providers--list--item"
+      >
+        <div class="providers--list--item--general">
+          <a
+            [routerLink]="['/provider', provider.id]"
+            [ngbTooltip]=""
+            class="force cut-long-text"
+          >
+            {{provider.name}}
+            
+          </a>
+          <a
+            [routerLink]="['/provider', provider.id]"
+            [ngbTooltip]=""
+            class="force cut-long-text"
+          >
+            {{provider.code}}
+            
+          </a>
+         
+         
+        </div>
+        <div class="providers--list--item--actions">
+          <ng-container *ngIf="provider.hasSources">
+            <div
+              ngbTooltip="Imported from TeleTeachers"
+              container="body"
+              class="source--exists"
+            >
+              TT
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!provider.hasSources && !embedded">
+            <a
+              [routerLink]="['/provider', provider.id]"
+              [queryParams]="{edit: 'true'}"
+              ngbTooltip="Edit"
+              placement="bottom"
+              container="body"
+              class="color--action inverse"
+            >
+              <fa-icon icon="pen"></fa-icon>
+            </a>
+            <a
+              (click)="remove(provider)"
+              ngbTooltip="Remove"
+              placement="bottom"
+              container="body"
+              class="color--action__red inverse"
+            >
+              <fa-icon icon="trash"></fa-icon>
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-assistant-list>
+

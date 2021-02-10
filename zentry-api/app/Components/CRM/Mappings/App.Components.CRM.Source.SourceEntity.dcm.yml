@@ -1,0 +1,34 @@
+App\Components\CRM\Source\SourceEntity:
+  type: entity
+  table: crms_sources
+  inheritanceType: SINGLE_TABLE
+  discriminatorColumn:
+    name: type
+    type: string
+  id:
+    identity:
+      type: identity
+      unique: true
+      column: id
+  fields:
+    direction:
+      type: string
+      column: direction
+    sourceId:
+      column: source_id
+      type: string
+    ownerId:
+      column: owner_id
+      type: string
+    createdAt:
+      type: datetime
+      column: created_at
+    updatedAt:
+      type: datetime
+      column: updated_at
+  manyToOne:
+    crm:
+      targetEntity: App\Components\Users\User\CRM\CRMEntity
+      joinColumn:
+        name: crm_id
+        referencedColumnName: id

@@ -1,0 +1,215 @@
+:host, .dashboard {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dashboard {
+  background-color: #f7fafc;
+
+  &--heading, &--calendar, &--recording {
+    padding: 0 65px;
+
+    @media (max-width: 1279px) {
+      padding: 0 15px;
+    }
+  }
+
+  &--heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 50px;
+    padding-bottom: 145px;
+    background: #ffffff;
+
+    &--greetings {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &__avatar {
+        margin-right: 25px;
+      }
+
+      &--info {
+        display: flex;
+        flex-direction: column;
+
+        &__hello {
+          font-size: 30px;
+          font-weight: 800;
+          margin-bottom: 15px;
+
+          &.cut-long-text {
+            width: 300px;
+          }
+        }
+
+        &__time {
+          color: #888997;
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+
+      @media (max-width: 1279px) {
+        order: 1;
+      }
+
+      @media (max-width: 415px) {
+        display: none;
+      }
+    }
+
+    &--event {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 375px;
+      border-radius: 7px;
+      background: url('/assets/img/icons/calendar/illustration.svg'), #4983FF;
+      background-repeat: no-repeat;
+      background-position: right bottom;
+      padding: 25px 20px;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+      &--date {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        height: 80px;
+        width: 80px;
+        padding: 15px 23px;
+        margin-left: -60px;
+        margin-right: 25px;
+        border-radius: 7px;
+        background-color: #FFFFFF;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+        span {
+          color: #1D3B7B;
+
+          &:first-child {
+            font-size: 20px;
+            font-weight: 800;
+          }
+
+          &:last-child {
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+
+        @media (max-width: 1279px) {
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: -60px;
+          margin-bottom: 20px;
+        }
+      }
+
+      &--content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #FFFFFF;
+        width: 265px;
+
+        &__guideline {
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+
+        &__title {
+          font-size: 18px;
+          font-weight: 800;
+          margin-bottom: 10px;
+        }
+
+        &__time {
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+
+      @media (max-width: 1279px) {
+        flex-direction: column;
+        flex-basis: 100%;
+        order: 3;
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      @media (max-width: 415px) {
+        flex-direction: column;
+        flex-basis: 100%;
+        order: 3;
+        text-align: center;
+        margin-top: 60px;
+      }
+    }
+
+    &--ad-hoc {
+      button {
+        height: 49px;
+        width: 163px;
+        justify-content: center;
+      }
+
+      @media (max-width: 1279px) {
+        order: 2;
+        margin-left: auto;
+      }
+
+      @media (max-width: 415px) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 1279px) {
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 415px) {
+      flex-wrap: wrap;
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+  }
+
+  &--calendar {
+    display: flex;
+    flex-direction: column;
+    margin-top: -100px;
+
+    &__title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 415px) {
+      margin-top: 50px;
+      text-align: center;
+    }
+  }
+
+  &--recording {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+
+    &__title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+  }
+
+  @media (max-width: 1279px) {
+    background-color: transparent;
+  }
+}

@@ -1,0 +1,17 @@
+label {
+  margin-bottom: 15px;
+  color: #37404D;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+label.require::after, label.required::after {
+  content: '*';
+  color: #f96868;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.form-group {
+  margin-bottom: 25px
+}

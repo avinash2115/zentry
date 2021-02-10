@@ -1,0 +1,8 @@
+App\Components\CRM\Source\ParticipantSourceEntity:
+  type: entity
+  manyToOne:
+    entity:
+      targetEntity: App\Components\Users\Participant\ParticipantEntity
+      joinColumn:
+        name: owner_id
+        referencedColumnName: id

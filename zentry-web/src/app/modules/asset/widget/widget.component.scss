@@ -1,0 +1,40 @@
+.asset--widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  &__title {
+    font-size: 30px;
+    font-weight: 800;
+  }
+
+  &__subtitle {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2C2D3F;
+  }
+
+  &__image {
+    width: 784px;
+    height: 294px;
+    margin-top: 35px;
+    background-image: url("/assets/img/icons/asset/widget/image-widget.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  &--download {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    a {
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
+}

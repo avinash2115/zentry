@@ -1,0 +1,554 @@
+<div
+  *ngIf="!isLoading"
+  class="calendar"
+>
+  <div class="calendar--toolbar">
+    <div class="calendar--toolbar--row">
+      <div class="calendar--toolbar--navigation">
+        <div
+          mwlCalendarPreviousView
+          [view]="viewActive"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="detectChanges()"
+          class="calendar--toolbar--navigation--backward"
+        >
+          <fa-icon icon="chevron-left"></fa-icon>
+        </div>
+        <div
+          mwlCalendarNextView
+          [view]="viewActive"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="detectChanges()"
+          class="calendar--toolbar--navigation--forward"
+        >
+          <fa-icon icon="chevron-right"></fa-icon>
+        </div>
+        <div class="calendar--toolbar--navigation--current">
+          {{ viewDate | calendarDate: (viewActive + 'ViewTitle'):'en' }}
+        </div>
+      </div>
+      <div class="calendar--toolbar--types">
+        <div class="calendar--toolbar--types--today">
+          <button
+            mwlCalendarToday
+            [(viewDate)]="viewDate"
+            (viewDateChange)="detectChanges()"
+            type="button"
+            class="btn btn__standard btn--radius__md btn-outline-primary"
+          >
+            Today
+          </button>
+        </div>
+        <div class="btn-group">
+          <button
+            (click)="viewSwitch(views.Day)"
+            [class.btn-outline-primary]="!viewIsActive(views.Day)"
+            [class.btn--color__primary]="viewIsActive(views.Day)"
+            type="button"
+            class="btn btn__standard btn--radius__md"
+          >
+            Day
+          </button>
+          <button
+            (click)="viewSwitch(views.Week)"
+            [class.btn-outline-primary]="!viewIsActive(views.Week)"
+            [class.btn--color__primary]="viewIsActive(views.Week)"
+            type="button"
+            class="btn btn__standard btn--radius__md"
+          >
+            Week
+          </button>
+          <button
+            (click)="viewSwitch(views.Month)"
+            [class.btn-outline-primary]="!viewIsActive(views.Month)"
+            [class.btn--color__primary]="viewIsActive(views.Month)"
+            type="button"
+            class="btn btn__standard btn--radius__md"
+          >
+            Month
+          </button>
+        </div>
+      </div>
+      <div class="calendar--toolbar--actions">
+        <button
+          (click)="build()"
+          type="button"
+          class="btn btn__standard btn--radius__md btn--color__contextual"
+        >
+          <fa-icon icon="notes-medical"></fa-icon>
+          Add Event
+        </button>
+      </div>
+    </div>
+    <div class="calendar--toolbar--row" *ngIf="!embedded">
+      <div class="calendar--toolbar--actions">
+        <div class="calendar--actions--search">
+        </div>
+        <app-crm-button
+          (synced)="fetch()"
+          [type]="crmService.types.session"
+        ></app-crm-button>
+        <button
+          type="button"
+          class="btn btn__standard btn--radius__md btn--color__primary"
+        >
+          <fa-icon icon="print"></fa-icon>
+          Print
+        </button>
+      </div>
+    </div>
+  </div>
+  <ng-container [ngSwitch]="viewActive">
+    <ng-container *ngSwitchCase="views.Day">
+      <ng-container *ngTemplateOutlet="dailyHeaderTemplate; context: {day: viewDate}"></ng-container>
+      <mwl-calendar-day-view
+        [viewDate]="viewDate"
+        [events]="events"
+        [hourSegments]="1"
+        [hourSegmentHeight]="100"
+        [hourSegmentTemplate]="dailyHourSegmentTemplate"
+        [currentTimeMarkerTemplate]="dailyCurrentTimeMarkerTemplate"
+        [eventTemplate]="timeEventTemplate"
+      >
+      </mwl-calendar-day-view>
+    </ng-container>
+
+    <mwl-calendar-week-view
+      *ngSwitchCase="views.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      [hourSegments]="1"
+      [hourSegmentHeight]="100"
+      [headerTemplate]="weeklyHeaderTemplate"
+      [hourSegmentTemplate]="weeklyHourSegmentTemplate"
+      [currentTimeMarkerTemplate]="weeklyCurrentTimeMarkerTemplate"
+      [eventTemplate]="timeEventTemplate"
+      [excludeDays]="[0, 6]"
+    >
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-month-view
+      *ngSwitchCase="views.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      [headerTemplate]="monthlyHeaderTemplate"
+      [cellTemplate]="monthlyCellTemplate"
+    >
+    </mwl-calendar-month-view>
+  </ng-container>
+  <div
+    *ngIf="!!form"
+    class="calendar--foldover"
+  >
+    <div class="calendar--foldover--header">
+      <div class="calendar--foldover--header__title">
+        {{form.get('resource').value.is_new ? 'Add event' : (form.get('resource').value.isNew && !form.get('resource').value.hasSources ? 'Edit appointment' : 'View appointment')}}
+      </div>
+      <div class="calendar--foldover--header--actions">
+        <button
+          (click)="quickStart(form.get('resource').value)"
+          *ngIf="!form.get('resource').value.is_new && form.get('resource').value.isNew"
+          type="button"
+          class="btn btn__standard btn--radius__sm btn--color__contextual"
+        >
+          Launch
+        </button>
+        <button
+          (click)="submit()"
+          *ngIf="(form.get('resource').value.isNew && !form.get('resource').value.hasSources) || form.get('resource').value.is_new"
+          type="button"
+          class="btn btn__standard btn--radius__sm btn--color__primary"
+        >
+          Save Appointment
+        </button>
+        <button
+          (click)="copy()"
+          type="button"
+          class="btn btn__standard btn--radius__sm btn-outline-secondary"
+          *ngIf="(!form.get('resource').value.isNew && form.get('resource').value.hasSources) || !form.get('resource').value.is_new"
+        >
+          Copy
+        </button>
+        <button
+          (click)="cancel()"
+          type="button"
+          class="btn btn__standard btn--radius__sm btn-outline-secondary"
+        >
+          {{form.get('resource').value.is_new || (form.get('resource').value.isNew && !form.get('resource').value.hasSources) ? 'Cancel' : 'Close'}}
+        </button>
+        <button
+          (click)="delete()"
+          *ngIf="(!form.get('resource').value.isNew && form.get('resource').value.hasSources) || !form.get('resource').value.is_new"
+          type="button"
+          class="btn btn__standard btn__standard--condensed btn--radius__sm btn--color__red"
+        >
+          <fa-icon icon="trash"></fa-icon>
+        </button>
+        <ng-container *ngIf="form.get('resource').value.hasSources">
+          <div
+            ngbTooltip="Imported from TeleTeachers"
+            container="body"
+            class="source--exists ml-auto"
+          >
+            TT
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="calendar--foldover--body">
+      <form
+        [formGroup]="form"
+      >
+        <div class="form-group">
+          <label for="name" class="required">Title</label>
+          <textarea
+            appControlError
+            class="form-control"
+            formControlName="name"
+            placeholder="Type title here ..."
+            id="name"
+            type="text"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="scheduled_date" class="required">
+            Date
+          </label>
+          <input
+            appControlError
+            class="form-control"
+            formControlName="scheduled_date"
+            placeholder="MM/DD/YYYY"
+            id="scheduled_date"
+            type="date"
+          >
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="scheduled_on" class="required">
+              Starts
+            </label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="scheduled_on"
+              placeholder="HH:MM"
+              id="scheduled_on"
+              type="time"
+            >
+          </div>
+          <div class="form-group col-md-6">
+            <label for="scheduled_to" class="required">
+              Ends
+            </label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="scheduled_to"
+              placeholder="HH:MM"
+              id="scheduled_to"
+              type="time"
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="service_id" class="required">Service</label>
+          <ng-select
+            #ngSelectComponentService
+            (change)="ngSelectComponentService.close(); detectChanges()"
+            (focus)="detectChanges()"
+            (blur)="detectChanges()"
+            (clear)="detectChanges()"
+            (search)="detectChanges()"
+            [items]="services"
+            [clearable]="true"
+            [searchable]="true"
+            bindLabel="name"
+            bindValue="id"
+            formControlName="service_id"
+            placeholder="Start typing or select ..."
+            id="service_id"
+            class="rounder"
+          ></ng-select>
+        </div>
+        <div class="form-group">
+          <label for="school_id" class="required">School</label>
+          <ng-select
+            #ngSelectComponentSchool
+            (change)="ngSelectComponentSchool.close(); detectChanges()"
+            (focus)="detectChanges()"
+            (blur)="detectChanges()"
+            (clear)="detectChanges()"
+            (search)="detectChanges()"
+            [items]="schools"
+            [clearable]="true"
+            [searchable]="true"
+            bindLabel="name"
+            bindValue="id"
+            formControlName="school_id"
+            placeholder="Start typing or select ..."
+            id="school_id"
+            class="rounder"
+          ></ng-select>
+        </div>
+        <div class="form-group">
+          <label for="participant_id" class="required">Students</label>
+          <ng-select
+            #ngSelectComponentStudent
+            (change)="ngSelectComponentStudent.blur()"
+            (focus)="detectChanges()"
+            (blur)="detectChanges()"
+            (clear)="detectChanges()"
+            (close)="detectChanges()"
+            (search)="detectChanges()"
+            [searchFn]="selectControlSearch"
+            [items]="available"
+            [clearable]="true"
+            [searchable]="true"
+            formControlName="participant_id"
+            id="participant_id"
+            placeholder="Start typing or select ..."
+            class="rounder"
+          >
+            <ng-template
+              let-item="item"
+              ng-label-tmp
+            >
+              {{item.fullname || item.email}}
+            </ng-template>
+            <ng-template
+              let-item="item"
+              ng-option-tmp
+            >
+              <div
+                (mouseover)="ngSelectMouseover()"
+                class="calendar--foldover--body--select--item"
+              >
+                <div class="avatar-wrapper">
+                  <img *ngIf="false; else simpleAvatar" [src]="" [alt]="item.initials" class="avatar__sm">
+                  <ng-template #simpleAvatar>
+                    <span class="avatar avatar__sm">{{item.initials}}</span>
+                  </ng-template>
+                </div>
+                <div class="calendar--foldover--body--select--item--info">
+                  <span *ngIf="!!item.fullname">{{item.fullname}}</span>
+                  <span *ngIf="!!item.email">{{item.email}}</span>
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="calendar--foldover--body--students">
+          <div
+            *ngFor="let participant of participantsSelected"
+            class="calendar--foldover--body--students--item"
+          >
+            <div class="avatar-wrapper">
+              <img *ngIf="false; else simpleAvatar" [src]="" [alt]="participant.initials" class="avatar avatar__sm">
+              <ng-template #simpleAvatar>
+                <span class="avatar avatar__sm">{{participant.initials}}</span>
+              </ng-template>
+            </div>
+            <div class="calendar--foldover--body--students--item--info">
+              <div class="calendar--foldover--body--students--item--info__fullname cut-long-text">
+                {{participant.fullname}}
+              </div>
+              <div class="calendar--foldover--body--students--item--info__email cut-long-text">
+                {{participant.email}}
+              </div>
+            </div>
+            <div
+              (click)="participantRemove(participant)"
+              *ngIf="form.get('resource').value.is_new || (form.get('resource').value.isNew && !form.get('resource').value.hasSources)"
+              ngbTooltip="Remove"
+              container="body"
+              class="calendar--foldover--body--students--item--remove"
+            >
+              <fa-icon icon="times"></fa-icon>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center">
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>
+
+<ng-template #dailyHeaderTemplate let-day="day">
+  <div class="calendar--daily--header">
+    <div
+      [class.today]="isToday(day)"
+      class="calendar--daily--header--day"
+    >
+      <div class="calendar--daily--header--day__date">
+        {{day.getDate()}}
+      </div>
+      {{day.toLocaleString('en-us', {weekday: 'long'})}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #dailyHourSegmentTemplate let-segment="segment" let-isTimeLabel="isTimeLabel">
+  <div class="calendar--daily--wrapper">
+    <div
+      *ngIf="isTimeLabel && segment.isStart"
+      class="calendar--daily--sidebar"
+    >
+      {{segment.date.toLocaleString('en-us', {hour: 'numeric', hour12: true})}}
+    </div>
+    <div class="calendar--daily--body--day"></div>
+  </div>
+</ng-template>
+
+<ng-template #dailyCurrentTimeMarkerTemplate let-isVisible="isVisible" let-topPx="topPx">
+  <div
+    *ngIf="isVisible"
+    [style.top.px]="topPx"
+    class="calendar--daily--timemarker"
+  >
+    <div class="calendar--daily--timemarker__point"></div>
+  </div>
+</ng-template>
+
+<ng-template #weeklyHeaderTemplate let-days="days">
+  <div class="calendar--weekly--header">
+    <div
+      *ngFor="let day of days"
+      [class.today]="day.isToday"
+      class="calendar--weekly--header--day"
+    >
+      <div class="calendar--weekly--header--day__date">
+        {{day.date.getDate()}}
+      </div>
+      {{day.date.toLocaleString('en-us', {weekday: 'long'})}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #weeklyHourSegmentTemplate let-segment="segment" let-isTimeLabel="isTimeLabel">
+  <div
+    *ngIf="isTimeLabel && segment.isStart"
+    class="calendar--weekly--sidebar"
+  >
+    {{segment.date.toLocaleString('en-us', {hour: 'numeric', hour12: true})}}
+  </div>
+  <div
+    *ngIf="!isTimeLabel && segment.isStart"
+    [class.today]="isToday(segment.date)"
+    [class.weekend]="isWeekend(segment.date)"
+    class="calendar--weekly--body--day"
+  >
+  </div>
+</ng-template>
+
+<ng-template #weeklyCurrentTimeMarkerTemplate let-isVisible="isVisible" let-topPx="topPx">
+  <div
+    *ngIf="isVisible"
+    [style.top.px]="topPx"
+    class="calendar--weekly--timemarker"
+  >
+    <div class="calendar--weekly--timemarker__point"></div>
+  </div>
+</ng-template>
+
+<ng-template #timeEventTemplate let-weekEvent="weekEvent">
+  <div
+    (click)="build(weekEvent.event.meta.resource)"
+    [ngClass]="colorCoding(weekEvent.event)"
+    class="calendar--time-event"
+  >
+    <div class="calendar--time-event--header">
+      <div
+        *ngIf="weekEvent.height >= 50 && weekEvent.width > 50"
+        class="calendar--time-event--header__period cut-long-text"
+      >
+        {{weekEvent.event.start.toLocaleString('en-us', {hour: 'numeric', minute: 'numeric', hour12: true})}}
+        - {{weekEvent.event.end.toLocaleString('en-us', {hour: 'numeric', minute: 'numeric', hour12: true})}}
+      </div>
+    </div>
+    <div class="calendar--time-event--title">
+      <div class="calendar--time-event--title__text cut-long-text">
+        {{weekEvent.event.title}}
+      </div>
+      <ng-container *ngIf="weekEvent.event.meta.resource.hasSources">
+        <div
+          ngbTooltip="Imported from TeleTeachers"
+          container="body"
+          class="source--exists ml-auto"
+        >
+          TT
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #monthlyHeaderTemplate let-days="days">
+  <div class="calendar--monthly--header">
+    <div
+      *ngFor="let day of days"
+      [class.today]="day.isToday"
+      class="calendar--monthly--header--day"
+    >
+      {{day.date.toLocaleString('en-us', {weekday: 'long'})}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #monthlyCellTemplate let-day="day">
+  <div
+    [class.today]="day.isToday"
+    [class.weekend]="day.isWeekend"
+    class="calendar--monthly--body--day"
+  >
+    <div class="calendar--monthly--body--day--date">
+      <div class="calendar--monthly--body--day--date__day">
+        {{day.date.getDate()}}
+      </div>
+    </div>
+    <div class="calendar--monthly--body--day--events">
+      <div
+        (click)="build(event.meta.resource)"
+        *ngFor="let event of limit(sort(day.events))"
+        [ngClass]="colorCoding(event)"
+        class="calendar--monthly--body--day--events--time-event cut-long-text"
+      >
+        {{event.start.toLocaleString('en-us', {hour: 'numeric', minute: 'numeric', hour12: true})}} {{event.title}}
+      </div>
+      <a
+        (click)="dayEventsListToggle(day)"
+        *ngIf="day.events.length > 3"
+        class="calendar--monthly--body--day--events--more cut-long-text force"
+      >
+        {{day.events.length - 3}} more
+      </a>
+    </div>
+    <div
+      *ngIf="monthDay && monthDay.date.getTime() === day.date.getTime()"
+      class="modal-dialog"
+    >
+      <div class="modal-content">
+        <div
+          (click)="dayEventsListToggle()"
+          class="close"
+        >
+          <fa-icon icon="times"></fa-icon>
+        </div>
+        <div class="modal-header">
+          <h4 class="modal-title">
+            {{monthDay.date.getDate()}} {{monthDay.date.toLocaleString('en-us', {weekday: 'long'})}}
+          </h4>
+        </div>
+        <div class="modal-body">
+          <ng-container *ngFor="let event of monthDay.events">
+            <ng-container
+              *ngTemplateOutlet="timeEventTemplate; context: {weekEvent: {width: 100, height: 50, event: event}}"></ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,11 @@
+<div class="parent">
+  <app-header></app-header>
+  <app-presentation *ngIf="isPresentationVisible"></app-presentation>
+  <div
+    [class.unwrapped]="!isContentWrapped"
+    class="content"
+  >
+    <router-outlet></router-outlet>
+  </div>
+  <app-loader *ngIf="showFullscreenLoader" [fullscreen]="true"></app-loader>
+</div>

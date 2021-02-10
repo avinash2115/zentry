@@ -1,0 +1,112 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  width: 300px;
+  max-width: calc(100% - 50px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  transition: .3s ease;
+  backface-visibility: hidden;
+  will-change: transform;
+  box-shadow: 5px 0 13px 3px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 767px) {
+    &[data-fullscreen-on-mobile] {
+      max-width: 100%;
+      width: 100%;
+      left: 0;
+    }
+  }
+
+  &.backdrop-dark + .backdrop-filter {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  > .nav-tabs {
+    margin-bottom: 0;
+    height: 64px;
+  }
+
+}
+
+.filter-body {
+  //Add 40px to bottom for case when in filter last element is datepicker
+  padding: 15px 15px 40px;
+  flex: 1;
+  min-height: calc(100vh - 128px);
+}
+
+.filter-block {
+  padding: 20px;
+  width: 100%;
+}
+
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  min-height: 64px !important;
+  border-bottom: 1px solid #ebebeb;
+
+  .close {
+    margin-left: 16px;
+    font-size: 16px;
+  }
+
+  &.nav-tabs {
+    padding: 0;
+  }
+
+  .nav-link {
+    height: 64px;
+    line-height: 64px - 6px;
+    padding-top: 6px;
+    padding-bottom: 0;
+  }
+}
+
+
+.filter-title {
+  margin-bottom: 0;
+  letter-spacing: .5px;
+}
+
+.filter-footer {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  min-height: 64px;
+  background-color: #fcfdfe;
+  border-top: 1px solid #f1f2f3;
+
+  .row {
+    flex: 1;
+  }
+
+  > *:not(.row) {
+    margin: 0 4px;
+  }
+
+  a:not(.btn) {
+    display: inline-block;
+    padding: 0.75rem 0.5rem;
+    color: #8b95a5;
+
+    &:hover {
+      color: #313944;
+    }
+  }
+}
+
+.app-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

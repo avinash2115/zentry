@@ -1,0 +1,306 @@
+:host {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  height: calc(100% - 60px);
+  overflow: auto;
+}
+
+.soap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+
+  &--header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    margin-top: 15px;
+
+    &__title {
+      font-size: 17px;
+      font-weight: 800;
+      text-align: center;
+    }
+  }
+
+  &--body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding-bottom: 100px;
+
+    &--student {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      width: 100%;
+      padding: 7px;
+      margin-top: 13px;
+      background-color: #F6F8FB;
+      border-bottom: 1px solid #DCDCE9;
+
+      &__fullname {
+        margin-left: 10px;
+        font-size: 14px;
+        font-weight: 800;
+      }
+    }
+
+    &--form {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 0 15px;
+      padding-top: 13px;
+      background-color: #F6F8FB;
+
+      form {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        margin-top: 0;
+      }
+
+      &--presence {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        min-width: 0;
+        width: 100%;
+        margin-bottom: 5px;
+
+        &__text {
+          font-size: 13px;
+          font-weight: 800;
+          margin-right: 15px;
+        }
+
+        &--buttons {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: auto;
+
+          button {
+            &:not(:last-child) {
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+
+      &-controls {
+        &--link{
+          &--copy {
+            margin-top: 10px;
+          }
+        }
+      }
+
+      &--goals {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-start;
+        min-width: 0;
+        margin: 0 -15px;
+        padding: 0 15px;
+        padding-bottom: 10px;
+        position: relative;
+        z-index: 3;
+        border-bottom: 1px solid #DCDCE9;
+
+        &--content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-top: 10px;
+
+          &__empty {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            color: #8D8EAA;
+            font-size: 12px;
+          }
+
+          &--goals {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+
+            &--navigation {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+
+              &--backward, &--forward {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                color: #888997;
+                opacity: 0.3;
+                cursor: not-allowed;
+
+                &.more {
+                  opacity: 1;
+                  cursor: pointer;
+                  color: #14BFF3;
+
+                  &:hover {
+                    color: #088FB8;
+                  }
+                }
+              }
+
+              &--backward {
+                margin-right: 5px;
+              }
+
+              &--forward {
+                margin-left: 5px;
+              }
+
+              &--current {
+                width: 100%;
+                padding: 12px;
+                border-radius: 9px;
+                background-color: #F4F7FC;
+                font-size: 12px;
+                font-weight: bold;
+                text-align: center;
+              }
+            }
+
+            &--controls {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+              margin: 15px 0;
+
+              &--tracker {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-width: 0;
+
+                button {
+                  border: none;
+                  border-radius: 100%;
+                  box-shadow: 0 3px 5px 0 rgba(0,0,0,0.15);
+                  padding: 12px;
+                  font-size: 21px;
+                  cursor: initial;
+
+                  fa-icon {
+                    line-height: 21px;
+                  }
+                }
+
+                &__amount {
+                  margin-top: 12px;
+                  color: #888997;
+                  font-size: 12px;
+                  font-weight: 800;
+                }
+
+                &__name {
+                  margin-top: 7px;
+                  color: #888997;
+                  font-size: 10px;
+                  font-weight: 600;
+                }
+
+                &:not(:last-child) {
+                  margin-right: 7px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &--fields {
+        display: flex;
+        flex-direction: column;
+        margin: 0 -15px;
+        padding: 0 15px;
+        padding-top: 10px;
+        background-color: #FFFFFF;
+      }
+
+      .form-group {
+        &:not(:last-child) {
+          margin-bottom: 12px;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        label {
+          margin-bottom: 8px;
+          font-size: 13px;
+        }
+      }
+
+      .form-control {
+        padding: 10px !important;
+      }
+    }
+  }
+
+  &--footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.5);
+    z-index: 5;
+
+    &__later {
+      padding: 5px;
+      margin-top: 0px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: underline;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    &--btn-group {
+      display: flex;
+      width: 100%;
+    }
+
+    button {
+      &.btn-outline-secondary {
+        border-radius: 100%;
+        margin-right: 10px;
+      }
+
+      &.btn--color__contextual {
+        margin-left: auto;
+      }
+    }
+  }
+}

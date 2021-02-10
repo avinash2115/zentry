@@ -1,0 +1,31 @@
+version: '3.6'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - "../:/var/www:cached"
+      - /var/www/docker/
+    ports:
+      - "80:80"
+    depends_on:
+      - node
+    networks:
+      - web
+
+  node:
+    image: registry.gitlab.trisk.us/supplies/docker/node:latest
+    volumes:
+      - "../:/var/www:cached"
+      - /var/www/docker/
+    ports:
+      - "4200:4200"
+      - "49153:49153"
+    tty: true
+    networks:
+      - web
+
+networks:
+  web:
+    driver: "bridge"

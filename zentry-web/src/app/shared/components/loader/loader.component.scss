@@ -1,0 +1,78 @@
+.styler {
+  display: flex;
+  justify-content: center;
+
+  &--fullscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    opacity: 0.5;
+    height: 100%;
+    width: 100%;
+    z-index: 1001;
+    align-items: center;
+  }
+
+  .loader {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 65px;
+    max-width: 151px;
+
+    .ball {
+      will-change: transform;
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 0;
+      animation: grow-show 1.7s infinite;
+
+      &.ball1 {
+        z-index: 1000;
+        height: 65px;
+        width: 65px;
+        background-color: #9474FD;
+        animation-delay: 0.46s;
+      }
+
+      &.ball2 {
+        z-index: 995;
+        height: 54px;
+        width: 54px;
+        background-color: #44A9EB;
+        animation-delay: 0.23s;
+        margin-left: -17%;
+      }
+
+      &.ball3 {
+        z-index: 990;
+        height: 32px;
+        width: 32px;
+        background-color: #12C9E0;
+        margin-left: -13%;
+      }
+    }
+  }
+}
+
+@keyframes grow-show {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  25% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}

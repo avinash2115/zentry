@@ -1,0 +1,14 @@
+node_modules
+public/storage
+storage/*.key
+vendor
+.idea
+_ide_helper.php
+.phpstorm.meta.php
+.phpunit.result.cache
+.bash_history
+.node_repl_history
+laravel-echo-server.lock
+.env
+.env.testing
+.env.zentry.us

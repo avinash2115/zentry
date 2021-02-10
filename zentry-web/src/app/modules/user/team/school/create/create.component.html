@@ -1,0 +1,135 @@
+<div class="participant--wizard">
+  <div
+    *ngIf="!isLoading"
+    class="participant--wizard--statusbar"
+  >
+    <div
+      [class.active]="stepIsActive(steps.general)"
+      [class.completed]="stepIsValid(steps.general)"
+      class="participant--wizard--statusbar--item"
+    >
+      <div class="participant--wizard--statusbar--item__body">
+        <fa-icon icon="school"></fa-icon>
+      </div>
+      <div class="participant--wizard--statusbar--item__title">
+        General Information
+      </div>
+    </div>
+  </div>
+  <div class="participant--wizard--content">
+    <ng-container *ngIf="!isLoading">
+      <form
+        (submit)="detectChanges()"
+        [formGroup]="form"
+      >
+        <div
+          [class.d-none]="!stepIsActive(steps.general)"
+          class="participant--wizard--content--wrapper"
+        >
+          <div class="form-group">
+            <label for="name" class="required">School Name</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="name"
+              placeholder="Enter School Name"
+              id="name"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="team_id" class="required">Select District</label>
+            <ng-select
+              #ngSelectComponentDistrict
+              (change)="ngSelectComponentDistrict.close(); detectChanges()"
+              (focus)="detectChanges()"
+              (blur)="detectChanges()"
+              (clear)="detectChanges()"
+              (search)="detectChanges()"
+              [items]="teams"
+              [clearable]="false"
+              [searchable]="true"
+              bindLabel="name"
+              bindValue="id"
+              formControlName="team_id"
+              placeholder="Start typing or select ..."
+              id="team_id"
+              class="rounder"
+            ></ng-select>
+          </div>
+          <div class="form-group">
+            <label for="address" class="required">Address</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="address"
+              placeholder="Address line"
+              id="address"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="city" class="required">City</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="city"
+              placeholder="Enter City"
+              id="city"
+              type="text"
+            >
+          </div>
+          <div class="form-group">
+            <label for="state" class="required">Select State</label>
+            <ng-select
+              #ngSelectComponentState
+              (change)="ngSelectComponentState.close(); detectChanges()"
+              (focus)="detectChanges()"
+              (blur)="detectChanges()"
+              (clear)="detectChanges()"
+              (search)="detectChanges()"
+              [items]="states"
+              [clearable]="false"
+              [searchable]="true"
+              bindLabel="label"
+              bindValue="value"
+              formControlName="state"
+              placeholder="Start typing or select ..."
+              id="state"
+              class="rounder"
+            ></ng-select>
+          </div>
+          <div class="form-group">
+            <label for="zip" class="required">ZIP</label>
+            <input
+              appControlError
+              class="form-control"
+              formControlName="zip"
+              placeholder="Enter ZIP/Postal Code"
+              id="zip"
+              type="text"
+            >
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <app-loader *ngIf="isLoading"></app-loader>
+  </div>
+  <div
+    *ngIf="!isLoading"
+    class="participant--wizard--navigation"
+  >
+    <ng-container *ngIf="stepIsActive(steps.general)">
+      <button class="btn btn__standard btn--radius__md btn-outline-secondary">
+        Cancel
+      </button>
+      <button
+        (click)="submit()"
+        class="btn btn__standard btn--radius__md btn--color__contextual left"
+      >
+        <fa-icon icon="check"></fa-icon>
+        Add School
+      </button>
+    </ng-container>
+  </div>
+</div>

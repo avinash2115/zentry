@@ -1,0 +1,175 @@
+
+
+.foldover {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px 0 8px 0;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.3);
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    z-index: 10;
+    width: 500px;
+
+    &--header, &--body {
+      display: flex;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    &--header {
+      flex-direction: row;
+      align-items: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E0E0E0;
+
+      &__title {
+        margin-right: 100px;
+        color: #F1583B;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      &--actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: auto;
+
+        button {
+          &:not(:last-child) {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+
+    &--body {
+      flex: 1;
+      overflow-y: auto;
+      align-items: baseline;
+      flex-direction: column;
+      .divider {
+        margin: 15px 0;
+      }
+      &--user {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        &--avatar {
+          $size: 40px;
+          width: $size;
+          height: $size;
+          line-height: $size - 5;
+          margin-right: 11px;
+        }
+        &--text {
+          &--name {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 16px;
+            color: #2C9BD6;
+          }
+          &--email {
+            margin-top: 10px;
+            font-size: 14px;
+            letter-spacing: 0;
+            font-weight: 400;
+            line-height: 15px;
+            color: #272837;
+          }
+        }
+      }
+      &--progress {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          width: 100%;
+
+          &--bar {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+
+            &__header {
+              font-size: 15px;
+              font-weight: bold;
+              letter-spacing: 0;
+              line-height: 19px;
+              color: #293F70;
+              margin-bottom: 9px;
+            }
+
+            &--progress {
+              .progress {
+                height: 8px;
+                border-radius: 5.5px;
+
+                .progress-bar {
+                  &:first-child {
+                    border-top-left-radius: 5.5px;
+                    border-bottom-left-radius: 5.5px;
+                  }
+
+                  &:last-child {
+                    border-top-right-radius: 5.5px;
+                    border-bottom-right-radius: 5.5px;
+                  }
+                }
+              }
+            }
+          }
+          &--info {
+            margin-top: 10px;
+            &--item {
+              display: flex;
+              align-items: center;
+              margin-bottom: 10px;
+              &:nth-last-child(1) {
+                margin-bottom: 0;
+              }
+              &--label {
+                display: flex;
+                align-items: center;
+                color: #293F70;
+                font-size: 15px;
+                font-weight: bold;
+                letter-spacing: 0;
+                &--icon {
+                  width: 25px;
+                  fa-icon {
+                    color: #95A4C6;
+                  }
+                }
+              }
+              &--text {
+                color: #293F70;
+                font-size: 15px;
+                letter-spacing: 0;
+                margin-left: 6px;
+              }
+            }
+          }
+        }
+      }
+      &--footer {
+        box-shadow: 0 -3px 6px 0 rgba(0,0,0,0.2);
+        width: 100%;
+        z-index: 1;
+        background: #FFFFFF;
+        &--link {
+          width: 100%;
+          height: 60px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 16px;
+          font-weight: 800;
+          letter-spacing: 0;
+          line-height: 20px;
+        }
+      }
+  }

@@ -1,0 +1,127 @@
+<ng-container *ngIf="!embedded">
+  <div class="recorded--toolbar">
+    <div class="recorded--toolbar--summary">
+      <div class="recorded--toolbar--summary--item">
+        <div class="recorded--toolbar--summary--item__header">
+          Total Sessions
+        </div>
+        <div class="recorded--toolbar--summary--item--body">
+          <div class="recorded--toolbar--summary--item--body__content">
+            {{count}}
+          </div>
+          <div class="recorded--toolbar--summary--item--body__notation">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<app-assistant-list
+  #assistantListComponent
+  (fetching)="onFetching($event)"
+  (response)="onResponse($event)"
+  (meta)="onMeta($event)"
+  [useMeta]="true"
+  [service]="service"
+  [toolbar]="!embedded"
+  [query]="!embedded"
+  [pagination]="!embedded"
+  [paginationLimit]="limit"
+  [filterIncludes]="filterIncludes"
+  [filterRemote]="filterRemote"
+  [filterBy]="filterBy"
+  paginationSelector=".recorded"
+>
+  <ng-template appListBodyTemplate>
+    <div
+      *ngFor="let recorded of data; trackBy: trackByFn"
+      class="recorded"
+    >
+      <div class="recorded--content">
+        <div class="recorded--content--preview">
+          <img
+            [src]="recorded.thumbnailUrl || '/assets/img/icons/session/recorded/no-preview.svg'"
+            [alt]="recorded.name"
+          >
+        </div>
+        <div class="recorded--content--body">
+          <div class="recorded--content--body--general">
+            <div class="recorded--content--body--general--info">
+              <a
+                [routerLink]="['/session/recorded', recorded.id]"
+                [ngbTooltip]="recorded.name"
+                placement="bottom"
+                container="body"
+                class="recorded--content--body--general--info__title cut-long-text"
+              >
+                {{recorded.name}}
+              </a>
+              <div class="recorded--content--body--general--info__time">
+                <span>{{recorded.startedAt | date: 'MMMM d, y'}}</span>
+                {{recorded.startedAt | date: 'h:mm a'}} - {{recorded.endedAt | date: 'h:mm a'}}
+              </div>
+            </div>
+            <div *ngIf="recorded.isShared" class="recorded--content--body--general__shared">
+              <span>Shared</span>
+              <fa-icon icon="external-link-alt"></fa-icon>
+            </div>
+          </div>
+          <div class="recorded--content--body--assets">
+            <div class="recorded--content--body--assets--participants">
+              <app-session-recorded-shared-participant-custom
+                (onParticipantClick)="showParticipantInfo($event, recorded)"
+                [recorded]="recorded"
+                [directly]="true"
+                [readonly]="true"
+              ></app-session-recorded-shared-participant-custom>
+            </div>
+            <div class="recorded--content--body--assets--media">
+              <div class="recorded--content--body--assets--media--clips">
+                <fa-icon icon="video"></fa-icon>
+                {{recorded.pois.length}}
+
+                <ng-container [ngPlural]="recorded.pois.length">
+                  <ng-template ngPluralCase="=1">Clip</ng-template>
+                  <ng-template ngPluralCase="other">Clips</ng-template>
+                </ng-container>
+              </div>
+              <div class="recorded--content--body--assets--media--notes">
+                <fa-icon icon="sticky-note"></fa-icon>
+                {{recorded.notes.length}}
+
+                <ng-container [ngPlural]="recorded.notes.length">
+                  <ng-template ngPluralCase="=1">Note</ng-template>
+                  <ng-template ngPluralCase="other">Notes</ng-template>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template
+    *ngIf="!data.length"
+    appListBodyStates
+  >
+    <div class="recorded recorded--empty">
+      <div class="recorded--empty__icon"></div>
+      <div class="recorded--empty--explanation">
+        <div class="recorded--empty--explanation__title">
+          You will have your documentation here.
+        </div>
+        <div class="recorded--empty--explanation__subtitle">
+          Click on the Quick Start button to start documenting your session.
+        </div>
+      </div>
+      <div class="recorded--empty__navigation"></div>
+    </div>
+  </ng-template>
+</app-assistant-list>
+
+<app-session-recorded-shared-participant-foldover *ngIf="participantInfo"
+  [participant]="participantInfo"
+  [recorded]="participantRecorded"
+  (close)="clearParticipantInfo()"
+></app-session-recorded-shared-participant-foldover>

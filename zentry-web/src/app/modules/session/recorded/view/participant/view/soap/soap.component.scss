@@ -1,0 +1,188 @@
+:host {
+  display: flex;
+  flex: 1;
+  min-width: 0
+}
+
+.soap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+
+  &--body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &--presence {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      min-width: 0;
+      padding: 25px 15px;
+      border-radius: 7px;
+      background-color: #FFFFFF;
+      box-shadow: 0 -1px 10px 0 rgba(0,0,0,0.15);
+
+      &__text {
+        font-size: 14px;
+        font-weight: 800;
+        margin-right: 20px;
+      }
+
+      &--buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        button {
+          &:not(:last-child) {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+
+    &--list {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 20px 15px;
+      margin-top: 15px;
+      border-radius: 7px;
+      background-color: #FFFFFF;
+      box-shadow: 0 -1px 10px 0 rgba(0,0,0,0.15);
+
+      &--navigation {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        &--backward, &--forward {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          font-size: 14px;
+          font-weight: bold;
+          color: #888997;
+          opacity: 0.3;
+          cursor: not-allowed;
+
+          &.more {
+            opacity: 1;
+            cursor: pointer;
+            color: #14BFF3;
+
+            &:hover {
+              color: #088FB8;
+            }
+          }
+
+          fa-icon {
+            margin-right: 10px;
+          }
+        }
+
+        &--backward {
+          margin-right: 5px;
+        }
+
+        &--forward {
+          margin-left: 5px;
+        }
+
+        &--count {
+          font-size: 14px;
+          font-weight: 800;
+          margin: 0 15px;
+        }
+      }
+
+      &--current {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        border-radius: 9px;
+        background-color: #F7FAFC;
+        font-size: 14px;
+        font-weight: bold;
+        &--name {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+
+      &--controls {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 15px;
+
+        &--tracker {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-width: 0;
+
+          button {
+            border: none;
+            border-radius: 100%;
+            box-shadow: 0 3px 5px 0 rgba(0,0,0,0.15);
+            padding: 12px;
+            font-size: 21px;
+
+            fa-icon {
+              line-height: 21px;
+            }
+          }
+
+          &__amount {
+            margin-top: 12px;
+            color: #888997;
+            font-size: 12px;
+            font-weight: 800;
+          }
+
+          &__name {
+            margin-top: 7px;
+            color: #888997;
+            font-size: 10px;
+            font-weight: 600;
+          }
+
+          &:not(:last-child) {
+            margin-right: 7px;
+          }
+        }
+      }
+    }
+
+    &--buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      margin-top: 15px;
+
+      button {
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .form-group {
+    margin-top: 15px;
+    margin-bottom: 0;
+  }
+
+  label {
+    font-size: 13px;
+    font-weight: 800;
+  }
+}
